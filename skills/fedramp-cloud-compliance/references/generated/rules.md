@@ -14,7 +14,7 @@ The Addressing FedRAMP Communication rules (formerly FedRAMP Security Inbox) ens
 
 - Subset **FRP** (FedRAMP Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects FedRAMP
 - Subset **CSO** (General Provider Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
-- **20x and Rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2026-01-05; maintaining certification 2026-01-05 (SHOULD adopt, else corrective action plan); optional adoption None; grace period ends 2026-07-01 (MUST adopt, else certification revoked)
+- **20x and Rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2026-01-05; maintaining certification 2026-01-05 (SHOULD adopt, else corrective action plan); grace period ends 2026-07-01 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/addressing-fedramp-communication/
 
 ### AFC-FRP-VRE — Verified Emails (MUST)
@@ -1359,7 +1359,7 @@ The Secure Configuration Guide rules help agencies and other customers understan
 
 - Subset **CSO** (General Provider Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
 - Subset **ENH** (Enhanced Capabilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
-- **20x and Rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2026-03-01; maintaining certification 2026-03-01 (SHOULD adopt, else corrective action plan); optional adoption None; grace period ends 2026-07-01 (MUST adopt, else certification revoked)
+- **20x and Rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2026-03-01; maintaining certification 2026-03-01 (SHOULD adopt, else corrective action plan); grace period ends 2026-07-01 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/secure-configuration-guide/
 
 ### SCG-CSO-RSC — Recommended Secure Configuration (MUST)

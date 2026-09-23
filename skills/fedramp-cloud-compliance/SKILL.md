@@ -12,6 +12,10 @@ can refresh them from FedRAMP's live machine-readable sources.
 
 ## Ground rules
 
+0. **Facts vs. guidance.** Rule text, IDs, dates, Terraform arguments, and service facts
+   were verified against primary sources on 2026-09-23. Content marked _Guidance_ (KSI
+   measure ideas, severity tiers, "usual choice" advice) is a recommendation. Present
+   it as a recommendation, never as a FedRAMP requirement.
 1. **Cite rule, KSI, and control IDs.** Use IDs such as `VDR-TFR-PVR`, `KSI-IAM-APM`,
    and `AC-2(1)`. Don't paraphrase a requirement without its ID. If a timeframe,
    parameter value, or force word (MUST/SHOULD/MAY) matters, confirm it with

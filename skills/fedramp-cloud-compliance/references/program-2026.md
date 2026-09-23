@@ -121,8 +121,11 @@ KSIs are outcome statements. They are validated by assessing the provider's *mea
 sets the metric requirements by class:
 - Class B must supply 30-day and up-to-1-year metric summaries.
 - Class C must also supply all daily metric data for up to a year.
-- Class D requirements are to be set in the 20x Phase 4 pilot. When mapping cloud
-features to KSIs, name the measure, how often it runs, and where its output is stored.
+- Class D MUST significantly supersede the lower classes, with specifics to be set in the
+  20x Phase 4 pilot.
+
+When mapping cloud features to KSIs, name the measure, how often it runs, and where its
+output is stored.
 
 ## Machine-readable package
 

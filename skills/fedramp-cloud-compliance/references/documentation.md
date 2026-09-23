@@ -58,7 +58,8 @@ For **20x KSIs** (`SDR-CSX-KSI`), also include:
 Metrics by class (`SDR-CSX-KMT`):
 - **Class B:** 30-day and up-to-1-year metric summaries.
 - **Class C:** also all daily metric data for up to a year.
-- **Class D:** requirements are to be set in the 20x Phase 4 pilot.
+- **Class D:** MUST significantly supersede the lower classes, with specifics to be set in
+  the 20x Phase 4 pilot.
 
 Example KSI measure line:
 > *KSI-IAM-APM:* Measure "% of interactive sign-ins using phishing-resistant
