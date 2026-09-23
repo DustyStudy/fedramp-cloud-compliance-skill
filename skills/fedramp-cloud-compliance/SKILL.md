@@ -105,14 +105,25 @@ variation and the effective or grace date.
 
 ## Script reference
 
+All paths in this skill (`scripts/…`, `references/…`) are relative to **this skill's base
+directory**, not the user's working directory. Use the absolute path, e.g.
+`python "<skill base dir>/scripts/fedramp.py" lookup …`.
+
 ```
-python scripts/fedramp.py lookup KSI-IAM-APM VDR-TFR-PVR "AC-2(1)" sc-13
-python scripts/fedramp.py search "significant change"
-python scripts/fedramp.py baseline c AU      # Class C controls in the AU family
-python scripts/fedramp.py build              # regenerate references/generated/*
+python <skill>/scripts/fedramp.py lookup KSI-IAM-APM VDR-TFR-PVR "AC-2(1)" sc-13
+python <skill>/scripts/fedramp.py search "significant change"
+python <skill>/scripts/fedramp.py baseline c AU   # Class C controls in the AU family
+python <skill>/scripts/fedramp.py check           # verify cited IDs and links
 ```
 
-The script uses only the standard library and needs network access on first use. It
-caches downloads for 24 hours under `~/.cache/fedramp-skill`. If it's offline, fall back
-to `references/generated/` and say which snapshot version the answer is based on
-(shown in each file's header).
+`lookup`, `search`, `baseline`, and `check` are read-only. They fetch FedRAMP's live data
+so answers aren't stale, and cache it for 24 hours under `~/.cache/fedramp-skill`.
+`build` **overwrites** `references/generated/*`. Run it only when the user asks to refresh
+the bundled snapshot; a weekly CI workflow already does this upstream.
+
+**Offline / air-gapped:** the script uses a stale cache if the network fails, and
+`FEDRAMP_SKILL_OFFLINE=1` forces cache-only. With no cache, don't use the script. Grep
+`references/generated/` (rules, KSIs, definitions, baselines) instead, and say which
+snapshot version the answer is based on (shown in each file's header). The snapshot
+doesn't include control statement text, so cite the control ID and point to
+fedramp.gov for the wording.

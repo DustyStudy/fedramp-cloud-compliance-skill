@@ -26,8 +26,19 @@ It covers:
 npx -y skills add DustyStudy/fedramp-cloud-compliance-skill --skill fedramp-cloud-compliance --agent claude-code --global
 ```
 
-Or copy `skills/fedramp-cloud-compliance/` into `~/.claude/skills/` (user) or `.claude/skills/`
-(project).
+Without `npx` (manual install):
+
+```bash
+git clone https://github.com/DustyStudy/fedramp-cloud-compliance-skill.git
+mkdir -p ~/.claude/skills
+cp -r fedramp-cloud-compliance-skill/skills/fedramp-cloud-compliance ~/.claude/skills/
+# or keep it updatable with a symlink (on Windows, use a directory junction: mklink /J):
+# ln -s "$PWD/fedramp-cloud-compliance-skill/skills/fedramp-cloud-compliance" ~/.claude/skills/
+```
+
+For a single project, use `.claude/skills/` in that project instead of `~/.claude/skills/`.
+The skill works offline from its bundled `references/generated/` snapshot. Live lookups
+via `scripts/fedramp.py` need network access to raw.githubusercontent.com.
 
 Then ask things like:
 
