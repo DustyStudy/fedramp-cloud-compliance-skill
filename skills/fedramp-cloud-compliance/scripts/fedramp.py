@@ -69,6 +69,12 @@ def fetch(url: str) -> str:
     offline = os.environ.get("FEDRAMP_SKILL_OFFLINE") == "1"
     if path.exists() and (offline or time.time() - path.stat().st_mtime < TTL):
         return path.read_text(encoding="utf-8")
+    if offline:
+        raise SystemExit(
+            f"error: FEDRAMP_SKILL_OFFLINE=1 and {url} is not cached.\n"
+            "Grep the bundled snapshot in references/generated/ "
+            "(rules.md, ksi.md, definitions.md, rev5-baselines.md) instead."
+        )
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "fedramp-cloud-compliance-skill"})
         with urllib.request.urlopen(req, timeout=60) as resp:
@@ -77,7 +83,11 @@ def fetch(url: str) -> str:
         if path.exists():
             print(f"warning: {url} unreachable ({exc}); using stale cache", file=sys.stderr)
             return path.read_text(encoding="utf-8")
-        raise SystemExit(f"error: cannot download {url}: {exc}")
+        raise SystemExit(
+            f"error: cannot download {url}: {exc}\n"
+            "Offline and no cache: grep the bundled snapshot in references/generated/ "
+            "(rules.md, ksi.md, definitions.md, rev5-baselines.md) instead."
+        )
     path.write_text(text, encoding="utf-8")
     return text
 

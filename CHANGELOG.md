@@ -3,6 +3,29 @@
 All notable changes to this repo are documented here. Format loosely
 follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.3.1] - 2026-09-24
+
+Changes from an external review; each point was checked against the repo and FedRAMP sources first.
+
+### Fixed
+- `FEDRAMP_SKILL_OFFLINE=1` now really means offline: with an empty cache it exits with a
+  pointer to the bundled snapshot instead of making a network call.
+
+### Changed
+- `SKILL.md`:
+  - Script and reference paths are relative to the skill's base directory.
+  - `build` overwrites `references/generated/`; the other commands are read-only.
+  - Added offline/air-gapped guidance.
+- `program-2026.md`: lists FedRAMP's provider JSON schemas, and notes that OSCAL appears only
+  in the agency rule `AGU-AGC-GRC`. FedRAMP publishes no mapping from SDR/CPO to OSCAL.
+- README: manual install with `git clone` or a symlink, and offline behavior.
+
+### Not changed (review points that didn't hold up)
+- The "missing frontmatter" report was incorrect: `SKILL.md` has had `---` delimiters since
+  0.1.0.
+- The bundled snapshot is not the default data source. That would quietly serve stale
+  rules, and the snapshot lacks control text.
+
 ## [0.3.0] - 2026-09-23
 
 Second, independent verification pass (four reviewers with no access to the first audit):

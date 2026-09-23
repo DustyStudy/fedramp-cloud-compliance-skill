@@ -131,8 +131,17 @@ output is stored.
 
 JSON Schemas for FedRAMP submissions are at https://github.com/FedRAMP/schemas.
 `FRC-CSO-JSN` requires JSON that validates against the schema whenever a rule references
-one. Pre-2026 OSCAL SSP/SAP/SAR/POA&M tooling targets the legacy process. Check the
-schemas repo before recommending OSCAL-based generators.
+one. The provider-side schemas (as of 2026-09-24) are FedRAMP's own JSON formats:
+- Certification Package Overview, Security Decision Record, Ongoing Certification Report
+- Vulnerability Detail Report, Accepted Vulnerability Info, Historical VER Activity
+- Incident Report, Significant Change Notifications
+- Assessor and advisor information, plus common definitions
+
+These are not OSCAL. In CR26, OSCAL appears only in `AGU-AGC-GRC`, which requires
+*agency* GRC and inventory tools to produce and ingest OSCAL and JSON. FedRAMP publishes no
+mapping from SDR/CPO to OSCAL, so don't invent one. Pre-2026 OSCAL SSP/SAP/SAR/POA&M tooling
+targets the legacy process. Check the schemas repo before recommending OSCAL-based
+generators.
 
 ## Authoritative sources
 
