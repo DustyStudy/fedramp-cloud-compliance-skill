@@ -159,6 +159,9 @@ def iter_ksis(data: dict):
 
 def timeframe(r: dict) -> str:
     num, typ = r.get("timeframe_num"), r.get("timeframe_type")
+    lo, hi = r.get("timeframe_num_min"), r.get("timeframe_num_max")
+    if typ and lo is not None and hi is not None:
+        return f" _(timeframe: {lo}–{hi} {typ})_"
     if typ and num is not None:
         return f" _(timeframe: {num} {typ})_"
     if typ:
@@ -178,6 +181,8 @@ def pain_lines(pt: dict | None, indent: str = "") -> list[str]:
 
 def rule_lines(rid: str, r: dict) -> list[str]:
     out = [f"### {rid} — {r['name']}" + (f" ({r['force']})" if r.get("force") else "")]
+    if r.get("affects"):
+        out.append(f"_Applies to: {', '.join(r['affects'])}_")
     if r.get("statement"):
         out.append(r["statement"] + timeframe(r))
     for bullet in (r.get("following_information") or []) + (r.get("following_information_bullets") or []):
@@ -192,14 +197,50 @@ def rule_lines(rid: str, r: dict) -> list[str]:
         out += pain_lines(cv.get("pain_timeframes"), "    ")
         if cv.get("rev5_controls_list"):
             out.append(f"    - Rev5 controls: {', '.join(cv['rev5_controls_list'])}")
+        if cv.get("note"):
+            out.append(f"    - _Note:_ {cv['note']}")
+        cls_arts = (cv.get("artifacts") or {}).get("all")
+        if cls_arts:
+            out.append("    - _Evidence artifacts:_ " + " | ".join(cls_arts))
     for note in [r["note"]] if r.get("note") else (r.get("notes") or []):
         out.append(f"- _Note:_ {note}")
+    for danger in [r["danger"]] if isinstance(r.get("danger"), str) else (r.get("danger") or []):
+        out.append(f"- **Warning:** {danger}")
+    for action in r.get("corrective_actions") or []:
+        out.append(f"- _Corrective action:_ {action}")
+    for ex in r.get("examples") or []:
+        if isinstance(ex, dict):
+            out.append(f"- _Example — {ex.get('id', '')}:_")
+            for k in ("key_tests", "examples"):
+                for item in ex.get(k) or []:
+                    out.append(f"    - {item}")
+        else:
+            out.append(f"- _Example:_ {ex}")
+    if r.get("schema"):
+        sc = r["schema"]
+        out.append(f"- _JSON schema:_ {sc.get('name', '')} {sc.get('url', '')}".rstrip())
+    for n in r.get("notification") or []:
+        out.append(f"- _Notify via:_ {n.get('name', '')} ({n.get('method', '')}: {n.get('target', '')}) — {n.get('party', '')}")
     arts = (r.get("artifacts") or {}).get("all")
     if arts:
         out.append("- _Evidence artifacts:_ " + " | ".join(arts))
     if r.get("reference_url"):
         out.append(f"- _Reference:_ {r.get('reference', '')} {r['reference_url']}".rstrip())
     return out
+
+
+def fmt_effective(label: str, eff: dict) -> str:
+    """Render an effective-date block using FedRAMP's 2026.09.22 wording."""
+    d = eff.get("date", {})
+    g = d.get("grace", {})
+    grace = g.get("default")
+    grace_txt = (f"at the first FedRAMP independent assessment started after {grace}"
+                 if g.get("until_next_assessment") else grace)
+    return (f"- **{label}** — {eff.get('is')} ({eff.get('current_status', '')}); "
+            f"obtaining initial certification {d.get('obtain')}; maintaining certification "
+            f"{d.get('maintain')} (SHOULD adopt, else corrective action plan); "
+            f"optional adoption {d.get('optional_adoption')}; grace period ends {grace_txt} "
+            f"(MUST adopt, else certification revoked)")
 
 
 def applicability(info: dict) -> list[str]:
@@ -214,16 +255,9 @@ def applicability(info: dict) -> list[str]:
     for typ in ("20x", "rev5"):
         eff = (info.get(typ) or {}).get("effective")
         if eff:
-            d = eff.get("date", {})
-            g = d.get("grace", {})
-            out.append(
-                f"- **{typ}** — {eff.get('is')}; obtain {d.get('obtain')}, maintain {d.get('maintain')}, "
-                f"optional adoption {d.get('optional_adoption')}, grace ends {g.get('default')}"
-                + (" (or next assessment)" if g.get("until_next_assessment") else "")
-            )
+            out.append(fmt_effective(typ, eff))
     if info.get("effective") and not any(info.get(t) for t in ("20x", "rev5")):
-        eff = info["effective"]
-        out.append(f"- Effective: {eff.get('is')} {json.dumps(eff.get('date', ''))}")
+        out.append(fmt_effective("20x and Rev5", info["effective"]))
     return out
 
 
@@ -406,8 +440,11 @@ def search(text: str) -> None:
     for fam, info, scope, _, rid, rule in iter_rules(data):
         blob = json.dumps(rule).lower()
         if needle in blob:
-            stmt = rule.get("statement") or next(iter((rule.get("varies_by_class") or {}).values()), {}).get("statement", "")
-            print(f"{rid}: {rule['name']} — {stmt[:160]}")
+            if rule.get("statement"):
+                print(f"{rid}: {rule['name']} ({rule.get('force', '')}) — {rule['statement'][:160]}")
+            else:
+                forces = ", ".join(f"{c.upper()}={v.get('force', '?')}" for c, v in (rule.get("varies_by_class") or {}).items())
+                print(f"{rid}: {rule['name']} (varies by class: {forces}) — run `lookup {rid}` for per-class text")
 
 
 def baseline(cls: str, fam: str | None) -> None:

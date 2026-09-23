@@ -14,24 +14,39 @@ https://learn.microsoft.com/azure/azure-government/compliance/azure-services-in-
 - Azure Government is a **separate cloud**. It has its own endpoints
   (`*.usgovcloudapi.net`, `login.microsoftonline.us`), Entra tenant, and portal
   (portal.azure.us).
-- **Get Microsoft's FedRAMP packages and CRM** from the Service Trust Portal or the FedRAMP
-  Marketplace. The CSP inherits PE and most MA/MP, and nothing for its own tenant
+- **Get Microsoft's FedRAMP packages and CRM:**
+  - The Azure Commercial SSP is on the Service Trust Portal (STP).
+  - Other artifacts are in a restricted STP section under NDA.
+  - Agencies can request the package through the FedRAMP Marketplace, which needs a
+    .gov/.mil email.
+
+  The CSP inherits PE and most MA/MP, and nothing for its own tenant
   configuration, identity, logging, or application.
 - Every Azure service you use is a **third-party information resource** under
   `MAS-CSO-TPR`.
 
 ## Cryptography (CMU, SC-8, SC-12, SC-13, SC-28)
 
-- Azure platform services use Microsoft's FIPS 140-validated modules (e.g. Windows
-  CNG/SymCrypt). Cite the CMVP certificates Microsoft lists, and don't give a level from
-  memory.
-- **Key Vault Premium** (HSM-backed keys) or **Managed HSM** for CMKs. Enable
-  purge protection and soft delete, and use RBAC (not access policies).
+- Microsoft states that Azure services use FIPS-approved *algorithms* backed by validated
+  modules such as SymCrypt (CMVP #5313, FIPS 140-3 Level 1 as of 2026-09). A cloud service
+  as a whole is never "FIPS validated". For `CMU-CSO-CMD`, list the specific modules and
+  certificates.
+- FIPS 140-2 certificates moved to the CMVP Historical list on 2026-09-21. Cite active
+  140-3 certificates and check their status on csrc.nist.gov before quoting them.
+- **Key Vault Premium** (HSM-backed keys; HSM Platform 2 is FIPS 140-3 Level 3) or
+  **Managed HSM** (FIPS 140-3 Level 3) for CMKs. Enable purge protection and soft delete,
+  and use RBAC (not access policies).
 - Use customer-managed keys where the rules or your SDR decisions call for key custody:
   Storage, SQL TDE, Cosmos DB, disk encryption sets, AKS etcd (KMS plugin), and so on.
   Enable Storage infrastructure (double) encryption for Class D if you decided you need it.
-- **TLS:** set `min_tls_version = "TLS1_2"` (Storage, App Service, SQL, Redis). Disable
-  plain HTTP.
+- **TLS:** the attribute names differ per resource, as of azurerm v5:
+  - Storage: `min_tls_version = "TLS1_2"`, the only value v5 accepts.
+  - SQL (`azurerm_mssql_server`) and Redis: `minimum_tls_version = "1.2"`.
+  - App Service: `site_config { minimum_tls_version = "1.2" }`. It still accepts 1.0–1.3,
+    so check it.
+
+  Disable plain HTTP. On App Service, `https_only` defaults to `false`, so set it
+  explicitly.
 - **Your own code:** use a validated module. On Linux VMs and AKS nodes, use FIPS-enabled
   images (e.g. AKS `fips_enabled = true` node pools).
 
@@ -41,13 +56,13 @@ https://learn.microsoft.com/azure/azure-government/compliance/azure-services-in-
 |---|---|---|
 | AC | Entra ID RBAC and Azure RBAC; management groups; **PIM** (just-in-time, approval, time-bound); Conditional Access; access reviews; Azure Policy deny effects; private endpoints / `public_network_access_enabled = false` | Role design, reviews, least privilege, break-glass accounts |
 | AU | Activity Log + Entra sign-in/audit logs → Log Analytics via **diagnostic settings** (every resource); Microsoft Sentinel; immutable (WORM) storage for archives; VNet flow logs | Event selection, review cadence, retention, access to logs (KSI-MLA-ALA) |
-| CA / CM | **Azure Policy regulatory compliance initiatives:** "FedRAMP High" `d5264498-16f4-418a-b659-fa7ef418175f`, "FedRAMP Moderate" `e95f5a9f-57ad-4d03-bb0b-b1d16db93693`, "NIST SP 800-53 Rev. 5" `179d1daa-458f-4e47-8086-2a68d0d6c38f` (Azure Government has its own copies. Verify the IDs in the target cloud); **Defender for Cloud** regulatory compliance dashboard; Machine Configuration (guest config); Azure Resource Graph inventory; Update Manager | Baselines, change control, remediation of non-compliant resources, inventory accuracy |
+| CA / CM | **Azure Policy regulatory compliance initiatives:** "FedRAMP High" `d5264498-16f4-418a-b659-fa7ef418175f`, "FedRAMP Moderate" `e95f5a9f-57ad-4d03-bb0b-b1d16db93693`, "NIST SP 800-53 Rev. 5" `179d1daa-458f-4e47-8086-2a68d0d6c38f` (Azure Government uses the **same GUIDs** with different, smaller contents, e.g. FedRAMP High has about 185 policies in Gov vs about 709 in commercial. All three default to Audit/AuditIfNotExists effects); **Defender for Cloud** regulatory compliance dashboard; Machine Configuration (guest config); Azure Resource Graph inventory; Update Manager | Baselines, change control, remediation of non-compliant resources, inventory accuracy |
 | CP | Azure Backup (immutable vaults, soft delete, cross-region restore); Site Recovery; availability zones; geo-redundant storage | RTO/RPO, restore testing |
 | IA | Entra ID with **Conditional Access authentication strength "Phishing-resistant MFA"** (FIDO2/passkeys, Windows Hello for Business, certificate-based auth / PIV/CAC). Managed identities and workload identity federation instead of secrets; block legacy auth | IdP policy, authenticator lifecycle, service principal secret hygiene |
 | IR | Defender for Cloud (CSPM + workload plans); Sentinel analytics and playbooks (Logic Apps); Defender XDR | IR plan, PAIN rating, IEC reporting |
 | RA / SI | Defender Vulnerability Management / Defender for Servers; Defender for Containers (registry and runtime scanning); Update Manager; Microsoft Purview for data discovery | VER evaluation, VDR timeframes, KEV remediation |
 | SC | VNets, NSGs, Azure Firewall Premium, WAF (Front Door / App Gateway), DDoS Protection, Private Link, Key Vault / Managed HSM | Deny-by-default flows, boundary docs, crypto module list |
-| SR | ACR with content trust / Notation signing, Defender for DevOps, GitHub Advanced Security | Vendor risk, provenance |
+| SR | ACR image signing with Notation (Notary Project). ACR content trust is deprecated: it can't be enabled on new registries after 2026-05-31, and azurerm v5 removed `trust_policy_enabled`. DevOps security in Defender for Cloud; GitHub Advanced Security | Vendor risk, provenance |
 | PE / MA / MP | Inherited from Microsoft for the infrastructure | Your own endpoints and media |
 
 ## KSI measure ideas (20x)
@@ -76,29 +91,41 @@ resource "azurerm_management_group_policy_assignment" "fedramp_high" {
   name                 = "fedramp-high"
   management_group_id  = azurerm_management_group.root.id
   policy_definition_id = "/providers/Microsoft.Authorization/policySetDefinitions/d5264498-16f4-418a-b659-fa7ef418175f"
-  location             = var.location   # required when the initiative contains DINE/modify policies
-  identity { type = "SystemAssigned" }
 }
+# name: 24 characters max. These three initiatives are audit-only, so no identity is needed.
+# If you add DINE/Modify policies, add identity { type = "SystemAssigned" } and then
+# location (Terraform requires location whenever identity is set), and grant the identity roles.
 ```
 
 - Assign the initiative at the management-group level so that new subscriptions inherit
-  it. Audit-only initiatives *report* compliance, so pair them with deny/DINE policies to
+  it. These initiatives only *report* compliance, so pair them with deny/DINE policies to
   actually *enforce* it.
-- The user's `azure-baseline-tf` and `azure-lighthouse-tf` repos contain related
+- These examples target `hashicorp/azurerm` v5 (5.0.0 was released 2026-07-27). Several
+  names and defaults changed between v4 and v5. Check the v5 upgrade guide against
+  existing code.
+- [azure-baseline-tf](https://github.com/DustyStudy/azure-baseline-tf) and
+  [azure-lighthouse-tf](https://github.com/DustyStudy/azure-lighthouse-tf) contain related
   baseline patterns.
 
 ## Common Azure findings
 
-- Storage accounts: `public_network_access_enabled`/`allow_nested_items_to_be_public`
-  left at true, `min_tls_version` below TLS1_2, `shared_access_key_enabled = true` without
-  justification, or no diagnostic settings.
+- Storage accounts: `public_network_access_enabled` left at true (the default),
+  `allow_nested_items_to_be_public = true` (default `false` in v5, `true` in older
+  versions), `min_tls_version` below `TLS1_2` (v4 and earlier), `shared_access_key_enabled
+  = true` without justification, or no diagnostic settings.
 - Key Vault: `purge_protection_enabled = false`, public network access, or access-policy
-  mode instead of RBAC.
+  mode instead of RBAC. That means `rbac_authorization_enabled = false` in v5, where the
+  argument is required. In v4 it was `enable_rbac_authorization`, and v5 removed it.
 - NSG rules with source `*`/`Internet` on 22/3389/admin ports.
-- SQL / PostgreSQL flexible server with public access, AAD-only auth disabled, or no
-  auditing.
+- SQL / PostgreSQL flexible server with public access, Entra-only auth disabled
+  (`azuread_authentication_only` on `azurerm_mssql_server`;
+  `authentication { active_directory_auth_enabled = true, password_auth_enabled = false }`
+  on PostgreSQL flexible server), or no auditing.
+- App Service without `https_only = true` or with `site_config.minimum_tls_version` below
+  1.2.
 - AKS: `local_account_disabled = false`, no `azure_active_directory_role_based_access_control`,
   public API server without authorized IP ranges, `fips_enabled` absent where required.
 - Resources with no `azurerm_monitor_diagnostic_setting`, so their logs never reach Log
-  Analytics / Sentinel.
+  Analytics / Sentinel. In v5 this resource only accepts `enabled_log` and
+  `enabled_metric` blocks.
 - Service principals with client secrets where a managed identity would work.

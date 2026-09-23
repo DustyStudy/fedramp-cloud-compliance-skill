@@ -55,7 +55,10 @@ For **20x KSIs** (`SDR-CSX-KSI`), also include:
 - verification that the automation is accurate and sufficient
 - validation that the measures are produced correctly
 
-Classes B–D also need **30-day and up-to-1-year metric summaries** (`SDR-CSX-KMT`).
+Metrics by class (`SDR-CSX-KMT`):
+- **Class B:** 30-day and up-to-1-year metric summaries.
+- **Class C:** also all daily metric data for up to a year.
+- **Class D:** requirements are to be set in the 20x Phase 4 pilot.
 
 Example KSI measure line:
 > *KSI-IAM-APM:* Measure "% of interactive sign-ins using phishing-resistant
@@ -74,8 +77,11 @@ the exact fields:
 - `MAS-CSO-IIR`: information resources in scope. This must be machine-readable, with an
   explanation of how it was derived and the code used.
 - `MAS-CSO-FLO`: information flows and security categories
-- `MAS-CSO-TPR`: third-party information resources, including every IaaS/PaaS service
-  used and its FedRAMP status
+- `MAS-CSO-TPR`: for each in-scope third-party information resource (e.g. IaaS/PaaS
+  services that handle or affect federal customer data), give its usage and
+  configuration, justification, mitigations, and compensating controls, as
+  machine-readable output. The rule doesn't ask for FedRAMP status, but it's useful
+  context.
 - `CMU-CSO-CMD`: cryptographic modules and their CMVP validation status
 - `IVV-CSO-ICP`: independent V&V inclusion
 - For Classes B–D, the assessor's overall summary (`CPO-CSO-OSA`)
@@ -112,20 +118,34 @@ validated crypto (`CMU-CSO-CAT`).
 
 - **Monthly activity report** (`VER-TFR-MHR`). Accepted vulnerabilities must be marked
   (`VER-TFR-MAV`).
-- **Per-vulnerability fields** come from `VER-RPT-VDT` and `VER-RPT-AVI`. Look them up.
-  Typical columns:
+- **Non-accepted vulnerabilities** (`VER-RPT-VDT`; JSON schema: FedRAMP Vulnerability
+  Detail Report). Required fields, if applicable:
   - tracking ID
-  - detection date
-  - evaluation date
-  - PAIN N1–N5 (`VER-EVA-EPA`)
-  - internet-reachable yes/no (IRV/NIRV)
-  - likely exploitable yes/no (LEV/NLEV)
-  - status
-  - target date from the `VDR-TFR-PVR` table for the class
-  - KEV yes/no + CISA due date
-  - mitigation and remediation notes
-  - accepted? plus rationale
-- Don't disclose sensitive exploit details publicly (`VER-RPT-NID`).
+  - time and source of detection
+  - time of completed evaluation
+  - internet-reachable yes/no (IRV)
+  - likely exploitable yes/no (LEV)
+  - historical and current PAIN (`VER-EVA-EPA`)
+  - time and PAIN of each completed reduction
+  - estimated time and target PAIN of the next reduction
+  - overdue now, or likely to become overdue, with an explanation
+  - supplementary information
+  - final disposition
+- **Accepted vulnerabilities** (`VER-RPT-AVI`; its own schema):
+  - tracking ID
+  - time and source of detection
+  - time of evaluation
+  - IRV
+  - LEV
+  - current PAIN
+  - why it is accepted
+  - supplementary information
+- **Optional internal extras** (not rule fields; keep them out of the schema-validated
+  JSON unless the schema allows them): KEV flag and CISA due date (`VDR-TFR-KEV`,
+  SHOULD), and the target date from the class's `VDR-TFR-PVR` table (SHOULD).
+- Never irresponsibly disclose sensitive details that are likely to enable exploitation.
+  But always give all necessary parties enough information for risk-based decisions
+  (`VER-RPT-NID`). Public disclosure is optional (`VER-RPT-RPD`).
 - Agencies own **agency** POA&Ms. Providers shouldn't convert their vulnerability lists
   into them.
 
@@ -137,7 +157,7 @@ validated crypto (`CMU-CSO-CAT`).
   - description
   - timeline (start, detection time and source, reportability evaluation time)
   - historical and current PAIN, with rationale
-  - functional impact on CIA and the data types affected
+  - functional impact on federal agency customers (confidentiality and/or integrity) and the federal customer data types affected
   - recovery plan and milestones
   - likely affected agencies
 - **Ongoing reports** (`IEC-CSO-OIR`) and a **final report** (`IEC-CSO-FIR`).
@@ -154,7 +174,11 @@ validated crypto (`CMU-CSO-CAT`).
   - final plans ≥10 business days before (`SCN-TRF-NFP`)
   - within 5 business days after finishing (`SCN-TRF-NAF`)
   - within 5 business days after verification (`SCN-TRF-NAV`)
-  - update the documentation (`SCN-TRF-UPD`)
+  - publish updated service documentation (user guides, Marketplace info) within 30
+    business days after finishing (`SCN-TRF-UPD`). This does not mean the certification
+    package.
+  - SHOULD have a third-party assessor review beforehand if human validation is needed
+    (`SCN-TRF-TPR`)
 - Notifications must be human- and machine-readable (`SCN-CSO-HRM`) and include the
   information in `SCN-CSO-INF`.
 
