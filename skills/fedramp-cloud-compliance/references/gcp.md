@@ -81,7 +81,7 @@ https://docs.cloud.google.com/architecture/security/fedramp-dod-compliance-scope
 resource "google_assured_workloads_workload" "fedramp" {
   compliance_regime = "FEDRAMP_MODERATE"      # or FEDRAMP_HIGH; immutable
   display_name      = "fedramp-boundary"
-  location          = var.region                # a US region, e.g. "us-west1" (as in the provider example)
+  location          = "us"                      # "us" multi-region is a supported workload location for both FedRAMP packages
   organization      = var.org_id                # bare numeric org ID
   billing_account   = "billingAccounts/${var.billing_account}"
   provisioned_resources_parent = "folders/${var.parent_folder}"   # parent under which AW creates its folder
