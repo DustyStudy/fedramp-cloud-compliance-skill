@@ -14,14 +14,16 @@ The Addressing FedRAMP Communication rules (formerly FedRAMP Security Inbox) ens
 
 - Subset **FRP** (FedRAMP Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects FedRAMP
 - Subset **CSO** (General Provider Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
-- Effective: required {"obtain": "2026-01-05", "maintain": "2026-01-05", "grace": {"default": "2026-07-01", "until_next_assessment": false}}
+- **20x and Rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2026-01-05; maintaining certification 2026-01-05 (SHOULD adopt, else corrective action plan); optional adoption None; grace period ends 2026-07-01 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/addressing-fedramp-communication/
 
 ### AFC-FRP-VRE — Verified Emails (MUST)
+_Applies to: FedRAMP_
 FedRAMP MUST send messages to cloud service providers using an official @fedramp.gov or @gsa.gov email address with properly configured Sender Policy Framework (SPF), DomainKeys Identified Mail (DKIM), and Domain-based Message Authentication Reporting and Conformance (DMARC) email authentication.
 - _Note:_ Anyone at GSA can send email from @fedramp.gov or @gsa.gov - FedRAMP team members will typically have "FedRAMP" or "F20B" in their name but this is not universal or enforceable. The nature of government enterprise IT services makes it difficult for FedRAMP to isolate FedRAMP-specific team members with enforceable identifiers.
 
 ### AFC-FRP-CDS — Criticality Designators (MUST)
+_Applies to: FedRAMP_
 FedRAMP MUST convey the criticality of the message in the subject line, IF the message requires an elevated reaction, using one of the following designators:
 - **Emergency:** There is a potential incident or crisis such that FedRAMP requires an extremely urgent reaction; emergency messages will contain aggressive timeframes for reaction and failure to meet these timeframes will result in corrective action.
 - **Emergency Test:** FedRAMP requires an extremely urgent reaction to confirm the functionality and effectiveness of the FedRAMP Security Inbox; emergency test messages will contain aggressive timeframes for reaction and failure to meet these timeframes will result in corrective action.
@@ -29,17 +31,22 @@ FedRAMP MUST convey the criticality of the message in the subject line, IF the m
 - _Note:_ Messages sent by FedRAMP without one of these designators are considered general communications and do not require an elevated reaction; these may be resolved in the normal course of business by the cloud service provider.
 
 ### AFC-FRP-UFS — Use FedRAMP_Security Email in Emergencies (MUST)
+_Applies to: FedRAMP_
 FedRAMP MUST send Emergency and Emergency Test designated messages from fedramp_security@gsa.gov OR fedramp_security@fedramp.gov.
 
 ### AFC-FRP-PNT — Public Notice of Emergency Tests (MUST)
+_Applies to: FedRAMP_
 FedRAMP MUST post a public notice at least 10 business days in advance of sending an Emergency Test message; such notices MUST include explanation of the likely expected actions and timeframes for the Emergency Test message. _(timeframe: 10 bizdays)_
 - _Note:_ Public notice may include blog posts, social media posts, announcements during Community Updates, or e-blasts.
 - _Note:_ As this process matures, additional confirmed options may become available.
+- _Notify via:_ FedRAMP Public Notices (web: https://www.fedramp.gov/notices) — Everyone
 
 ### AFC-FRP-RQA — Required Actions (MUST)
+_Applies to: FedRAMP_
 FedRAMP MUST clearly specify the required actions in the body of messages that require an elevated reaction.
 
 ### AFC-FRP-ERT — Elevated Reaction Timeframes (MUST)
+_Applies to: FedRAMP_
 FedRAMP MUST clearly specify the expected timeframe for completing required actions in the body of messages that require an elevated reaction; timeframes for actions will vary depending on the situation but the default timeframes to provide an estimated resolution time for Emergency and Emergency Test designated messages will be as follows:
 - **Class D:** within 12 hours
 - **Class C:** by 3:00 p.m. Eastern Time on the 2nd business day
@@ -48,43 +55,55 @@ FedRAMP MUST clearly specify the expected timeframe for completing required acti
 - _Note:_ FedRAMP Class D Certified cloud service providers are expected to address Emergency messages (including tests) from FedRAMP with a reaction time appropriate to operating a service where failure to react rapidly might have a severe or debilitating customer effect on the U.S. Government; some Emergency messages may require faster reaction and all such messages should be addressed as quickly as possible.
 
 ### AFC-FRP-COR — Explain Corrective Actions (MUST)
+_Applies to: FedRAMP_
 FedRAMP MUST clearly specify the corrective actions that will result from failure to complete the required actions in the body of messages that require an elevated reaction; such actions may vary from negative ratings in the FedRAMP Marketplace to suspension of FedRAMP Certification depending on the severity of the event.
 
 ### AFC-FRP-RPM — Reaction Metrics (MAY)
+_Applies to: FedRAMP_
 FedRAMP MAY track and publicly share the time required by cloud service providers to take the actions specified in messages that require an elevated reaction.
 
 ### AFC-CSO-INB — Maintain a FedRAMP Security Inbox (MUST)
+_Applies to: Providers_
 Providers MUST establish and maintain an email address to receive messages from FedRAMP; this inbox is a FedRAMP Security Inbox (FSI).
 - _Note:_ Unless otherwise notified, FedRAMP will use the listed Security Email on the Marketplace for these notifications.
 - _Note:_ If a provider establishes a new inbox in reaction to this guidance that is different from the Security Email then they must follow the AFC-CSO-NOC (Notification of Changes) rules to notify FedRAMP.
+- **Warning:** Be careful using a personal email tied to an individual for this inbox due to the significant risk to future communications after a change in personnel!
 - _Evidence artifacts:_ Email address to receive messages from FedRAMP
 
 ### AFC-CSO-NOC — Notification of Changes (MUST)
+_Applies to: Providers_
 Providers MUST immediately notify FedRAMP of any changes to the email address for their FedRAMP Security Inbox.
+- _Notify via:_ [CSP] Notification of Changes (form: https://help.fedramp.gov/hc/en-us/requests/new?ticket_form_id=51829466938011) — FedRAMP
 - _Evidence artifacts:_ Process, manual or automated, to notify FedRAMP of changes in the FedRAMP Security Inbox
 
 ### AFC-CSO-TFG — Trust @fedramp.gov and @gsa.gov (MUST)
+_Applies to: Providers_
 Providers MUST treat any email originating from an @fedramp.gov or @gsa.gov email address as if it was sent from FedRAMP by default; if such a message is confirmed to originate from someone other than FedRAMP then the FedRAMP Security Inbox rules no longer apply.
 - _Evidence artifacts:_ Configuration settings for FSI mailbox | Automated validation to check FSI mailbox configuration
 
 ### AFC-CSO-RCV — Receive Email Without Disruption (MUST)
+_Applies to: Providers_
 Providers MUST receive and react to email messages from FedRAMP without disruption and without requiring additional actions from FedRAMP.
 - _Note:_ This requirement is intended to prevent cloud service providers from requiring FedRAMP to complete a CAPTCHA, log into a customer portal, or otherwise take service-specific actions that might prevent the security team from receiving the message.
 
 ### AFC-CSO-CRA — Complete Required Actions (MUST)
+_Applies to: Providers_
 Providers MUST complete the required actions in Emergency or Emergency Test designated messages sent by FedRAMP within the timeframe included in the message.
 - _Note:_ Timeframes may vary by FedRAMP Certification class.
 
 ### AFC-CSO-EMR — Emergency Message Routing (MUST)
+_Applies to: Providers_
 Providers MUST route Emergency designated messages sent by FedRAMP to a senior security official for their awareness.
 - _Note:_ Senior security officials are determined by the provider.
 - _Evidence artifacts:_ Configuration settings for FSI mailbox | Automated validation to check FSI mailbox configuration
 
 ### AFC-CSO-IMA — Important Message Actions (SHOULD)
+_Applies to: Providers_
 Providers SHOULD complete the required actions in Important designated messages sent by FedRAMP within the timeframe specified in the message.
 - _Note:_ Timeframes may vary by FedRAMP Certification class.
 
 ### AFC-CSO-ACK — Acknowledge Receipt (SHOULD)
+_Applies to: Providers_
 Providers SHOULD promptly and automatically acknowledge the receipt of messages received from FedRAMP in their FedRAMP Security Inbox.
 
 
@@ -95,80 +114,106 @@ The Agency Use rules summarize the many demands made on agencies by the FedRAMP 
 - Subset **AGC** (General Agency Responsibilities): types 20x/Rev5; paths Program/Agency; classes A/B/C/D; affects Agencies
 - Subset **USE** (Use of FedRAMP Certifications): types 20x/Rev5; paths Program/Agency; classes A/B/C/D; affects Agencies
 - Subset **SPN** (Agency Sponsored Certifications): types Rev5; paths Agency; classes B/C/D; affects Agencies
-- Effective: required {"obtain": "2026-07-04", "maintain": "2026-07-04", "optional_adoption": "2026-07-04", "grace": {"default": "2026-07-04", "until_next_assessment": false}}
+- **20x and Rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2026-07-04; maintaining certification 2026-07-04 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends 2026-07-04 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/agency-use/
 
 ### AGU-AGC-AIP — Agency Internal Policies (MUST)
+_Applies to: Agencies_
 Agencies MUST maintain agency-wide policy that aligns with the requirements in OMB Memorandum M-24-15.
 
 ### AGU-AGC-NAA — Notify FedRAMP After Authorization (MUST)
+_Applies to: Agencies_
 Agencies MUST notify FedRAMP upon authorizing the use of a cloud service within the scope of FedRAMP, supplying at least the following information:
 - A copy of the agency's Authorization to Operate letter for the information system leveraging the cloud service, following agency policy and templates.
 - All other supplemental information requested in the Submit an ATO Letter form by FedRAMP.
+- _Notify via:_ Submit an ATO Letter (form: https://help.fedramp.gov/hc/en-us/requests/new?ticket_form_id=51447926193691) — FedRAMP
 
 ### AGU-AGC-GRC — Governance, Risk, and Compliance Tools (MUST)
+_Applies to: Agencies_
 Agencies MUST ensure that internal governance, risk, compliance, and inventory tools can produce and ingest machine-readable artifacts using formats identified by FedRAMP, including at least:
 - Open Security Controls Assessment Language (OSCAL)
 - JSON
 
 ### AGU-AGC-NAI — Notify Additional Information Requests (MUST)
+_Applies to: Agencies_
 Agencies MUST notify FedRAMP after requesting any additional information or materials from a FedRAMP Certified cloud service offering beyond those required by FedRAMP.
 - _Note:_ Agencies are expected to notify FedRAMP under OMB Memorandum M-24-15 section IV (a).
+- _Notify via:_ [For Agencies] Additional Information, Security Requirements, or Certification Change, or After Request Form (form: https://help.fedramp.gov/hc/en-us/requests/new?ticket_form_id=51822364715035) — FedRAMP
 
 ### AGU-AGC-NAR — No Additional Security Requirements (MUST NOT)
+_Applies to: Agencies_
 Agencies MUST NOT require additional information or materials from FedRAMP Certified cloud service offerings beyond those required by FedRAMP UNLESS the head of the agency or an authorized delegate determines there is a demonstrable need and notifies FedRAMP; this does not apply to seeking clarification or asking general questions about FedRAMP Certification Data.
 - _Note:_ This is related to the Presumption of Adequacy for a FedRAMP Certification and notification is mandated by OMB Memorandum M-24-15 section IV (a).
+- _Notify via:_ info@fedramp.gov (email: info@fedramp.gov) — FedRAMP
 
 ### AGU-AGC-TPP — No Certification Type or Path Preferences (MUST NOT)
+_Applies to: Agencies_
 Agencies MUST NOT require cloud service offerings to obtain or maintain a specific FedRAMP Certification Type or FedRAMP Certification Path, UNLESS the head of the agency or an authorized delegate determines there is a demonstrable need and notifies FedRAMP.
 - _Note:_ This is related to the Presumption of Adequacy for a FedRAMP Certification and notification is mandated by OMB Memorandum M-24-15 section IV (a).
+- _Notify via:_ info@fedramp.gov (email: info@fedramp.gov) — FedRAMP
 
 ### AGU-AGC-WKG — FedRAMP Working Groups (SHOULD)
+_Applies to: Agencies_
 Agencies SHOULD participate in FedRAMP working groups, communities of practice, and stakeholder engagements to supply feedback and align practices across government.
 
 ### AGU-AGC-LIA — Agency Liaison Program (SHOULD)
+_Applies to: Agencies_
 Agencies SHOULD assign at least 1 federal employee to be an active participant in the FedRAMP Agency Liaison program.
 - _Reference:_ Agency Liaison Program https://www.fedramp.gov/2026/agencies/support/liaisons
 
 ### AGU-AGC-SIN — Shared FedRAMP Inbox (SHOULD)
+_Applies to: Agencies_
 Agencies SHOULD establish and maintain a dedicated shared FedRAMP agency inbox to serve as the official point of contact for communications between FedRAMP and the agency.
 - _Note:_ A shared FedRAMP agency inbox may follow an agency-specific format such as agency-fedramp@agency.gov.
 
 ### AGU-USE-ABU — Authorization Before Use (MUST)
+_Applies to: Agencies_
 Agencies MUST complete the Authorization to Operate process for federal information systems that use FedRAMP Certified cloud service offerings.
 - _Note:_ FedRAMP provides technical assistance to help agencies navigate this process.
 - _Reference:_ Using a FedRAMP Certified Cloud Service Offering https://www.fedramp.gov/2026/agencies/use
 
 ### AGU-USE-RCF — Resolve Certification Package Conflicts (MUST)
+_Applies to: Agencies_
 Agencies MUST collaborate with FedRAMP when discrepancies or conflicts arise between agency-specific security determinations and the FedRAMP Certification Package.
 
 ### AGU-USE-RSG — Review Secure Configuration Guides (MUST)
+_Applies to: Agencies_
 Agencies MUST review the Secure Configuration Guides supplied by Providers and configure relevant security settings.
 
 ### AGU-USE-AFR — Accept FedRAMP Rules (MUST)
+_Applies to: Agencies_
 Agencies MUST allow FedRAMP Certified cloud service offerings to follow FedRAMP rules.
 
 ### AGU-USE-NFC — Notify FedRAMP of Monitoring Concerns (MUST)
+_Applies to: Agencies_
 Agencies MUST notify FedRAMP if information presented in an Ongoing Certification Report, Quarterly Review, or other FedRAMP Certification Data causes significant concerns for the authorizing official that would likely result in rescission of their Authorization to Operate.
 - _Note:_ Agencies are expected to notify FedRAMP under OMB Memorandum M-24-15 section IV (a).
+- _Notify via:_ Report Concerns on Ongoing Certifications (form: https://help.fedramp.gov/hc/en-us/requests/new?ticket_form_id=51821301979547) — FedRAMP
 
 ### AGU-USE-ROR — Review Ongoing Certification Reports (SHOULD)
+_Applies to: Agencies_
 Agencies SHOULD review each Ongoing Certification Report to understand how changes to the cloud service offering may impact the risk tolerance documented in the agency Authorization to Operate for the federal information system that includes the cloud service offering in its boundary.
 - _Note:_ This agency review supports agency responsibilities under 44 USC § 35, OMB Circular A-130, FIPS-200, and OMB Memorandum M-24-15.
 
 ### AGU-USE-DSO — Designate Senior Official (SHOULD)
+_Applies to: Agencies_
 Agencies SHOULD designate a federal senior information security official to review Ongoing Certification Reports and represent the agency at Quarterly Reviews for cloud service offerings included in agency information systems.
 
 ### AGU-USE-NPC — Notify Provider of Concerns (SHOULD)
+_Applies to: Agencies_
 Agencies SHOULD formally notify the cloud service provider if information presented in an Ongoing Certification Report, Quarterly Review, or other FedRAMP Certification Data causes significant concerns for the authorizing official that would likely result in rescission of their Authorization to Operate.
+- _Notify via:_ The provider's security contact email or form. (varies: varies by provider) — Provider
 
 ### AGU-USE-RIR — Review All Information Resources (SHOULD)
+_Applies to: Agencies_
 Agencies SHOULD consider third-party information resources used by the cloud service offering during initial and ongoing authorization activities.
 
 ### AGU-USE-CLA — Using FedRAMP Class A Certifications (SHOULD NOT)
+_Applies to: Agencies_
 Agencies SHOULD NOT authorize the use of a FedRAMP Class A Certified cloud service offering for more than 12 months UNLESS the cloud service offering is actively seeking a FedRAMP Class B, C, or D Certification.
 
 ### AGU-SPN-MRC — Most Recent Consolidated Rules (MUST)
+_Applies to: Agencies_
 Agencies MUST follow the most recent FedRAMP Consolidated Rules when initiating agency-sponsored FedRAMP Certification.
 
 
@@ -179,18 +224,21 @@ The Collaborative Continuous Monitoring rules help agencies use shared, current 
 - Subset **AGM** (Agency Guidance): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Agencies
 - Subset **OCR** (Ongoing Certification Reports): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
 - Subset **QTR** (Quarterly Reviews): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
-- **20x** — required; obtain 2026-07-04, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-01-01 (or next assessment)
-- **rev5** — required; obtain 2027-01-01, maintain 2027-04-02, optional adoption 2026-07-04, grace ends 2027-10-01
+- **20x** — required (Consolidated Rules for 2026); obtaining initial certification 2026-07-04; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends at the first FedRAMP independent assessment started after 2027-01-01 (MUST adopt, else certification revoked)
+- **rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2027-01-01; maintaining certification 2027-04-02 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends 2027-10-01 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/collaborative-continuous-monitoring/
 
 ### CCM-AGM-ROR — Review Ongoing Reports (MUST)
+_Applies to: Agencies_
 Agencies MUST review each Ongoing Certification Report to understand how changes to the cloud service offering may impact the previously agreed-upon risk tolerance documented in the agency's Authorization to Operate of a federal information system that includes the cloud service offering in its boundary.
 - _Note:_ This is required by 44 USC § 35, OMB A-130, FIPS-200, and M-24-15.
 
 ### CCM-AGM-CSC — Consider Security Category (SHOULD)
+_Applies to: Agencies_
 Agencies SHOULD consider the Security Category noted in their Authorization to Operate of the federal information system that includes the cloud service offering in its boundary and assign appropriate information security resources for reviewing Ongoing Certification Reports, attending Quarterly Reviews, and other ongoing FedRAMP Certification Data.
 
 ### CCM-OCR-AVL — Report Availability (MUST)
+_Applies to: Providers_
 Providers MUST supply an Ongoing Certification Report to all necessary parties every 3 months, covering the entire period since the previous summary, in a consistent format that is human readable; this report MUST include high-level summaries of at least the following information (if applicable): _(timeframe: 3 months)_
 - Changes to FedRAMP Certification Data
 - Planned changes to FedRAMP Certification Data during at least the next 3 months
@@ -200,64 +248,85 @@ Providers MUST supply an Ongoing Certification Report to all necessary parties e
 - A list of all agencies that are directly using the product
 - FedRAMP Reportable Incidents or an attestation that no such incidents occurred
 - Lessons learned and changes planned or made as a result of FedRAMP Reportable Incidents (if such occurred)
+- _JSON schema:_ FedRAMP Ongoing Certification Report (CCM-OCR-AVL) https://fedramp.gov/schemas/fedramp-ongoing-certification-report-schema-2026-06-24.json
 - _Evidence artifacts:_ Most recent Ongoing Certification Report. If the report is not available, the provider MUST provide a sample report that includes all required information. | How the report will be delivered
 
 ### CCM-OCR-NRD — Next Report Date (MUST)
+_Applies to: Providers_
 Providers MUST supply the target date for their next Ongoing Certification Report with other public FedRAMP Certification Data.
 
 ### CCM-OCR-FBM — Feedback Mechanism (MUST)
+_Applies to: Providers_
 Providers MUST supply an asynchronous mechanism for all necessary parties to provide feedback or ask questions about each Ongoing Certification Report.
 - _Note:_ This could be email by default but providers are encouraged to consider something more interactive as appropriate.
 - _Evidence artifacts:_ How to access the feedback mechanism.
 
 ### CCM-OCR-AFS — Anonymized Feedback Summary (MUST)
+_Applies to: Providers_
 Providers MUST supply an anonymized and desensitized summary of the feedback, questions, and answers about each Ongoing Certification Report as an addendum to the Ongoing Certification Report OR in the next Ongoing Certification Report.
 - _Note:_ This is intended to encourage sharing of information and decrease the burden on the cloud service provider - providing this summary will reduce duplicate questions from agencies and ensure FedRAMP has access to this information. It is generally in the provider's interest to update this addendum frequently throughout the quarter.
 - _Evidence artifacts:_ How the summary will be delivered
 
 ### CCM-OCR-LSI — Limit Sensitive Information (MUST NOT)
+_Applies to: Providers_
 Providers MUST NOT irresponsibly disclose sensitive information in an Ongoing Certification Report that would likely have an adverse effect on the cloud service offering.
 
 ### CCM-OCR-SOR — Spread Out Reports (SHOULD)
+_Applies to: Providers_
 Providers SHOULD establish a regular 3 month cycle for Ongoing Certification Reports that is spread out from the beginning, middle, or end of each quarter.
 - _Note:_ This recommendation is intended to discourage hundreds of cloud service providers from releasing their Ongoing Certification Reports during the first or last week of each quarter because that is the easiest way for a single provider to track this deliverable; the result would overwhelm agencies with many cloud services. Widely used cloud service providers are encouraged to work with their customers to identify ideal timeframes for this cycle.
 
 ### CCM-OCR-RPS — Responsible Public Certification Report Sharing (MAY)
+_Applies to: Providers_
 Providers MAY responsibly supply some or all of the information an Ongoing Certification Report to the public or other parties if the provider determines doing so will NOT likely have an adverse effect on the cloud service offering.
 
 ### CCM-QTR-MTG — Quarterly Review Meeting
+_Applies to: Providers_
 - **Class A (MAY):** Providers with Class A Certifications MAY host a synchronous Quarterly Review every 3 months, open to all necessary parties, to review aspects of the most recent Ongoing Certification Reports that the provider determines are of the most relevance to agencies. _(timeframe: 3 months)_
+    - _Evidence artifacts:_ selected ordinal recurrence for the synchronous Quarterly Review cycle if applicable.
 - **Class B (SHOULD):** Providers with Class B Certifications SHOULD host a synchronous Quarterly Review every 3 months, open to all necessary parties, to review aspects of the most recent Ongoing Certification Reports that the provider determines are of the most relevance to agencies. _(timeframe: 3 months)_
+    - _Evidence artifacts:_ selected ordinal recurrence for the Ongoing Certification Report cycle if applicable OR explanation for why Ongoing Certification Reports are not being delivered.
 - **Class C (MUST):** Providers with Class C Certifications MUST host a synchronous Quarterly Review every 3 months, open to all necessary parties, to review aspects of the most recent Ongoing Certification Reports that the provider determines are of the most relevance to agencies. _(timeframe: 3 months)_
+    - _Evidence artifacts:_ selected ordinal recurrence for the Ongoing Certification Report cycle.
 - **Class D (MUST):** Providers with Class D Certifications MUST host a synchronous Quarterly Review every 3 months, open to all necessary parties, to review aspects of the most recent Ongoing Certification Reports that the provider determines are of the most relevance to agencies. _(timeframe: 3 months)_
+    - _Evidence artifacts:_ selected ordinal recurrence for the Ongoing Certification Report cycle.
 
 ### CCM-QTR-REG — Meeting Registration Info (MUST)
+_Applies to: Providers_
 Providers MUST supply either a registration link or a downloadable calendar file with meeting information for Quarterly Reviews to all necessary parties.
 - _Evidence artifacts:_ URL to the registration page or calendar file.
 
 ### CCM-QTR-NRD — Next Review Date (MUST)
+_Applies to: Providers_
 Providers MUST publicly supply the target date for their next Quarterly Review with other public FedRAMP Certification Data.
 
 ### CCM-QTR-NID — No Irresponsible Disclosure (MUST NOT)
+_Applies to: Providers_
 Providers MUST NOT irresponsibly disclose sensitive information in a Quarterly Review that would likely have an adverse effect on the cloud service offering.
 
 ### CCM-QTR-SAR — Schedule Around Reports (SHOULD)
-Providers SHOULD regularly schedule Quarterly Reviews to occur at least 3 business days after releasing an Ongoing Certification Report AND within 10 business days of such release. _(timeframe: bizdays)_
+_Applies to: Providers_
+Providers SHOULD regularly schedule Quarterly Reviews to occur at least 3 business days after releasing an Ongoing Certification Report AND within 10 business days of such release. _(timeframe: 3–10 bizdays)_
 
 ### CCM-QTR-ACT — Additional Content (SHOULD)
+_Applies to: Providers_
 Providers SHOULD supply additional information in Quarterly Reviews that the provider determines is of interest, use, or otherwise relevant to agencies.
 
 ### CCM-QTR-RTR — Record/Transcribe Reviews (SHOULD)
+_Applies to: Providers_
 Providers SHOULD record or transcribe Quarterly Reviews and supply them to all necessary parties.
 
 ### CCM-QTR-RTP — Restrict Third Parties (SHOULD NOT)
+_Applies to: Providers_
 Providers SHOULD NOT invite third parties to attend Quarterly Reviews intended for agencies unless they have specific relevance.
 - _Note:_ This is because agencies are less likely to actively participate in meetings with third parties; the cloud service provider's independent assessor should be considered relevant by default.
 
 ### CCM-QTR-SRR — Share Recordings Responsibly (MAY)
+_Applies to: Providers_
 Providers MAY responsibly supply recordings or transcriptions of Quarterly Reviews to the public or other parties ONLY if the provider removes all agency information (comments, questions, names, etc.) AND determines doing so will NOT likely have an adverse effect on the cloud service offering.
 
 ### CCM-QTR-SCR — Share Content Responsibly (MAY)
+_Applies to: Providers_
 Providers MAY responsibly supply content prepared for a Quarterly Review to the public or other parties if the provider determines doing so will NOT likely have an adverse effect on the cloud service offering.
 
 
@@ -268,11 +337,12 @@ The Certification Data Sharing rules allow providers to store and share FedRAMP 
 - Subset **CSO** (General Provider Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
 - Subset **TRC** (FedRAMP-Compatible Trust Centers): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
 - Subset **UTC** (Using a Trust Center): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
-- **20x** — required; obtain 2026-07-04, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-01-01 (or next assessment)
-- **rev5** — required; obtain 2027-01-01, maintain 2027-08-01, optional adoption 2026-07-04, grace ends 2028-02-01
+- **20x** — required (Consolidated Rules for 2026); obtaining initial certification 2026-07-04; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends at the first FedRAMP independent assessment started after 2027-01-01 (MUST adopt, else certification revoked)
+- **rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2027-01-01; maintaining certification 2027-08-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends 2028-02-01 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/certification-data-sharing/
 
 ### CDS-CSO-PUB — Public Information (MUST)
+_Applies to: Providers_
 Providers MUST publicly share up-to-date information about the cloud service offering in both human-readable and JSON formats, including at least the following information that is available and applicable:
 - FedRAMP ID
 - Service Model
@@ -291,39 +361,64 @@ Providers MUST publicly share up-to-date information about the cloud service off
 - Next Ongoing Certification Report date (see CCM-OCR-NRD (Next Report Date))
 - Current FedRAMP Recognized independent assessment service
 - _Note:_ Generally, this information should be available on a public webpage or publicly shared in a FedRAMP-compatible trust center.
+- _JSON schema:_ FedRAMP Certification Package Overview (FRC-CSO-PKG) https://fedramp.gov/schemas/fedramp-certification-package-overview-schema-2026-06-24.json
 - _Evidence artifacts:_ URL to the human-readable data. | URL to the machine-readable data.
 
 ### CDS-CSO-SVC — Public Service List (MUST)
+_Applies to: Providers_
 Providers MUST publicly share a detailed list of specific services and their security categories that are included in the cloud service offering using clear feature or service names that align with standard public marketing materials; this list MUST be complete enough for a potential customer to determine which services are and are not included in the FedRAMP Minimum Assessment Scope without requesting access to underlying FedRAMP Certification Data.
+- _JSON schema:_ FedRAMP Certification Package Overview (FRC-CSO-PKG) https://fedramp.gov/schemas/fedramp-certification-package-overview-schema-2026-06-24.json
 - _Evidence artifacts:_ URL to the human-readable data. | URL to the machine-readable data (if applicable).
 
 ### CDS-CSO-FID — Always Include FedRAMP ID (MUST)
+_Applies to: Providers_
 Providers MUST always include the FedRAMP ID of the related cloud service offering in all FedRAMP Certification Data once assigned, including all reports, notifications, and other communication that results from FedRAMP rules.
 - _Note:_ The FedRAMP ID is supplied by FedRAMP after a cloud service offering is registered to be listed on the FedRAMP Marketplace - providers will need to use a placeholder until the FedRAMP ID is assigned.
 - _Note:_ Many providers have multiple cloud service offerings or use internal names that don't align to public materials; using the FedRAMP ID ensures we can easily align the communication with a specific cloud service offering.
 
 ### CDS-CSO-FRC — FedRAMP Certification Reports (MUST)
+_Applies to: Providers_
 Providers MUST include FedRAMP Certification Reports with their FedRAMP Certification Data without inappropriate modifications, and make such reports available within 2 weeks of receiving the materials from FedRAMP. _(timeframe: 2 weeks)_
 - _Note:_ FedRAMP provides Certification Reports for all cloud service offerings following the Program Certification path as part of the initial and ongoing FedRAMP Certification process, and may provide Certification Reports for cloud service offerings following the Agency Certification path.
 
 ### CDS-CSO-AVR — Availability Reporting
+_Applies to: Providers_
 - **Class A (SHOULD):** Providers with Class A Certifications SHOULD maintain a web service, available to all necessary parties, that indicates current and historical availability of core services within the cloud service offering over at least the past 30 days, including availability incidents, in both human-readable and machine-readable formats; this service SHOULD be available even if the primary cloud service offering is unavailable.
+    - _Note:_ This service may be separate from the trust center.
 - **Class B (MUST):** Providers with Class B Certifications MUST maintain a web service, available to all necessary parties, that indicates current and historical availability of core services within the cloud service offering over at least the past 30 days, including availability incidents, in both human-readable and machine-readable formats; this service MUST be available even if the primary cloud service offering is unavailable.
+    - _Note:_ This service may be separate from the trust center.
 - **Class C (MUST):** Providers with Class C Certifications MUST maintain a web service, available to all necessary parties, that indicates current and historical availability of core services within the cloud service offering over at least the past 30 days, including availability incidents, in both human-readable and machine-readable formats; this service MUST be available even if the primary cloud service offering is unavailable.
+    - _Note:_ This service may be separate from the trust center.
 - **Class D (MUST):** Providers with Class D Certifications MUST maintain a web service, available to all necessary parties, that indicates current and historical availability of core services within the cloud service offering over at least the past 30 days, including availability incidents, in both human-readable and machine-readable formats; this service MUST be available even if the primary cloud service offering is unavailable.
+    - _Note:_ This service may be separate from the trust center.
 
 ### CDS-CSO-UTC — Use Trust Centers (MUST)
+_Applies to: Providers_
 Providers MUST use a FedRAMP-compatible trust center to store and share FedRAMP Certification Data with all necessary parties.
 - _Note:_ Rules for FedRAMP-Compatible Trust Centers are explained in the Certification Data Sharing Rules under the FedRAMP-Compatible Trust Centers section (id: CDS-TRC).
+- _JSON schema:_ FedRAMP Certification Package Overview (FRC-CSO-PKG) https://fedramp.gov/schemas/fedramp-certification-package-overview-schema-2026-06-24.json
 
 ### CDS-CSO-CBF — Consistency Between Formats (MUST)
+_Applies to: Providers_
 Providers MUST use automation to ensure information remains consistent between human-readable and machine-readable formats when FedRAMP Certification Data is provided in both formats.
 
 ### CDS-CSO-RIS — Responsible Information Sharing (MUST)
+_Applies to: Providers_
 Providers MUST provide sufficient information in FedRAMP Certification Data to support agency authorization decisions but SHOULD NOT include sensitive information that would likely enable a threat actor to gain unauthorized access, cause harm, disrupt operations, or otherwise have a negative adverse impact on the cloud service offering.
 - _Note:_ This is not a license to exclude accurate risk information, but specifics that would likely lead to compromise should be abstracted. A breach of confidentiality with FedRAMP Certification Data should be anticipated by a secure cloud service provider.
+- _Example — Tips on sensitive information in FedRAMP Certification Data:_
+    - Passwords, API keys, access credentials, etc.
+    - Excessive detail about methodology that exposes weaknesses
+    - Personally identifiable information about employees
+    - DON'T: "In an emergency, an administrator with physical access to a system can log in using "secretadmin" with the password "pleasewutno""
+    - DO: "In an emergency, administrators with physical access can log in directly."
+    - DON'T: "All backup MFA credentials are stored in a SuperSafe Series 9000 safe in the CEOs office."
+    - DO: "All backup MFA credentials are stored in a UL Class 350 safe in a secure location with limited access."
+    - DON'T: "During an incident, the incident response team lead by Jim Smith (555-0505) will open a channel at the conference line (555-0101 #97808 passcode 99731)..."
+    - DO: "During an incident, the incident response team will coordinate over secure channels."
 
 ### CDS-CSO-IRP — Include Relevant Policies (MUST)
+_Applies to: Providers_
 Providers MUST supply all relevant policies and procedures in the FedRAMP Certification Data, including a human-readable and machine-readable reference that explains at least the following about each included policy and procedure:
 - Name of policy or procedure
 - Name of file, document, web page, etc.
@@ -335,54 +430,73 @@ Providers MUST supply all relevant policies and procedures in the FedRAMP Certif
 - _Evidence artifacts:_ Explanation of how to access this information.
 
 ### CDS-CSO-HAD — Historical FedRAMP Certification Data (MUST)
+_Applies to: Providers_
 Providers MUST supply snapshots of FedRAMP Certification Data aligned to Ongoing Certification Reports to all necessary parties; these snapshots MUST be available for the duration of FedRAMP Certification.
 - _Note:_ Historical snapshots do not need to be reconstructed for periods before the provider's first Ongoing Certification Report, but should be maintained for all subsequent Ongoing Certification Reports.
 - _Evidence artifacts:_ Explanation of how to access this information.
 
 ### CDS-CSO-PSM — Per-Service Certification Materials
+_Applies to: Providers_
 - **Class A (MAY):** Providers with Class A Certifications MAY supply per-service FedRAMP Certification materials.
+    - _Evidence artifacts:_ Explanation of the supplied materials, including how to access and use them.
 - **Class B (MAY):** Providers with Class B Certifications MAY supply per-service FedRAMP Certification materials.
+    - _Evidence artifacts:_ Explanation of the supplied materials, including how to access and use them.
 - **Class C (MAY):** Providers with Class C Certifications MAY supply per-service FedRAMP Certification materials.
+    - _Evidence artifacts:_ Explanation of the supplied materials, including how to access and use them.
 - **Class D (MUST):** Providers with Class D Certifications MUST supply per-service FedRAMP Certification materials.
+    - _Evidence artifacts:_ Explanation of the supplied materials, including how to access and use them.
 - _Note:_ Providers determine what they consider to be separate services, based on maximizing the customer experience for agencies who may only adopt some services and not others.
 - _Note:_ Providers are encouraged to provide a single comprehensive set of materials for all shared aspects of the service offering and only provide separate materials for unique aspects of each service to minimize the burden on providers and agencies.
 
 ### CDS-CSO-RPS — Responsible Public Package Sharing (MAY)
+_Applies to: Providers_
 Providers MAY responsibly share some or all of the information in a FedRAMP Certification Package publicly or with other parties if the provider determines doing so will NOT likely have an adverse effect on the cloud service offering.
 - _Evidence artifacts:_ Explanation of if and how this information is shared with other parties.
 
 ### CDS-TRC-USH — Uninterrupted Sharing (MUST)
+_Applies to: Providers_
 Trust centers MUST share FedRAMP Certification Data with all necessary parties without interruption.
 - _Note:_ "Without interruption" means that parties should not have to request manual approval each time they need to access FedRAMP Certification Data or go through a complicated process. The preferred way of ensuring access without interruption is to use on-demand just-in-time access provisioning.
 
 ### CDS-TRC-PAC — Programmatic Access (MUST)
+_Applies to: Providers_
 Trust centers MUST provide documented programmatic access to all FedRAMP Certification Data, including programmatic access to human-readable materials.
 - _Evidence artifacts:_ URL to the documentation for programmatic access.
 
 ### CDS-TRC-AAI — Agency Access Inventory (MUST)
+_Applies to: Providers_
 Trust centers MUST maintain an inventory and history of federal agency users or systems with access to FedRAMP Certification Data and MUST make this information available to FedRAMP upon request.
 - _Evidence artifacts:_ Explanation of how FedRAMP can obtain this information.
 
 ### CDS-TRC-ACL — Access Logging (MUST)
+_Applies to: Providers_
 Trust centers MUST log access to FedRAMP Certification Data and store summaries of access for at least six months; such information, as it pertains to specific parties, SHOULD be made available upon request by those parties.
 - _Evidence artifacts:_ Explanation of how the appropriate parties can obtain this log information.
 
 ### CDS-TRC-HMR — Human and Machine-Readable Certification Data (SHOULD)
+_Applies to: Providers_
 Trust centers SHOULD make FedRAMP Certification Data available to view and download in both human-readable and machine-readable formats.
 
 ### CDS-TRC-SSM — Self-Service Access Management (SHOULD)
+_Applies to: Providers_
 Trust centers SHOULD include features that encourage all necessary parties to provision and manage access to FedRAMP Certification Data for their users and services directly.
 - _Evidence artifacts:_ URL or explanation how to access documentation of these features and capabilities.
 
 ### CDS-UTC-AAD — Agency Access Denial (MUST)
+_Applies to: Providers_
 Providers MUST notify FedRAMP within 5 business days of denying an agency access request for FedRAMP Certification Data. _(timeframe: 5 bizdays)_
+- _Notify via:_ [CSP] Agency Access Denial (form: https://help.fedramp.gov/hc/en-us/requests/new?ticket_form_id=51829826617243) — FedRAMP
 
 ### CDS-UTC-AGA — Agency Access (SHOULD)
+_Applies to: Providers_
 Providers SHOULD supply access to the FedRAMP Certification Package with agencies upon request.
 - _Evidence artifacts:_ URL or explanation of how to request these materials. | Explanation of how the provider decides whether or not to share these materials or other related policies.
 
 ### CDS-CSF-TCM — Trust Center Migration (MUST) [rev5 only]
+_Applies to: Providers_
 Providers MUST notify all necessary parties when migrating to a trust center and MUST provide information in their existing USDA Connect Community Portal secure folders explaining how to use the trust center to obtain FedRAMP Certification Data.
+- _Notify via:_ info@fedramp.gov (email: info@fedramp.gov) — FedRAMP
+- _Notify via:_ Agency Security Contact (varies: varies by agency) — Agency Customers
 
 
 ## CMU — Cryptographic Module Use
@@ -390,21 +504,28 @@ Providers MUST notify all necessary parties when migrating to a trust center and
 The Cryptographic Module Use rules clarify how providers should select and use cryptographic modules. These rules allow risk-based decisions for some services while still encouraging validated cryptographic modules whenever they are technically feasible and reasonable.
 
 - Subset **CSO** (Cloud Service Provider Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
-- **20x** — required; obtain 2026-07-04, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-01-01 (or next assessment)
-- **rev5** — required; obtain 2027-01-01, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-06-01
+- **20x** — required (Consolidated Rules for 2026); obtaining initial certification 2026-07-04; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends at the first FedRAMP independent assessment started after 2027-01-01 (MUST adopt, else certification revoked)
+- **rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2027-01-01; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends 2027-06-01 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/cryptographic-module-use/
 
 ### CMU-CSO-CMD — Cryptographic Module Documentation (MUST)
+_Applies to: Providers_
 Providers MUST document the cryptographic modules used in each service (or groups of services that use the same modules) where cryptographic services are used to protect federal customer data, including whether these modules are validated under the NIST Cryptographic Module Validation Program or are update streams of such modules.
 - _Evidence artifacts:_ List of cryptographic modules including whether these modules are validated under the NIST Cryptographic Module Validation Program or are update streams of such modules.
 
 ### CMU-CSO-UVM — Using Validated Cryptographic Modules
+_Applies to: Providers_
 - **Class A (MAY):** Providers with Class A Certifications MAY use cryptographic modules or update streams of cryptographic modules with active validations under the NIST Cryptographic Module Validation Program when using cryptographic services to protect federal customer data.
+    - _Evidence artifacts:_ List of cryptographic modules including whether these modules are validated under the NIST Cryptographic Module Validation Program or are update streams of such modules.
 - **Class B (MAY):** Providers with Class B Certifications MAY use cryptographic modules or update streams of cryptographic modules with active validations under the NIST Cryptographic Module Validation Program when using cryptographic services to protect federal customer data.
+    - _Evidence artifacts:_ List of cryptographic modules including whether these modules are validated under the NIST Cryptographic Module Validation Program or are update streams of such modules.
 - **Class C (SHOULD):** Providers with Class C Certifications SHOULD use cryptographic modules or update streams of cryptographic modules with active validations under the NIST Cryptographic Module Validation Program when using cryptographic services to protect federal customer data.
+    - _Evidence artifacts:_ List of cryptographic modules including whether these modules are validated under the NIST Cryptographic Module Validation Program or are update streams of such modules.
 - **Class D (MUST):** Providers with Class D Certifications MUST use cryptographic modules or update streams of cryptographic modules with active validations under the NIST Cryptographic Module Validation Program when using cryptographic services to protect federal customer data.
+    - _Evidence artifacts:_ List of cryptographic modules including whether these modules are validated under the NIST Cryptographic Module Validation Program or are update streams of such modules.
 
 ### CMU-CSO-CAT — Configuration of Agency Tenants (SHOULD)
+_Applies to: Providers_
 Providers SHOULD configure agency tenants by default to use cryptographic services that use cryptographic modules or update streams of cryptographic modules with active validations under the NIST Cryptographic Module Validation Program when such modules are available.
 - _Evidence artifacts:_ List of cryptographic modules used by default including whether these modules are validated under the NIST Cryptographic Module Validation Program or are update streams of such modules.
 
@@ -414,11 +535,12 @@ Providers SHOULD configure agency tenants by default to use cryptographic servic
 The Certification Package Overview rules outline the expectations for a simple overview of the cloud service offering that must be included within a FedRAMP Certification Package. This overview replaces the historically required base System Security Plan for FedRAMP Rev5 and is intended to provide a clear, concise, and consistent summary of the offering and the information included in the package to help customers understand the offering at a high level.
 
 - Subset **CSO** (General Provider Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
-- **20x** — required; obtain 2026-07-04, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-01-01 (or next assessment)
-- **rev5** — required; obtain 2027-01-01, maintain 2027-07-01, optional adoption 2026-07-04, grace ends 2027-07-01 (or next assessment)
+- **20x** — required (Consolidated Rules for 2026); obtaining initial certification 2026-07-04; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends at the first FedRAMP independent assessment started after 2027-01-01 (MUST adopt, else certification revoked)
+- **rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2027-01-01; maintaining certification 2027-07-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends at the first FedRAMP independent assessment started after 2027-07-01 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/certification-package-overview/
 
 ### CPO-CSO-OVR — Overview of the Cloud Service Offering (MUST)
+_Applies to: Providers_
 Providers MUST supply a Certification Package Overview within their FedRAMP Certification Package, in both human-readable and JSON formats, that includes at least all of the information required by the following rules:
 - Certification Package Overview: CPO-CSO-MTD (Certification Package Overview Metadata)
 - Certification Data Sharing: CDS-CSO-PUB (Public Information)
@@ -431,8 +553,10 @@ Providers MUST supply a Certification Package Overview within their FedRAMP Cert
 - Independent Verification and Validation: IVV-CSO-ICP (Inclusion in Certification Package)
 - _Note:_ For FedRAMP Rev5, the Certification Package Overview replaces the historically required System Security Plan (not including appendices).
 - _Note:_ This list of rules may not apply to all FedRAMP Certification Classes or Types - if a rule does not apply then the information is not required.
+- _JSON schema:_ FedRAMP Certification Package Overview Schema https://fedramp.gov/schemas/fedramp-certification-package-overview-schema-2026-06-24.json
 
 ### CPO-CSO-MTD — Certification Package Overview Metadata (MUST)
+_Applies to: Providers_
 Providers MUST also include the following basic metadata in their Certification Package Overview:
 - Name, title, and contact information of official that is responsible and accountable for the FedRAMP Certification Package
 - Version
@@ -440,12 +564,14 @@ Providers MUST also include the following basic metadata in their Certification 
 - Source of update
 
 ### CPO-CSO-OSA — Overall Summary of Assessment in Certification Package
+_Applies to: Providers_
 - **Class A (MAY):** Providers seeking Class A Certification MAY also include an overall summary of their FedRAMP independent assessment in their Certification Package Overview.
 - **Class B (MUST):** Providers seeking Class B Certification MUST also include the overall summary of their FedRAMP independent assessment, supplied by the assessor per IVV-IAS-OSA (Overall Summary of Assessment), in their Certification Package Overview.
 - **Class C (MUST):** Providers seeking Class C Certification MUST also include the overall summary of their FedRAMP independent assessment, supplied by the assessor per IVV-IAS-OSA (Overall Summary of Assessment), in their Certification Package Overview.
 - **Class D (MUST):** Providers seeking Class D Certification MUST also include the overall summary of their FedRAMP independent assessment, supplied by the assessor per IVV-IAS-OSA (Overall Summary of Assessment), in their Certification Package Overview.
 
 ### CPO-CSX-CPM — Certification Package Maintenance for 20x [20x only]
+_Applies to: Providers_
 - **Class A (SHOULD):** Providers with 20x Class A Certifications SHOULD persistently maintain their FedRAMP Certification Package to ensure it is up to date and complete at least once every 3 months. _(timeframe: 3 months)_
 - **Class B (MUST):** Providers with 20x Class B Certifications MUST persistently maintain their FedRAMP Certification Package to ensure it is up to date and complete at least once every month. _(timeframe: 1 months)_
 - **Class C (MUST):** Providers with 20x Class C Certifications MUST persistently maintain their FedRAMP Certification Package to ensure it is up to date and complete at least once every 2 weeks. _(timeframe: 2 weeks)_
@@ -454,6 +580,7 @@ Providers MUST also include the following basic metadata in their Certification 
 - _Note:_ This rule does not require or expect persistent human review of all materials in this cadence.
 
 ### CPO-CSF-CPM — Certification Package Maintenance for Rev5 [rev5 only]
+_Applies to: Providers_
 - **Class B (MUST):** Providers with Rev5 Class B Certifications MUST persistently maintain their FedRAMP Certification Package to ensure it is up to date and complete at least once every year. _(timeframe: 1 years)_
 - **Class C (MUST):** Providers with Rev5 Class C Certifications MUST persistently maintain their FedRAMP Certification Package to ensure it is up to date and complete at least once every year. _(timeframe: 1 years)_
 - **Class D (MUST):** Providers with Rev5 Class D Certifications MUST persistently maintain their FedRAMP Certification Package to ensure it is up to date and complete at least once every six months. _(timeframe: 6 months)_
@@ -470,44 +597,53 @@ This ruleset explains how cloud service offerings obtain and maintain FedRAMP Ce
 - Subset **APP** (Applying for FedRAMP Certification): types 20x/Rev5; paths Program/Agency; classes A/B/C/D; affects Providers
 - Subset **APS** (Applying for FedRAMP Certification with an Agency Sponsor): types Rev5; paths Agency; classes B/C/D; affects Providers
 - Subset **CCL** (Changing Certification Class): types Rev5; paths Agency; classes B/C/D; affects Providers
-- **20x** — required; obtain 2026-07-04, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-01-01 (or next assessment)
-- **rev5** — required; obtain 2027-01-01, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-01-01 (or next assessment)
+- **20x** — required (Consolidated Rules for 2026); obtaining initial certification 2026-07-04; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends at the first FedRAMP independent assessment started after 2027-01-01 (MUST adopt, else certification revoked)
+- **rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2027-01-01; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends at the first FedRAMP independent assessment started after 2027-01-01 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/fedramp-certification/
 
 ### FRC-CSO-FCP — FedRAMP Certification Profile (MUST)
+_Applies to: Providers_
 Providers MUST identify a target FedRAMP Certification Profile and apply all relevant FedRAMP Practices to the cloud service offering.
 - _Note:_ Information resources (including third-party information resources) MAY vary by security category as appropriate to the type of information handled by or impacted by the information resource.
 
 ### FRC-CSO-PKG — FedRAMP Certification Package (MUST)
+_Applies to: Providers_
 Providers seeking a Certification MUST supply a complete FedRAMP Certification Package to FedRAMP for initial certification; the FedRAMP Certification Package MUST include at least the following information:
 - Information about the Cloud Service Offering following CPO-CSO-OVR (Overview of the Cloud Service Offering)
 - Implementation, Validation, and Assessment information for each relevant FedRAMP requirement/control/ksi as defined in SDR-CSO-FRR (FedRAMP Rules)
 - A real or example Ongoing Certification Report following CCM-OCR-AVL (Report Availability)
+- _JSON schema:_ FedRAMP Certification Package Overview (FRC-CSO-PKG) https://fedramp.gov/schemas/fedramp-certification-package-overview-schema-2026-06-24.json
 
 ### FRC-CSO-JSN — FedRAMP JSON Schemas (MUST)
+_Applies to: Providers_
 Providers MUST supply machine-readable information in JSON documents that are valid against the corresponding JSON schema when a rule contains a FedRAMP JSON schema, UNLESS otherwise specified in the rule.
 - _Note:_ FedRAMP JSON schemas are designed to be lightweight and flexible to establish a minimum set of structured information while allowing providers to improve on the format and structure of the information as needed to meet their needs and the needs of their customers.
 
 ### FRC-CSO-MRA — Maintain Responsibility and Accountability (MUST)
+_Applies to: Providers_
 Providers MUST maintain responsibility and accountability for the accuracy and completeness of all information in the FedRAMP Certification Package, especially when they engage a third party (such as an independent assessor, advisory service, or external tools) to supply information on their behalf.
 
 ### FRC-CSO-POP — Pick One Program Certification Type (MUST NOT)
+_Applies to: Providers_
 Providers MUST NOT seek both FedRAMP Rev5 Program Certification and FedRAMP 20x Program Certification for the same cloud service offering; pick one type.
 - _Note:_ This rule does not prevent a provider from seeking and maintaining a FedRAMP Rev5 Agency Certification and a FedRAMP 20x Program Certification for the same cloud service offering, however, doing so is strongly discouraged due to the increased complexity and risk of confusion for all parties.
 
 ### FRC-CLA-ASF — Approved Alternative Security Frameworks (MUST)
+_Applies to: Providers_
 Providers seeking a FedRAMP Class A Certification MUST have completed a certification or equivalent process, including an independent assessment if applicable, from one of the following alternative security frameworks within the past 12 months:
 - FedRAMP Rev5 (including FedRAMP Ready) at any historical Impact Level
 - SOC 2 Type II
 - GovRAMP at any Impact Level
 
 ### FRC-CLA-EAM — External Assessment Materials (MUST)
+_Applies to: Providers_
 Providers seeking a FedRAMP Class A Certification MUST supply the following materials from their alternative security framework assessment to all necessary parties:
 - SOC 2 Type II: Complete report, bridge or gap letter (if applicable), verified audit engagement documentation, estimated schedule for upcoming report, supplemental compliance evidence (if applicable)
 - FedRAMP Ready: Readiness Assessment Report, Security Assessment Plan, and any other materials required by FedRAMP.
 - GovRAMP: Readiness Assessment Report, Security Assessment Plan, and any other materials required by GovRAMP.
 
 ### FRC-CLA-MFR — Mandatory FedRAMP Rules for Class A (MUST)
+_Applies to: Providers_
 Providers seeking a Class A FedRAMP Certification MUST address all rules in this FedRAMP Class A Certification subset (FRC-CLA) AND the following additional FedRAMP Class A rules; the appropriate artifacts or information mapping for all rules MUST be supplied in the FedRAMP Certification Package.
 - FedRAMP Certification: FRC-CSO-PKG (FedRAMP Certification Package)
 - FedRAMP Certification: FRC-CSO-JSN (FedRAMP JSON Schemas)
@@ -537,6 +673,7 @@ Providers seeking a Class A FedRAMP Certification MUST address all rules in this
 - _Note:_ Information about how the provider addresses the included Key Security Indicators are required to receive a class A certification even if the provider intends to pursue a Rev 5 Program Certification path in the future.
 
 ### FRC-CLA-RFR — Recommended FedRAMP Rules for Class A (SHOULD)
+_Applies to: Providers_
 Providers seeking a Class A FedRAMP Certification SHOULD address the following additional recommended FedRAMP Class A rules (if applicable):
 - Certification Data Sharing: CDS-CSO-AVR (Availability Reporting)
 - Certification Package Overview: CPO-CSF-CPM (Certification Package Maintenance for Rev5)
@@ -551,6 +688,7 @@ Providers seeking a Class A FedRAMP Certification SHOULD address the following a
 - Vulnerability Evaluation and Reporting: VER-TFR-EVU (Evaluate Vulnerabilities Quickly)
 
 ### FRC-CLA-OFR — Address Optional FedRAMP Rules for Class A (MAY)
+_Applies to: Providers_
 Providers seeking a Class A FedRAMP Certification MAY address the following additional optional FedRAMP Class A rules (if applicable):
 - Collaborative Continuous Monitoring: CCM-QTR-MTG (Quarterly Review Meeting)
 - Certification Data Sharing: CDS-CSO-PSM (Per-Service Certification Materials)
@@ -563,9 +701,11 @@ Providers seeking a Class A FedRAMP Certification MAY address the following addi
 - Vulnerability Evaluation and Reporting: VER-TFR-NRI (Non-Internet-Reachable Incidents)
 
 ### FRC-CLA-IVV — Optional Independent Verification and Validation (MAY)
+_Applies to: Providers_
 Providers seeking a FedRAMP Class A Certification MAY have the FedRAMP Certification Package independently verified and validated by a FedRAMP Recognized assessor before submission to FedRAMP.
 
 ### FRC-APP-MLF — Marketplace Listing First (MUST)
+_Applies to: Providers_
 Providers MUST be listed in the FedRAMP Marketplace before applying for FedRAMP Certification, including:
 - FedRAMP Marketplace: MKT-CSO-MLR (Marketplace Listing Requirements),
 - FedRAMP Marketplace: MKT-CSO-PML (Provider Marketplace Listing Requests)
@@ -573,49 +713,61 @@ Providers MUST be listed in the FedRAMP Marketplace before applying for FedRAMP 
 - FedRAMP Marketplace: MKT-IIP-DCP (Demonstrating Continuous Progress)
 
 ### FRC-APP-AFC — Applying for FedRAMP Certification (MUST)
+_Applies to: Providers_
 Providers MUST complete the FedRAMP Certification Application Form in full to request an initial assessment by FedRAMP.
+- _Notify via:_ [For CSPs] FedRAMP Certification Application Form (form: https://help.fedramp.gov/hc/en-us/requests/new?ticket_form_id=51137131584283) — FedRAMP
 
 ### FRC-APP-FCP — Fresh FedRAMP Certification Package (MUST)
+_Applies to: Providers_
 Providers MUST supply a fresh initial FedRAMP Certification Package that shows the current status of the cloud service offering as verified and validated by the provider within the previous 7 days.
 
 ### FRC-APP-FIA — Fresh Independent Assessment
+_Applies to: Providers_
 - **Class A (MAY):** Providers seeking Class A Certification MAY supply a fresh initial FedRAMP independent assessment that was completed by a FedRAMP Recognized independent assessment service within the previous 3 months. _(timeframe: 3 months)_
 - **Class B (MUST):** Providers seeking Class B Certification MUST supply a fresh initial FedRAMP independent assessment that was completed by a FedRAMP Recognized independent assessment service within the previous 3 months. _(timeframe: 3 months)_
 - **Class C (MUST):** Providers seeking Class C Certification MUST supply a fresh initial FedRAMP independent assessment that was completed by a FedRAMP Recognized independent assessment service within the previous 3 months. _(timeframe: 3 months)_
 - **Class D (MUST):** Providers seeking Class D Certification MUST supply a fresh initial FedRAMP independent assessment that was completed by a FedRAMP Recognized independent assessment service within the previous 3 months. _(timeframe: 3 months)_
 
 ### FRC-APP-NTP — No Third-Party Applicants (MUST NOT)
+_Applies to: Providers_
 Providers MUST NOT use a third party to apply for a FedRAMP Certification on their behalf; this includes independent assessment services.
 - _Note:_ FedRAMP previously allowed independent assessment services to submit applications on behalf of providers, but this caused confusion about who was responsible for the application and the information in it. Providers should apply directly to ensure clear accountability.
 - _Note:_ Providers may use third parties to help them prepare their application and assessment materials for submission.
 
 ### FRC-APP-USA — Updating Stale Assessments (MAY)
+_Applies to: Providers_
 Providers MAY freshen a stale initial independent verification and validation assessment by having a FedRAMP Recognized independent assessment service review any changes between the original assessment and the current status of the cloud service offering in place of a full re-assessment, UNLESS the stale assessment is more than 9 months old.
 
 ### FRC-APS-ATO — Agency Authorization to Operate (MUST)
+_Applies to: Providers_
 Providers seeking a FedRAMP Rev5 Agency Certification MUST have completed the Authorization to Operate (ATO) process with their agency sponsor for the cloud service offering, concluding with a formal signed ATO letter that the agency has sent over official government channels to FedRAMP.
 
 ### FRC-CCL-UCC — Upgrading Certification Class (MUST)
+_Applies to: Providers_
 Providers MUST apply for a new FedRAMP Certification to upgrade their Certification Class; all applicable requirements MUST be met in advance.
 - _Note:_ Upgrade paths include moving from A to B, C, or D; B to C or D; and C to D.
 - _Note:_ The preferred path is to incrementally update the implementation and assurance commitments within the current Certification Class until the provider has met all requirements for the target Certification Class, then apply for the new Certification Class.
 
 ### FRC-CCL-DCC — Downgrading Certification Class (MUST)
+_Applies to: Providers_
 Providers MUST apply for a new FedRAMP Certification to downgrade their Certification Class.
 - _Note:_ Downgrade paths include moving from D to C, B, or A; C to B or A; or B to A.
 - _Note:_ FRC-CCL-DNP (Downgrade Notification Period) applies - please DO NOT downgrade Certification Class with providing advance notification to all necessary parties!
 
 ### FRC-CCL-DNP — Downgrade Notification Period (SHOULD)
+_Applies to: Providers_
 Providers SHOULD notify all necessary parties at least 120 days in advance of an intended downgrade or cancellation of FedRAMP Certification.
 - _Note:_ Downgrading or canceling FedRAMP Certification will have severe negative consequences for the provider and their agency customers and should only be done after careful consideration and planning... but if it must be done, notify all necessary parties as soon as possible.
 
 ### FRC-CSX-VVK — Automated Verification and Validation of Key Security Indicators [20x only]
+_Applies to: Providers_
 - **Class A (MAY):** Providers seeking 20x Class A Certification MAY implement automated methods to persistently verify and validate the accuracy and completeness of Key Security Indicators.
 - **Class B (SHOULD):** Providers seeking 20x Class B Certification SHOULD implement automated methods to persistently verify and validate the accuracy and completeness of Key Security Indicators with at least 1 automated method for each Key Security Indicator.
 - **Class C (MUST):** Providers seeking 20x Class C Certification MUST implement automated methods to persistently verify and validate the accuracy and completeness of Key Security Indicators with at least 2 automated methods for each Key Security Indicator.
 - **Class D (MUST):** Providers seeking 20x Class D Certification MUST implement automated methods to persistently verify and validate the accuracy and completeness of Key Security Indicators with at least 4 automated methods for each Key Security Indicator.
 
 ### FRC-CSX-MOT — Metrics Over Time for Key Security Indicators [20x only]
+_Applies to: Providers_
 - **Class A (MAY):** Providers seeking 20x Class A Certification MAY supply historical metrics for Key Security Indicators.
 - **Class B (SHOULD):** Providers seeking 20x Class B Certification SHOULD supply historical metrics for Key Security Indicators.
 - **Class C (MUST):** Providers seeking 20x Class C Certification MUST supply historical metrics including status from persistent validation over at least the past 6 months for all Key Security Indicators.
@@ -623,6 +775,7 @@ Providers SHOULD notify all necessary parties at least 120 days in advance of an
 - _Note:_ For initial FedRAMP Certification, providers will need to have mechanisms in place and agree to meet this requirement in the event the cloud service has not been operating with related metrics available for the required period prior to applying for initial certification.
 
 ### FRC-CSX-VVR — Automated Verification and Validation of FedRAMP Rules [20x only]
+_Applies to: Providers_
 - **Class A (MAY):** Providers seeking 20x Class A Certification MAY implement automated methods to persistently verify and validate the accuracy and completeness of the Security Decision Record for FedRAMP rules when applicable.
 - **Class B (SHOULD):** Providers seeking 20x Class B Certification SHOULD implement automated methods to persistently verify and validate the accuracy and completeness of the Security Decision Record for FedRAMP rules when applicable.
 - **Class C (SHOULD):** Providers seeking 20x Class C Certification SHOULD implement automated methods to persistently verify and validate the accuracy and completeness of the Security Decision Record for FedRAMP rules when applicable.
@@ -630,9 +783,11 @@ Providers SHOULD notify all necessary parties at least 120 days in advance of an
 - _Note:_ Different rules will be easy to automate for different providers, depending on the implementation, so FedRAMP generally leaves this implementation up to providers based on what makes the most sense for their own business and approach.
 
 ### FRC-CSX-MAS — Application within MAS (SHOULD) [20x only]
+_Applies to: Providers_
 Providers SHOULD apply ALL Key Security Indicators to ALL aspects of their cloud service offering that are within the FedRAMP Minimum Assessment Scope.
 
 ### FRC-CSF-BSL — FedRAMP Rev5 Baselines [rev5 only]
+_Applies to: Providers_
 - **Class B (MUST):** Providers seeking FedRAMP Rev5 Class B Certification MUST include at least the following NIST SP 800-53 Rev. 5 controls in their Security Decision Record:
     - Rev5 controls: AC, AT, AU, CA, CM, CP, IA, IR, MA, MP, PE, PL, PS, RA, SA, SC, SI, SR
 - **Class C (MUST):** Providers seeking FedRAMP Rev5 Class C Certification MUST include at least the following NIST SP 800-53 Rev. 5 controls in their Security Decision Record:
@@ -642,12 +797,15 @@ Providers SHOULD apply ALL Key Security Indicators to ALL aspects of their cloud
 - _Reference:_ NIST SP 800-53 Rev. 5, Security and Privacy Controls for Information Systems and Organizations https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final
 
 ### FRC-CSF-ACP — Assign Control Parameters (MUST) [rev5 only]
+_Applies to: Providers_
 Providers MUST assign all organization-defined control parameters, following FedRAMP Rev5 Controls Guidance, and ensure that all control parameter assignments are documented in the Security Decision Record (SDR).
 
 ### FRC-CSF-FFG — Follow FedRAMP Rev5 Controls Guidance (MUST) [rev5 only]
+_Applies to: Providers_
 Providers MUST follow FedRAMP Rev5 Controls Guidance for the implementation and documentation of all applicable controls.
 
 ### FRC-CSF-RDY — FedRAMP Ready Conversion (MUST) [rev5 only]
+_Applies to: Providers_
 Providers with FedRAMP Rev5 Ready status MUST convert to a FedRAMP Certification by whichever of the follow dates is later: the expiration of their annual assessment or November 17, 2026 (the legacy FedRAMP Ready status will be entirely removed on December 31, 2027).
 - _Note:_ The simplest conversion in most cases would be to a FedRAMP 20x Class A Certification.
 - _Note:_ Cloud services that do not wish to convert or do not meet conversion criteria will be renamed Legacy FedRAMP Ready and otherwise retired from FedRAMP Ready.
@@ -659,21 +817,27 @@ The Incident Evaluation and Communication rules explain how providers must commu
 
 - Subset **FRP** (FedRAMP Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects FedRAMP
 - Subset **CSO** (General Provider Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
-- **20x** — required; obtain 2026-07-04, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-01-01 (or next assessment)
-- **rev5** — required; obtain 2027-01-01, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-06-01
+- **20x** — required (Consolidated Rules for 2026); obtaining initial certification 2026-07-04; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends at the first FedRAMP independent assessment started after 2027-01-01 (MUST adopt, else certification revoked)
+- **rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2027-01-01; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends 2027-06-01 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/incident-evaluation-and-communication/
 
 ### IEC-FRP-ORV — Ongoing Review (MUST)
+_Applies to: FedRAMP_
 FedRAMP MUST periodically review FedRAMP Incident Evaluation and Communication implementation with providers based on lack of reporting or other information.
+- _Corrective action:_ FedRAMP will request a Corrective Action Plan when a provider is unaware of the rules or has failed to implement proper procedures.
+- _Corrective action:_ FedRAMP will grant a 3 month grace period to implement proper procedures pending remediation and possible revocation of FedRAMP Certification.
 
 ### IEC-CSO-EFR — Evaluate FedRAMP Reportability (MUST)
+_Applies to: Providers_
 Providers MUST promptly evaluate incidents to determine if they affect confidentiality or integrity of federal customer data or are likely to affect confidentiality or integrity of federal customer data; such incidents are FedRAMP Reportable Incidents and must be reported following the FedRAMP Incident Evaluation and Communication rules.
 - _Evidence artifacts:_ An incident log showing an example of one or more incidents being evaluated including the reason for the determination. The log can be from real incidents, simulated incidents, or a combination of sources.
 
 ### IEC-CSO-DPR — Default PAIN Rating (MUST)
+_Applies to: Providers_
 Providers MUST treat FedRAMP Reportable Incidents as if they have a Potential Agency Impact N-rating (PAIN) of 5 UNLESS they promptly estimate the PAIN rating following the rule in IEC-CSO-EFI (Estimate Federal Impact).
 
 ### IEC-CSO-IIR — Initial Incident Report
+_Applies to: Providers_
 - **Class A (SHOULD):** Providers with Class A Certifications SHOULD responsibly notify all affected parties after identifying FedRAMP Reportable Incidents by providing an Initial Incident Report with as much of the following information that is available at the time of reporting and/or the current relevant status for each item:
     - Contact information for the federal incident response coordinator
     - Provider's internally assigned tracking identifier
@@ -688,6 +852,7 @@ Providers MUST treat FedRAMP Reportable Incidents as if they have a Potential Ag
     - PAIN 3: Initial Incident Report 6 hours
     - PAIN 4: Initial Incident Report 6 hours
     - PAIN 5: Initial Incident Report 6 hours
+    - _Evidence artifacts:_ An Initial Incident Report for one or more incidents. The report can be from real incidents, simulated incidents, or a combination of sources.
 - **Class B (MUST):** Providers with Class B Certifications MUST responsibly notify all affected parties after identifying FedRAMP Reportable Incidents by providing an Initial Incident Report with as much of the following information that is available at the time of reporting and/or the current relevant status for each item:
     - Contact information for the federal incident response coordinator.
     - Provider's internally assigned tracking identifier
@@ -702,6 +867,7 @@ Providers MUST treat FedRAMP Reportable Incidents as if they have a Potential Ag
     - PAIN 3: Initial Incident Report 6 hours
     - PAIN 4: Initial Incident Report 6 hours
     - PAIN 5: Initial Incident Report 6 hours
+    - _Evidence artifacts:_ An Initial Incident Report for one or more incidents. The report can be from real incidents, simulated incidents, or a combination of sources.
 - **Class C (MUST):** Providers with Class C Certifications MUST responsibly notify all affected parties after identifying FedRAMP Reportable Incidents by providing an Initial Incident Report with as much of the following information that is available at the time of reporting and/or the current relevant status for each item:
     - Contact information for the federal incident response coordinator.
     - Provider's internally assigned tracking identifier
@@ -716,6 +882,7 @@ Providers MUST treat FedRAMP Reportable Incidents as if they have a Potential Ag
     - PAIN 3: Initial Incident Report 1 hours
     - PAIN 4: Initial Incident Report 1 hours
     - PAIN 5: Initial Incident Report 1 hours
+    - _Evidence artifacts:_ An Initial Incident Report for one or more incidents. The report can be from real incidents, simulated incidents, or a combination of sources.
 - **Class D (MUST):** Providers with Class D Certifications MUST responsibly notify all affected parties after identifying FedRAMP Reportable Incidents by providing an Initial Incident Report with as much of the following information that is available at the time of reporting and/or the current relevant status for each item:
     - Contact information for the federal incident response coordinator.
     - Provider's internally assigned tracking identifier
@@ -730,8 +897,14 @@ Providers MUST treat FedRAMP Reportable Incidents as if they have a Potential Ag
     - PAIN 3: Initial Incident Report 0.25 hours
     - PAIN 4: Initial Incident Report 0.25 hours
     - PAIN 5: Initial Incident Report 0.25 hours
+    - _Evidence artifacts:_ An Initial Incident Report for one or more incidents. The report can be from real incidents, simulated incidents, or a combination of sources.
+- _JSON schema:_ FedRAMP Incident Report (IEC-CSO-IIR / IEC-CSO-OIR / IEC-CSO-FIR) https://fedramp.gov/schemas/fedramp-incident-report-schema-2026-06-24.json
+- _Notify via:_ fedramp_security@fedramp.gov (email: fedramp_security@fedramp.gov) — FedRAMP
+- _Notify via:_ Follow agency-specific incident reporting procedures (varies: varies by agency) — Agency Customers
+- _Notify via:_ Provider's Trust Center or USDA Connect (update: trust center) — All Necessary Parties
 
 ### IEC-CSO-OIR — Ongoing Incident Reports
+_Applies to: Providers_
 - **Class A (SHOULD):** Providers with Class A Certifications SHOULD responsibly notify all affected parties of ongoing activity as new information becomes available during incident response for FedRAMP Reportable Incidents, including updates (or lack of updates) to all previously reported information and as much of the following additional information that is available and/or the current relevant status for each item:
     - Observed incident activity
     - Indicators of compromise
@@ -743,6 +916,7 @@ Providers MUST treat FedRAMP Reportable Incidents as if they have a Potential Ag
     - PAIN 3: Ongoing Incident Report 1 bizdays
     - PAIN 4: Ongoing Incident Report 1 bizdays
     - PAIN 5: Ongoing Incident Report 1 bizdays
+    - _Evidence artifacts:_ An Ongoing Incident Report for one or more incidents. The report can be from real incidents, simulated incidents, or a combination of sources.
 - **Class B (MUST):** Providers with Class B Certifications MUST responsibly notify all affected parties of ongoing activity as new information becomes available during incident response for FedRAMP Reportable Incidents, including updates (or lack of updates) to all previously reported information and as much of the following additional information that is available and/or the current relevant status for each item:
     - Observed incident activity
     - Indicators of compromise
@@ -754,6 +928,7 @@ Providers MUST treat FedRAMP Reportable Incidents as if they have a Potential Ag
     - PAIN 3: Ongoing Incident Report 1 bizdays
     - PAIN 4: Ongoing Incident Report 1 bizdays
     - PAIN 5: Ongoing Incident Report 1 bizdays
+    - _Evidence artifacts:_ An Ongoing Incident Report for one or more incidents. The report can be from real incidents, simulated incidents, or a combination of sources.
 - **Class C (MUST):** Providers with Class C Certifications MUST responsibly notify all affected parties of ongoing activity as new information becomes available during incident response for FedRAMP Reportable Incidents, including updates (or lack of updates) to all previously reported information and as much of the following additional information that is available and/or the current relevant status for each item:
     - Observed incident activity
     - Indicators of compromise
@@ -765,6 +940,7 @@ Providers MUST treat FedRAMP Reportable Incidents as if they have a Potential Ag
     - PAIN 3: Ongoing Incident Report 6 hours
     - PAIN 4: Ongoing Incident Report 6 hours
     - PAIN 5: Ongoing Incident Report 6 hours
+    - _Evidence artifacts:_ An Ongoing Incident Report for one or more incidents. The report can be from real incidents, simulated incidents, or a combination of sources.
 - **Class D (MUST):** Providers with Class D Certifications MUST responsibly notify all affected parties of ongoing activity as new information becomes available during incident response for FedRAMP Reportable Incidents, including updates (or lack of updates) to all previously reported information and as much of the following additional information that is available and/or the current relevant status for each item:
     - Observed incident activity
     - Indicators of compromise
@@ -776,34 +952,49 @@ Providers MUST treat FedRAMP Reportable Incidents as if they have a Potential Ag
     - PAIN 3: Ongoing Incident Report 3 hours
     - PAIN 4: Ongoing Incident Report 3 hours
     - PAIN 5: Ongoing Incident Report 3 hours
+    - _Evidence artifacts:_ An Ongoing Incident Report for one or more incidents. The report can be from real incidents, simulated incidents, or a combination of sources.
+- _JSON schema:_ FedRAMP Incident Report (IEC-CSO-IIR / IEC-CSO-OIR / IEC-CSO-FIR) https://fedramp.gov/schemas/fedramp-incident-report-schema-2026-06-24.json
+- _Notify via:_ fedramp_security@fedramp.gov (email: fedramp_security@fedramp.gov) — FedRAMP
+- _Notify via:_ Follow agency-specific incident reporting procedures (varies: varies by agency) — Agency Customers
+- _Notify via:_ Provider's Trust Center or USDA Connect (update: trust center) — All Necessary Parties
 
 ### IEC-CSO-FIR — Final Incident Report
+_Applies to: Providers_
 - **Class A (MUST):** Providers with Class A Certifications MUST responsibly notify all affected parties by providing a Final Incident Report once the incident has been resolved and recovery is complete, including final updates to all previously reported information.
     - PAIN 1: Final Incident Report 3 bizdays
     - PAIN 2: Final Incident Report 3 bizdays
     - PAIN 3: Final Incident Report 3 bizdays
     - PAIN 4: Final Incident Report 3 bizdays
     - PAIN 5: Final Incident Report 3 bizdays
+    - _Evidence artifacts:_ An Final Incident Report for one or more incidents. The report can be from real incidents, simulated incidents, or a combination of sources.
 - **Class B (MUST):** Providers with Class B Certifications MUST responsibly notify all affected parties by providing a Final Incident Report once the incident has been resolved and recovery is complete, including final updates to all previously reported information.
     - PAIN 1: Final Incident Report 3 bizdays
     - PAIN 2: Final Incident Report 3 bizdays
     - PAIN 3: Final Incident Report 3 bizdays
     - PAIN 4: Final Incident Report 3 bizdays
     - PAIN 5: Final Incident Report 3 bizdays
+    - _Evidence artifacts:_ An Final Incident Report for one or more incidents. The report can be from real incidents, simulated incidents, or a combination of sources.
 - **Class C (MUST):** Providers with Class C Certifications MUST responsibly notify all affected parties by providing a Final Incident Report once the incident has been resolved and recovery is complete, including final updates to all previously reported information.
     - PAIN 1: Final Incident Report 1 bizdays
     - PAIN 2: Final Incident Report 1 bizdays
     - PAIN 3: Final Incident Report 6 hours
     - PAIN 4: Final Incident Report 6 hours
     - PAIN 5: Final Incident Report 6 hours
+    - _Evidence artifacts:_ An Final Incident Report for one or more incidents. The report can be from real incidents, simulated incidents, or a combination of sources.
 - **Class D (MUST):** Providers with Class D Certifications MUST responsibly notify all affected parties by providing a Final Incident Report once the incident has been resolved and recovery is complete, including final updates to all previously reported information.
     - PAIN 1: Final Incident Report 24 hours
     - PAIN 2: Final Incident Report 6 hours
     - PAIN 3: Final Incident Report 3 hours
     - PAIN 4: Final Incident Report 3 hours
     - PAIN 5: Final Incident Report 3 hours
+    - _Evidence artifacts:_ An Final Incident Report for one or more incidents. The report can be from real incidents, simulated incidents, or a combination of sources.
+- _JSON schema:_ FedRAMP Incident Report (IEC-CSO-IIR / IEC-CSO-OIR / IEC-CSO-FIR) https://fedramp.gov/schemas/fedramp-incident-report-schema-2026-06-24.json
+- _Notify via:_ fedramp_security@fedramp.gov (email: fedramp_security@fedramp.gov) — FedRAMP
+- _Notify via:_ Follow agency-specific incident reporting procedures (varies: varies by agency) — Agency Customers
+- _Notify via:_ Provider's Trust Center or USDA Connect (update: trust center) — All Necessary Parties
 
 ### IEC-CSO-EFI — Estimate Federal Impact (SHOULD)
+_Applies to: Providers_
 Providers SHOULD promptly estimate the likely adverse impact of an incident on agency customers to assign a Potential Agency Impact N-rating; this step is called Incident Rating.
 - **N1** for a likely minimal customer effect on 1 or more agencies.
 - **N2** for a likely narrow customer effect on 1 or more agencies.
@@ -811,10 +1002,13 @@ Providers SHOULD promptly estimate the likely adverse impact of an incident on a
 - **N4** for a likely debilitating customer effect on 1 agency or a likely disruptive customer effect on more than 1 agency.
 - **N5** for a likely debilitating customer effect on more than 1 agency.
 - _Note:_ All incidents must be assigned a default PAIN-5 as required by IEC-CSO-DPR (Default PAIN Rating) if this step is not completed.
+- _JSON schema:_ FedRAMP Incident Report (IEC-CSO-IIR / IEC-CSO-OIR / IEC-CSO-FIR) https://fedramp.gov/schemas/fedramp-incident-report-schema-2026-06-24.json
 - _Evidence artifacts:_ An incident log showing an example of one or more incidents being evaluated including the reason for the determination. The log can be from real incidents, simulated incidents, or a combination of sources.
 
 ### IEC-CSO-AIR — Automated Incident Reporting (SHOULD)
+_Applies to: Providers_
 Providers SHOULD use automation to minimize human intervention in the process of reporting FedRAMP Reportable Incidents to all affected parties.
+- **Warning:** Modern cloud services should not be reporting incidents by hand-crafting emails!
 
 
 ## IVV — Independent Verification and Validation
@@ -823,11 +1017,12 @@ This ruleset explains the expectations for independent verification and validati
 
 - Subset **CSO** (General Provider Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
 - Subset **IAS** (General Independent Assessor Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Assessors
-- **20x** — required; obtain 2026-07-04, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-01-01 (or next assessment)
-- **rev5** — required; obtain 2027-01-01, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-01-01 (or next assessment)
+- **20x** — required (Consolidated Rules for 2026); obtaining initial certification 2026-07-04; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends at the first FedRAMP independent assessment started after 2027-01-01 (MUST adopt, else certification revoked)
+- **rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2027-01-01; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends at the first FedRAMP independent assessment started after 2027-01-01 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/independent-verification-and-validation/
 
 ### IVV-CSO-FIA — FedRAMP Independent Assessments
+_Applies to: Providers_
 - **Class A (MAY):** Providers with Class A Certifications MAY persistently complete an independent verification and validation assessment of all applicable FedRAMP rules with a FedRAMP Recognized independent assessment service OR FedRAMP at least once per year; this is a FedRAMP independent assessment. _(timeframe: 1 years)_
 - **Class B (MUST):** Providers with Class B Certifications MUST persistently complete an independent verification and validation assessment of all applicable FedRAMP rules with a FedRAMP Recognized independent assessment service OR FedRAMP at least once per year; this is a FedRAMP independent assessment. _(timeframe: 1 years)_
 - **Class C (MUST):** Providers with Class C Certifications MUST persistently complete an independent verification and validation assessment of all applicable FedRAMP rules with a FedRAMP Recognized independent assessment service OR FedRAMP at least once per year; this is a FedRAMP independent assessment. _(timeframe: 1 years)_
@@ -838,64 +1033,80 @@ This ruleset explains the expectations for independent verification and validati
 - _Note:_ FedRAMP Recognized independent assessment services are listed on the FedRAMP Marketplace.
 
 ### IVV-CSO-SEI — Supply Evidence of Implementation (MUST)
+_Applies to: Providers_
 Providers MUST supply evidence to all necessary assessors of the implementation of the measures that have been documented to meet FedRAMP Practices; this evidence is the result of verification.
 - _Note:_ For example, if the documentation says that firewall rules are used to block traffic then the cloud service provider would verify that firewall rules are in place to block traffic and supply that evidence to assessors (preferably by allowing them to see how firewall configurations are deployed from a source of truth).
 
 ### IVV-CSO-SEE — Supply Evidence of Effectiveness (MUST)
+_Applies to: Providers_
 Providers MUST supply evidence to all necessary assessors of the effectiveness of the measures that have been implemented to meet FedRAMP Practices; this evidence is the result of validation.
 - _Note:_ For example, after verifying that firewalls are configured to block traffic following IVV-CSO-SEI (Supply Evidence of Implementation), the provider would validate that traffic is actually being blocked and supply evidence of that validation to assessors (such as by allowing them to see metrics on the traffic that is blocked vs not).
 
 ### IVV-CSO-ICP — Inclusion in Certification Package (MUST)
+_Applies to: Providers_
 Providers MUST supply the results of FedRAMP independent assessments in their FedRAMP Certification Package without inappropriate modification.
 - _Note:_ Inappropriate modification in this context means changing the underlying intent/etc. of the content provided by the independent assessment service - the content itself may be modified for presentation, formatting, etc. as needed.
 - _Note:_ This rule is related to IVV-IAS-VIP (Verify Inclusion in Certification Package).
 
 ### IVV-CSO-DUS — Document Use of Representative Samples (MUST)
+_Applies to: Providers_
 Providers MUST document and explain the use of representative samples during verification and validation when using representative samples as allowed by IVV-CSO-USR (Use Representative Samples).
 
 ### IVV-CSO-STE — Supply Technical Explanations (SHOULD)
+_Applies to: Providers_
 Providers SHOULD supply all necessary assessors with technical explanations, demonstrations, and other relevant supporting information about the technical capabilities they employ to address FedRAMP rules; this SHOULD be supplied as necessary to ensure the assessor can effectively complete verification and validation.
 
 ### IVV-CSO-USR — Use Representative Samples (MAY)
+_Applies to: Providers_
 Providers MAY use representative samples as appropriate during verification and validation.
 - _Note:_ Many modern cloud services using effective automation do not need to use representative sampling and are capable of persistently verifying and validating the majority of their security measures automatically.
 
 ### IVV-CSO-RAA — Receiving Assessor Advice (MAY)
+_Applies to: Providers_
 Providers MAY ask for and accept advice from their assessor during assessment regarding techniques and procedures that will improve their security posture or the effectiveness, clarity, and accuracy of their verification, validation and reporting procedures, UNLESS doing so is likely to compromise the objectivity and integrity of the assessment.
 
 ### IVV-IAS-VIM — Verify Implementation (MUST)
+_Applies to: Assessors_
 Assessors MUST verify that the measures implemented by the cloud service offering matches the measures they documented to meet FedRAMP Practices.
 - _Note:_ This requires reviewing the actual measures themselves at a technical level, such as reviewing underlying code as appropriate; don't simply review documentation or screenshots.
 
 ### IVV-IAS-VEF — Validate Effectiveness (MUST)
+_Applies to: Assessors_
 Assessors MUST validate the effectiveness of the implemented measures to ensure they have the intended outcome for meeting FedRAMP Practices.
 - _Note:_ This requires reviewing the actual measures themselves at a technical level, such as reviewing underlying code as appropriate; don't simply review documentation or screenshots.
 
 ### IVV-IAS-SUM — Assessment Summary (MUST)
+_Applies to: Assessors_
 Assessors MUST supply the provider with a high-level summary of their assessment process and findings for each FedRAMP Practice; this summary will be included by the provider in the FedRAMP Security Decision Record for the cloud service offering.
 - _Note:_ FedRAMP does not require a separate Security Assessment Plan or Security Assessment Report for FedRAMP 20x or FedRAMP Rev5 Certifications; this information is expected to be included in the Security Decision Record by the cloud service provider.
 
 ### IVV-IAS-OSA — Overall Summary of Assessment (MUST)
+_Applies to: Assessors_
 Assessors MUST supply the provider with an overall summary of the verification and validation assessment results, including any resulting failures or areas of dispute; this summary will be included by the provider in the FedRAMP Certification Package Overview for the cloud service offering.
 - _Note:_ FedRAMP does not supply a template for this summary and encourages independent assessment services to optimize for the best customer experience in the creation of these materials.
 
 ### IVV-IAS-VIP — Verify Inclusion in Certification Package (MUST)
+_Applies to: Assessors_
 Assessors MUST verify that information supplied during a FedRAMP independent assessment is included in the FedRAMP Certification Package by the provider without inappropriate modification.
 - _Note:_ This rule is related to IVV-CSO-ICP (Inclusion in Certification Package).
 
 ### IVV-IAS-EPX — Engage Provider Experts (SHOULD)
+_Applies to: Assessors_
 Assessors SHOULD engage provider experts in discussion to understand the decisions made by the provider and inform expert qualitative assessment, and SHOULD perform independent research to test such information as part of the expert qualitative assessment process.
 
 ### IVV-IAS-SHA — Sharing Advice (MAY)
+_Applies to: Assessors_
 Assessors MAY share advice with providers they are assessing about techniques and procedures that will improve the provider's security posture or the effectiveness, clarity, and accuracy of their verification, validation and reporting procedures, UNLESS doing so is likely to compromise the objectivity and integrity of the assessment.
 
 ### IVV-CSX-AIA — Annual Independent Assessments for 20x [20x only]
+_Applies to: Providers_
 - **Class A (MUST):** Providers with 20x Class A Certifications MUST meet the expectations of their underlying alternative security framework as part of their persistent independent verification and validation assessment.
 - **Class B (MUST):** Providers with 20x Class B Certifications MUST include all Key Security Indicators in a FedRAMP independent assessment at least once per year. _(timeframe: 1 years)_
 - **Class C (MUST):** Providers with 20x Class C Certifications MUST include all Key Security Indicators in a FedRAMP independent assessment at least once per year. _(timeframe: 1 years)_
 - **Class D (MUST):** Providers with 20x Class D Certifications MUST include all Key Security Indicators in a FedRAMP independent assessment at least once per year. _(timeframe: 1 years)_
 
 ### IVV-CSF-AIA — Annual Independent Assessments for Rev5 [rev5 only]
+_Applies to: Providers_
 - **Class B (MUST):** Providers with Rev5 Class B Certifications MUST include the following Rev5 Controls in a FedRAMP independent assessment at least once per year: _(timeframe: 1 years)_
     - Rev5 controls: AC, AU, CA, CM, CP, IA, IR, PE, RA, SA, SC, SI
 - **Class C (MUST):** Providers with Rev5 Class C Certifications MUST include the following Rev5 Controls in a FedRAMP independent assessment at least once per year: _(timeframe: 1 years)_
@@ -904,13 +1115,16 @@ Assessors MAY share advice with providers they are assessing about techniques an
     - Rev5 controls: AC, AU, CA, CM, CP, IA, IR, MA, PE, RA, SA, SC, SI
 
 ### IVV-CSF-MCA — Mandatory Control Assessment (MUST) [rev5 only]
+_Applies to: Providers_
 Providers MUST have all applicable Rev5 Controls included in FedRAMP independent assessments every 3 years but are not required to have all Rev5 Controls included in the same FedRAMP independent assessment. _(timeframe: 3 years)_
 - _Note:_ Traditionally this has been done by reviewing a rotating selection of Rev5 Controls at each annual assessment, however this requirement is a ceiling and not a floor. See IVV-CSF-PCA (Preferred Control Assessment) for FedRAMP's recommended approach to Rev5 control assessments.
 
 ### IVV-CSF-ACF — Assessment of Rev5 Controls with Findings (MUST) [rev5 only]
+_Applies to: Providers_
 Providers MUST have Rev5 Controls with negative findings from the previous FedRAMP independent assessment included in the next FedRAMP independent assessment.
 
 ### IVV-CSF-PCA — Preferred Control Assessment (SHOULD) [rev5 only]
+_Applies to: Providers_
 Providers SHOULD include all applicable Rev5 Controls in each FedRAMP independent assessment.
 
 
@@ -919,11 +1133,12 @@ Providers SHOULD include all applicable Rev5 Controls in each FedRAMP independen
 The Minimum Assessment Scope rules help providers define assessment boundaries narrowly enough to avoid unnecessary review of components that do not affect the offering's security. These rules still ensure the assessment includes the resources and connections needed to understand the offering's confidentiality, integrity, and availability.
 
 - Subset **CSO** (General Provider Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
-- **20x** — required; obtain 2026-07-04, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-01-01 (or next assessment)
-- **rev5** — required; obtain 2027-01-01, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-01-01 (or next assessment)
+- **20x** — required (Consolidated Rules for 2026); obtaining initial certification 2026-07-04; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends at the first FedRAMP independent assessment started after 2027-01-01 (MUST adopt, else certification revoked)
+- **rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2027-01-01; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends at the first FedRAMP independent assessment started after 2027-01-01 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/minimum-assessment-scope/
 
 ### MAS-CSO-IIR — Identify Information Resources (MUST)
+_Applies to: Providers_
 Providers MUST identify a set of information resources to assess for FedRAMP Certification that includes all information resources that are likely to handle federal customer data or likely to impact the confidentiality, integrity, or availability of federal customer data handled by the cloud service offering; this set of information resources is the cloud service offering.
 - _Note:_ Certain categories of cloud computing products and services are specified as entirely outside the scope of FedRAMP by the Director of the Office of Management and Budget. All such products and services are therefore not included in the cloud service offering for FedRAMP. For more, see https://fedramp.gov/scope.
 - _Note:_ Software produced by cloud service providers that is delivered separately for installation on agency systems and not operated in a shared responsibility model (typically including agents, application clients, mobile applications, etc. that are not fully managed by the cloud service provider) is not a cloud computing product or service and is entirely outside the scope of FedRAMP under the FedRAMP Certification Act. All such software is therefore not included in the cloud service offering for FedRAMP. For more, see https://fedramp.gov/scope.
@@ -931,23 +1146,28 @@ Providers MUST identify a set of information resources to assess for FedRAMP Cer
 - _Evidence artifacts:_ A machine readable output containing all required data of the components of the cloud service offering that are likely to handle federal customer data or likely to impact the confidentiality, integrity, or availability of federal customer data handled by the cloud service offering. | A human readable explanation of how the machine readable output is derived. | The code for the automated process used to generate the machine readable output.
 
 ### MAS-CSO-FLO — Information Flows and Security Categories (MUST)
+_Applies to: Providers_
 Providers MUST clearly identify, document, and explain information flows and security categories for ALL information resources or sets of information resources in the cloud service offering.
 - _Note:_ Information resources (including third-party information resources) MAY vary by security category as appropriate to the type of information handled by or impacted by the information resource.
 - _Evidence artifacts:_ A machine readable output containing all required data of the permitted connections between components of the cloud service offering that are likely to handle federal customer data or likely to impact the confidentiality, integrity, or availability of federal customer data handled by the cloud service offering. | A human readable explanation of how the machine readable output is derived. | The code for the automated process used to generate the machine readable output.
 
 ### MAS-CSO-TPR — Third-Party Information Resources (MUST)
+_Applies to: Providers_
 Providers MUST address the potential impact to federal customer data from third-party information resources used by the cloud service offering, ONLY IF MAS-CSO-IIR (Identify Information Resources) APPLIES, by documenting the following information about each applicable third-party information resource:
 - General usage and configuration
 - Explanation or justification for use
 - Mitigation measures in place to reduce the potential impact to federal customer data
 - Compensating controls in place to reduce the potential impact to federal customer data
+- _JSON schema:_ FedRAMP Certification Package Overview (FRC-CSO-PKG) https://fedramp.gov/schemas/fedramp-certification-package-overview-schema-2026-06-24.json
 - _Evidence artifacts:_ A machine readable output containing all required data of the third-party information resources of the cloud service offering that are likely to handle federal customer data or likely to impact the confidentiality, integrity, or availability of federal customer data handled by the cloud service offering. | A human readable explanation of how the machine readable output is derived. | The code for the automated process used to generate the machine readable output.
 
 ### MAS-CSO-MDI — Metadata Inclusion (MUST)
+_Applies to: Providers_
 Providers MUST include metadata (including metadata about federal customer data) in the Minimum Assessment Scope ONLY IF MAS-CSO-IIR (Identify Information Resources) APPLIES.
 - _Evidence artifacts:_ A machine readable output containing all required data of the metadata collected or maintained by the cloud service offering that are likely to handle federal customer data or likely to impact the confidentiality, integrity, or availability of federal customer data handled by the cloud service offering. | A human readable explanation of how the machine readable output is derived. | The code for the automated process used to generate the machine readable output.
 
 ### MAS-CSO-SUP — Supplemental Information (MAY)
+_Applies to: Providers_
 Providers MAY include additional materials about other information resources that are not part of the cloud service offering in a FedRAMP Certification Package supplement; these resources will not be FedRAMP Certified and MUST be clearly marked and separated from the cloud service offering.
 - _Note:_ This is intended to allow inclusion of things like security materials for apps, supplemental marketing collateral, and other information that is not part of the cloud service offering but may be useful to agencies.
 
@@ -961,50 +1181,68 @@ The Marketplace Listing rules define how FedRAMP decides which cloud service off
 - Subset **IAS** (General Assessor Responsibilities): types ; paths ; classes ; affects Assessors
 - Subset **CAS** (General Advisor Responsibilities): types ; paths ; classes ; affects Advisors
 - Subset **IIP** (Provider Responsibilities for Initial Implementation Phase Listings): types 20x/Rev5; paths Program/Agency; classes ; affects Providers
-- Effective: required {"obtain": "2026-07-04", "maintain": "2026-07-04", "optional_adoption": "2026-07-04", "grace": {"default": "2026-07-04", "until_next_assessment": false}}
+- **20x and Rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2026-07-04; maintaining certification 2026-07-04 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends 2026-07-04 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/marketplace-listing/
 
 ### MKT-FRP-SOF — Scope of FedRAMP (MUST NOT)
+_Applies to: FedRAMP_
 FedRAMP MUST NOT list cloud service offerings in the Marketplace or perform any FedRAMP Certification activities unless it determines the cloud service offering is within the scope of FedRAMP.
 - _Reference:_ Scope of FedRAMP https://fedramp.gov/scope
 
 ### MKT-CSO-MLR — Marketplace Listing Requirements (MUST)
+_Applies to: Providers_
 Providers MUST address at least these FedRAMP rules to apply for a new FedRAMP Marketplace listing OR to request updates to an existing listing:
 - Certification Data Sharing: CDS-CSO-PUB (Public Information)
 
 ### MKT-CSO-PML — Provider Marketplace Listing Requests (MUST)
+_Applies to: Providers_
 Providers MUST notify FedRAMP using the FedRAMP Marketplace Providing Listing Request Form to request a listing in the FedRAMP Marketplace.
 - _Note:_ FedRAMP does not accept applications for a FedRAMP Marketplace Listing via email!
+- _Notify via:_ FedRAMP Marketplace Provider Listing Request Form (form: https://help.fedramp.gov/hc/en-us/requests/new?ticket_form_id=50939227168027) — FedRAMP
 
 ### MKT-IAS-OFR — Only FedRAMP Recognized Assessors (MUST)
+_Applies to: Assessors_
 Assessors MUST obtain and maintain FedRAMP Recognition to be listed in the FedRAMP Marketplace.
 
 ### MKT-IAS-WEB — Website Requirements for Assessors (MUST)
+_Applies to: Assessors_
 Assessors MUST have an appropriate web site that publicly supplies at least the following information in human-readable and JSON formats:
 - General description of the independent assessment service
 - Contact information
 - Types of independent services offered
 - Optional: Positive attestations from customers or customer references
+- _JSON schema:_ FedRAMP Assessor Information Schema https://fedramp.gov/schemas/fedramp-assessor-information-schema-2026-06-24.json
 - _Evidence artifacts:_ URL to the human-readable data. | URL to the machine-readable data.
 
 ### MKT-IAS-LRQ — Listing Requests for Assessors (MUST)
+_Applies to: Assessors_
 Assessors MUST complete the Assessor Listing Request Form to request listing in the FedRAMP Marketplace.
+- _Notify via:_ [For Assessors/Advisors] Marketplace Listing Form (form: https://help.fedramp.gov/hc/en-us/requests/new?ticket_form_id=52060327520795) — FedRAMP
 
 ### MKT-CAS-WEB — Website Requirements for Advisors (MUST)
+_Applies to: Advisors_
 Advisors MUST have an appropriate web site that publicly supplies at least the following information in consistent machine-readable and human-readable formats:
 - General description of the consulting or advisory service
 - Contact information
 - Types of consulting or advisory services offered
 - Optional: Positive attestations from customers or customer references
+- _JSON schema:_ FedRAMP Advisory Service Information Schema https://fedramp.gov/schemas/fedramp-advisor-information-schema-2026-06-24.json
 - _Evidence artifacts:_ URL to the human-readable data. | URL to the machine-readable data.
 
 ### MKT-CAS-LRQ — Listing Requests for Advisors (MUST)
+_Applies to: Advisors_
 Advisors MUST complete the Advisor Listing Request Form to request listing in the FedRAMP Marketplace.
+- _Notify via:_ [For Assessors/Advisors] Marketplace Listing Form (form: https://help.fedramp.gov/hc/en-us/requests/new?ticket_form_id=52060327520795) — FedRAMP
 
 ### MKT-CAS-RFR — Advisor Responses to FedRAMP (MUST)
+_Applies to: Advisors_
 Advisors MUST reply to all requests from @fedramp.gov or @gsa.gov email addresses sent to the contact information provided in their advisor listing within 5 business days. _(timeframe: 5 bizdays)_
+- _Corrective action:_ If an advisor fails to respond to a request within 5 business days, FedRAMP will send a follow-up email.
+- _Corrective action:_ If an advisor fails to respond to the follow-up email within 5 business days, FedRAMP will remove their listing from the Marketplace.
+- _Corrective action:_ Advisors removed from the Marketplace for failure to respond to FedRAMP will not be eligible for listing for at least 6 months unless there are extenuating circumstances.
 
 ### MKT-IIP-AGU — Agency Use Cases (MUST)
+_Applies to: Providers_
 Providers MUST demonstrate that a cloud service offering is intended for one of the following use cases:
 - Direct Use: The product will be used directly by agency customers for integration into a federal information system that falls within the scope of 44 USC § 3506 and will receive an agency Authorization to Operate.
 - Indirect Use: The product will be included as a third-party information resource in other cloud service offerings that are directly used by agency customers.
@@ -1012,11 +1250,14 @@ Providers MUST demonstrate that a cloud service offering is intended for one of 
 - _Note:_ Services used by private companies to meet other compliance requirements (such as CMMC) that do not also meet one of the above use cases are outside the scope of FedRAMP.
 
 ### MKT-IIP-DCP — Demonstrating Continuous Progress (MUST)
+_Applies to: Providers_
 Providers MUST demonstrate continuous progress towards a FedRAMP Certification, documented in their Trust Center or website and updated at least quarterly; progress is measured by the provider against documented goals and milestones.
 - _Note:_ This is an opportunity for a business to showcase its goals and progress, and should be seen as a marketing and customer experience challenge instead of a compliance challenge.
 
 ### MKT-IIP-DLA — Deadline for Assessment (MUST)
+_Applies to: Providers_
 Providers MUST demonstrate that an assessment for a FedRAMP Certification Class B, C, or D has been scheduled within 2 years of initial listing in the Initial Implementation Phase. _(timeframe: 2 years)_
+- _Corrective action:_ If a provider fails to schedule an assessment for a FedRAMP Certification Class B, C, or D within 2 years of initial listing in the Initial Implementation Phase, FedRAMP will remove their listing from the Marketplace until they provide evidence of a scheduled assessment.
 
 
 ## REC — FedRAMP Recognition of Independent Assessment Services
@@ -1025,50 +1266,70 @@ The FedRAMP Recognition of independent assessment services rules explain the req
 
 - Subset **FRP** (FedRAMP Responsibilities): types ; paths ; classes ; affects FedRAMP
 - Subset **IAS** (General Independent Assessor Responsibilities): types ; paths ; classes ; affects Assessors
-- Effective: required {"obtain": "2026-07-04", "maintain": "2026-07-04", "optional_adoption": "2026-07-04", "grace": {"default": "2026-07-04", "until_next_assessment": false}}
+- **20x and Rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2026-07-04; maintaining certification 2026-07-04 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends 2026-07-04 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/fedramp-recognition/
 
 ### REC-FRP-FOC — Foreign Ownership Collection (MUST)
+_Applies to: FedRAMP_
 FedRAMP MUST maintain a process to collect foreign ownership, control, or influence declarations from FedRAMP Recognized assessors and updates to those declarations.
 
 ### REC-FRP-RAO — Recognized Assessors Only (MUST NOT)
+_Applies to: FedRAMP_
 FedRAMP MUST NOT accept verification, validation, or other attestations from independent assessors who are not FedRAMP Recognized.
 
 ### REC-FRP-DRD — Double Revocation Disqualification (MUST NOT)
+_Applies to: FedRAMP_
 FedRAMP MUST NOT restore FedRAMP Recognition for an assessor after FedRAMP has revoked that assessor's FedRAMP Recognition 2 times.
 
 ### REC-IAS-ACC — A2LA Accreditation (MUST)
+_Applies to: Assessors_
 Assessors MUST obtain and maintain accreditation through the American Association for Laboratory Accreditation (A2LA) Cybersecurity Inspection Body Program to qualify for FedRAMP Recognition.
 - _Note:_ FedRAMP will remove FedRAMP Recognition immediately after the American Association for Laboratory Accreditation notifies FedRAMP that an assessor's accreditation has lapsed.
 
 ### REC-IAS-ADA — Actually Do Assessments (MUST)
+_Applies to: Assessors_
 Assessors MUST complete at least 2 initial or ongoing assessments for Class B, C, or D FedRAMP Certifications every 2 years to maintain FedRAMP Recognition. _(timeframe: 2 years)_
 - _Note:_ For a newly FedRAMP Recognized Assessor, this rule applies beginning on the initial date of FedRAMP Recognition if that date is later than 2026-06-01.
+- _Corrective action:_ FedRAMP will notify assessors when they are within 6 months of losing FedRAMP Recognition under this rule and request a corrective action plan.
+- _Corrective action:_ Assessors whose corrective action plan is not accepted will lose FedRAMP Recognition and must supply an alternative corrective action plan to move toward renewed FedRAMP Recognition.
 
 ### REC-IAS-PSC — Policy and Standards Compliance (MUST)
+_Applies to: Assessors_
 Assessors MUST maintain compliance with the latest American Association for Laboratory Accreditation (A2LA) R311 - Specific Requirements - Federal Risk and Authorization Management Program to maintain FedRAMP Recognition.
 - _Reference:_ A2LA Public Documents https://portal.a2la.org/documents/
 
 ### REC-IAS-ANR — Annual Surveillance Assessment (MUST)
+_Applies to: Assessors_
 Assessors MUST achieve a favorable annual surveillance assessment by the American Association for Laboratory Accreditation (A2LA) to maintain FedRAMP Recognition. _(timeframe: 1 years)_
+- _Corrective action:_ Assessors have 75 days to complete corrective actions for nonconformances identified by the American Association for Laboratory Accreditation (A2LA)during a surveillance assessment. If an assessor exceeds the 75 day resolution timeframe, A2LA will supply FedRAMP with a narrative of the assessor's current status, the assessor will be designated as in Remediation in the FedRAMP Marketplace, and the assessor must supply a corrective action plan to FedRAMP.
 
 ### REC-IAS-RAS — Full A2LA Reassessment (MUST)
+_Applies to: Assessors_
 Assessors MUST achieve a favorable full reassessment by the American Association for Laboratory Accreditation (A2LA) at least once every 2 years to maintain FedRAMP Recognition. _(timeframe: 2 years)_
+- _Corrective action:_ Assessors have 75 days to complete corrective actions for nonconformances identified by the American Association for Laboratory Accreditation during a reassessment. If an assessor exceeds the 75 day resolution timeframe, the American Association for Laboratory Accreditation will supply FedRAMP with a narrative of the assessor's current status, the assessor will be designated as In Remediation in the FedRAMP Marketplace, and the assessor must supply a corrective action plan to FedRAMP.
 
 ### REC-IAS-RAR — Re-entry after Revocation (MUST)
+_Applies to: Assessors_
 Assessors MUST satisfy all American Association for Laboratory Accreditation (A2LA) re-entry conditions before regaining FedRAMP Recognition after revocation.
 - _Note:_ A revocation may require extended time in revoked status while the assessor demonstrates acceptable performance in the A2LA Cybersecurity Inspection Body Program before seeking FedRAMP Recognition again.
 
 ### REC-IAS-RQU — Roles and Qualifications (MUST)
+_Applies to: Assessors_
 Assessors MUST staff FedRAMP assessments with all roles required by the American Association for Laboratory Accreditation (A2LA) R311, including personnel who meet the qualifications for each role, unless FedRAMP publishes a specific exception for a limited pilot or other explicitly scoped process.
+- _Corrective action:_ FedRAMP may require a consultation meeting, corrective action plan, or revocation for failure to comply.
 
 ### REC-IAS-AFI — Annual Foreign Interest Reports (MUST)
+_Applies to: Assessors_
 Assessors MUST report information relating to any foreign interest, foreign influence, or foreign control of the independent assessment service to FedRAMP annually. _(timeframe: 1 years)_
+- _Notify via:_ FedRAMP Foreign Ownership, Control, or Influence Declaration Form (form: https://help.fedramp.gov/hc/en-us/requests/new?ticket_form_id=52006681154587) — FedRAMP
 
 ### REC-IAS-CFI — Changes in Foreign Interest (MUST)
+_Applies to: Assessors_
 Assessors MUST report updated information relating to any foreign interest, foreign influence, or foreign control of the independent assessment service within 48 hours of any change in foreign ownership or control. _(timeframe: 48 hours)_
+- _Notify via:_ FedRAMP Foreign Ownership, Control, or Influence Declaration Form (form: https://help.fedramp.gov/hc/en-us/requests/new?ticket_form_id=52006681154587) — FedRAMP
 
 ### REC-IAS-PST — Performance Standards (MUST)
+_Applies to: Assessors_
 Assessors MUST meet FedRAMP performance standards for assessor deliverables to support independent, risk-based reviews by FedRAMP and federal agencies, including at least:
 - Complete Assessment Packages: Supplies complete and thoroughly prepared documents on the first submission.
 - Deliverable Quality: Ensures documentation content is clear, complete, concise, and consistent.
@@ -1079,13 +1340,17 @@ Assessors MUST meet FedRAMP performance standards for assessor deliverables to s
 - Chain of Custody: Preserves the integrity and chain of custody of assessor-authored documents and provider-supplied evidence used in FedRAMP assessments.
 
 ### REC-IAS-CAP — Corrective Action Plan (MUST)
+_Applies to: Assessors_
 Assessors MUST supply a corrective action plan when FedRAMP requires one for performance standards deficiencies or organizational risks.
 
 ### REC-IAS-INV — Invalid Deliverables (MUST)
+_Applies to: Assessors_
 Assessors MUST treat deliverables prepared, performed, or submitted by personnel who do not meet required role qualifications as invalid for FedRAMP purposes.
 
 ### REC-IAS-SEP — Advisory Separation (MUST NOT)
+_Applies to: Assessors_
 Assessors MUST NOT perform a FedRAMP independent assessment of the same cloud service offering within 2 years after supplying advisory or consulting services for that offering, unless FedRAMP publishes a specific exception for a limited pilot or other explicitly scoped process. _(timeframe: 2 years)_
+- _Corrective action:_ FedRAMP may require a consultation meeting, corrective action plan, or revocation for failure to comply.
 
 
 ## SCG — Secure Configuration Guide
@@ -1094,48 +1359,58 @@ The Secure Configuration Guide rules help agencies and other customers understan
 
 - Subset **CSO** (General Provider Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
 - Subset **ENH** (Enhanced Capabilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
-- Effective: required {"obtain": "2026-03-01", "maintain": "2026-03-01", "grace": {"default": "2026-07-01", "until_next_assessment": false}}
+- **20x and Rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2026-03-01; maintaining certification 2026-03-01 (SHOULD adopt, else corrective action plan); optional adoption None; grace period ends 2026-07-01 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/secure-configuration-guide/
 
 ### SCG-CSO-RSC — Recommended Secure Configuration (MUST)
+_Applies to: Providers_
 Providers MUST create, maintain, and make available recommendations for securely configuring their cloud services (the Secure Configuration Guide) that includes at least the following information:
 - Required: Instructions on how to securely access, configure, operate, and decommission top-level administrative accounts that control enterprise access to the entire cloud service offering.
 - Required: Explanations of security-related settings that can be operated only by top-level administrative accounts and their security implications.
 - Recommended: Explanations of security-related settings that can be operated only by privileged accounts and their security implications.
 - _Note:_ These rules refer to this guidance as a Secure Configuration Guide but cloud service providers may make this guidance available in various appropriate forms that provide the best customer experience.
 - _Note:_ This guidance should explain how top-level administrative accounts and privileged accounts are named and referred to in the cloud service offering.
+- _JSON schema:_ FedRAMP Certification Package Overview (FRC-CSO-PKG) https://fedramp.gov/schemas/fedramp-certification-package-overview-schema-2026-06-24.json
 - _Evidence artifacts:_ URL to the human-readable data. | URL to the machine-readable data.
 
 ### SCG-CSO-AUP — Use Instructions (MUST)
+_Applies to: Providers_
 Providers MUST include instructions in the FedRAMP Certification Package that explain how to obtain and use the Secure Configuration Guide.
 - _Note:_ These instructions may appear in a variety of ways; it is up to the provider to do so in the most appropriate and effective ways for their specific customer needs.
 - _Evidence artifacts:_ URL or explanation of how to request these materials. | Explanation of how the provider decides whether or not to share these materials or other related policies.
 
 ### SCG-CSO-PUB — Public Secure Configuration Guidance (SHOULD)
+_Applies to: Providers_
 Providers SHOULD make the Secure Configuration Guide available publicly.
 - _Evidence artifacts:_ Explanation of how to access this information | or explanation why this functionality is not available
 
 ### SCG-CSO-SDF — Secure Defaults (SHOULD)
+_Applies to: Providers_
 Providers SHOULD set all settings to their recommended secure defaults for top-level administrative accounts and privileged accounts when initially provisioned.
 - _Evidence artifacts:_ Explanation of how to access this information | or explanation why this functionality is not available
 
 ### SCG-ENH-CMP — Comparison Capability (SHOULD)
+_Applies to: Providers_
 Providers SHOULD offer the capability to compare all current settings for top-level administrative accounts and privileged accounts to the recommended secure defaults.
 - _Evidence artifacts:_ Explanation of how to access this information | or explanation why this functionality is not available
 
 ### SCG-ENH-EXP — Export Capability (SHOULD)
+_Applies to: Providers_
 Providers SHOULD offer the capability to export all security settings in a machine-readable format.
 - _Evidence artifacts:_ Explanation of how to access this information | or explanation why this functionality is not available
 
 ### SCG-ENH-API — API Capability (SHOULD)
+_Applies to: Providers_
 Providers SHOULD offer the capability to view and adjust security settings via an API or similar capability.
 - _Evidence artifacts:_ Explanation of how to access this information | or explanation why this functionality is not available
 
 ### SCG-ENH-MRG — Machine-Readable Guidance (SHOULD)
+_Applies to: Providers_
 Providers SHOULD also provide the Secure Configuration Guide in a machine-readable format that can be used by customers or third-party tools to compare against current settings.
 - _Evidence artifacts:_ Explanation of how to access this information | or explanation why this functionality is not available
 
 ### SCG-ENH-VRH — Versioning and Release History (SHOULD)
+_Applies to: Providers_
 Providers SHOULD provide versioning and a release history for recommended secure default settings for top-level administrative accounts and privileged accounts as they are adjusted over time.
 - _Evidence artifacts:_ Explanation of how to access this information | or explanation why this functionality is not available
 
@@ -1149,29 +1424,34 @@ The Significant Change Notification rules supply a simple framework allowing pro
 - Subset **ADP** (Adaptive Changes): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
 - Subset **RTR** (Routine Recurring Changes): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
 - Subset **TRF** (Transformative Changes): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
-- **20x** — required; obtain 2026-07-04, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-01-01 (or next assessment)
-- **rev5** — required; obtain 2027-01-01, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-06-01
+- **20x** — required (Consolidated Rules for 2026); obtaining initial certification 2026-07-04; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends at the first FedRAMP independent assessment started after 2027-01-01 (MUST adopt, else certification revoked)
+- **rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2027-01-01; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends 2027-06-01 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/significant-change-notification/
 
 ### SCN-FRP-CAP — Corrective Action Plan Conditions (MAY)
+_Applies to: FedRAMP_
 FedRAMP MAY require providers to delay significant changes beyond the standard Significant Change Notification period and/or submit significant changes for approval in advance as a condition of a formal FedRAMP Corrective Action Plan or other agreement.
 - _Note:_ The circumstances and conditions of such a Corrective Action Plan will vary and be documented in the Correcive Action Plan.
 
 ### SCN-CSO-EVA — Evaluate Changes (MUST)
+_Applies to: Providers_
 Providers MUST evaluate all potential significant changes to determine the type of significant change and follow the appropriate Significant Change Notification rules.
 - Is it a significant change? --> Continue evaluation and follow the Significant Change Notification rules.
 - If it is, is it an FedRAMP Certification class change?  --> This requires a new assessment and cannot be done under the Significant Change Notification rules.
 - If it is not, is it a routine recurring change? --> Follow the Routine Recurring Change rules (SCN-RTR Routine Recurring Changes).
 - If it is not, is it a transformative change? --> Follow the Transformative Change rules (SCN-TRF Transformative Changes).
 - If it is not, then it is an adaptive change --> Follow the Adaptive Change rules (SCN-ADP Adaptive Changes).
+- _JSON schema:_ FedRAMP Significant Change Notification (SCN-CSO-INF) https://fedramp.gov/schemas/fedramp-significant-change-notifications-schema-2026-06-24.json
 - _Evidence artifacts:_ Evidence of significant change evaluation including a description fo the change, the determined type, and an explanation for the decision. At least one example must be provided for each type of change. Real examples are prefered but the provider may use fictitious examples as long as the example provides evidence of the decision making process.
 
 ### SCN-CSO-MAR — Maintain Audit Records (MUST)
+_Applies to: Providers_
 Providers MUST maintain auditable records of the significant change evaluation activities required by SCN-CSO-EVA (Evaluate Changes) and make them available to FedRAMP as requested.
 - _Note:_ These audit records must be available to FedRAMP on request; these records do not need to be included in the FedRAMP Certification Package by default and do not need to be emailed to FedRAMP continuously.
 - _Evidence artifacts:_ Explanation of how FedRAMP can obtain this information.
 
 ### SCN-CSO-INF — Required Information (MUST)
+_Applies to: Providers_
 Providers MUST include at least the following information in Significant Change Notifications:
 - Service Offering FedRAMP ID
 - Assessor Name (if applicable)
@@ -1184,70 +1464,124 @@ Providers MUST include at least the following information in Significant Change 
 - Copy of the business or security impact analysis
 - Name and title of approver
 - _Note:_ Structure of the information may vary depending on how the provider tracks this internally.
+- _JSON schema:_ FedRAMP Significant Change Notification (SCN-CSO-INF) https://fedramp.gov/schemas/fedramp-significant-change-notifications-schema-2026-06-24.json
 - _Evidence artifacts:_ A recent Significant Change Notification or sample Significant Change Notification
 
 ### SCN-CSO-HIS — Historical Notifications (MUST)
+_Applies to: Providers_
 Providers MUST keep 12 months of historical Significant Change Notifications available with their FedRAMP Certification Data.
 - _Evidence artifacts:_ Explanation of how FedRAMP can obtain this information.
 
 ### SCN-CSO-HRM — Human and Machine-Readable Notifications (MUST)
+_Applies to: Providers_
 Providers MUST make ALL Significant Change Notifications and related audit records available in human-readable and JSON formats.
+- _JSON schema:_ FedRAMP Significant Change Notifications Schema https://fedramp.gov/schemas/fedramp-significant-change-notifications-schema-2026-06-24.json
 - _Evidence artifacts:_ URL or explanation of how to request these materials. | Explanation of how the provider decides whether or not to share these materials or other related policies.
 
 ### SCN-CSO-ARI — Additional Relevant Information (MAY)
+_Applies to: Providers_
 Providers MAY include additional relevant information in Significant Change Notifications.
 - _Note:_ This allows providers to convey whatever additional information they think is relevant without worrying about negative consequences from not following an exact template.
 
 ### SCN-CSO-NOM — Notification Mechanisms (MAY)
+_Applies to: Providers_
 Providers MAY notify necessary parties in a variety of ways as long as the mechanism for notification is clearly documented in the FedRAMP Certification Package and easily accessible.
 - _Note:_ The sharing mechanism should be designed based on the needs of the provider and their customers and may vary between providers.
 - _Note:_ The default sharing mechanism for most providers during the SCN beta was to send an email to agency customers and upload a copy of the notification to the provider's secure sharing location.
 - _Evidence artifacts:_ Current list of available notification mechanisms
 
 ### SCN-CSO-EMG — Emergency Changes (MAY)
+_Applies to: Providers_
 Providers MAY execute significant changes (including transformative changes) during an emergency or incident without following the Significant Change Notification rules in advance. In such emergencies, providers MUST follow all relevant procedures, notify all necessary parties, retroactively provide all Significant Change Notification materials, and complete appropriate assessment after the incident.
 - _Note:_ Procedures for emergency changes should be documented in the FedRAMP Certification Package.
 
 ### SCN-ADP-NTF — Notification Requirements (MUST)
+_Applies to: Providers_
 Providers MUST notify all necessary parties within 10 business days after finishing adaptive changes, also including the following information: _(timeframe: 10 bizdays)_
 - Summary of any new risks identified and/or vulnerabilities resulting from the change (if applicable)
 - _Note:_ Activities that match the adaptive significant change type are a frequent and normal part of iteratively improving a service by deploying new functionality or modifying existing functionality in a way that is typically transparent to customers and does not introduce significant new security risks.
 - _Note:_ In general, most changes that do not happen regularly will be adaptive changes. This change type deliberately covers a wide range of activities in a way that requires assessment and consideration.
+- _Example — Tips on adaptive changes:_
+    - Requires minimal changes to security plans or procedures
+    - Requires some careful planning and project management to implement, but does not rise to the level of planning required for transformative changes
+    - Requires verification of existing functionality and secure configuration after implementation
+    - Updates to operating systems, containers, virtual machines, software or libraries with known breaking changes, complex steps, or service disruption
+    - Deploying larger than normal incremental feature improvements in code or libraries that are the work of multiple weeks of development efforts but are not considered a major new service
+    - Changing cryptographic modules where the new module meets the same standards and characteristics of the former
+    - Replacing a like-for-like component where some security plan or procedure adjustments are required (e.g., scanning tool or managed database swap)
+    - Adding models to existing approved AI services without exposing federal customer data to new services
+- _Notify via:_ FedRAMP Certification Data (update: FedRAMP Certification Data) — All Necessary Parties
 - _Evidence artifacts:_ At least the most recent SCN notification including the date it was sent and the date the change was applied. Additional examples may be provided. If no SCN notifications have been sent then this artifact is not required.
 
 ### SCN-RTR-NNR — No Notification Requirements (SHOULD NOT)
+_Applies to: Providers_
 Providers SHOULD NOT make formal Significant Change Notifications for routine recurring changes; this type of change is exempted from notification requirements.
 - _Note:_ Activities that match the routine recurring significant change type are performed regularly and routinely by cloud service providers to address flaws or vulnerabilities, address incidents, and generally perform the typical maintenance and service delivery changes expected during day-to-day operations.
 - _Note:_ These changes leverage mature processes and capabilities to identify, mitigate, and remediate risks as part of the change. They are often entirely automated and may occur without human intervention, even though they have an impact on security of the service.
 - _Note:_ If the activity does not occur regularly and routinely then it cannot be a significant change of this type (e.g., replacing all physical firewalls to remediate a vulnerability is obviously not regular or routine).
+- _Example — Tips on ongoing operations:_
+    - Routine care and feeding by staff during normal duties
+    - No major impact to service availability
+    - Does not require executive approval
+    - Provisioning or deprovisioning capacity to support service elasticity
+    - Changing or tuning performance configurations for instances or services
+    - Updating and maintaining operational handling of information flows and protection across physical and logical networks (e.g., updating firewall rules)
+    - Generating or refreshing API or access tokens
+- _Example — Tips on vulnerability management:_
+    - Minor, incremental patching or updates
+    - Significant refactoring or migration process NOT required
+    - No breaking changes
+    - Updating security service or endpoint signatures
+    - Routine patching of devices, operating systems, software or libraries
+    - Updating and deploying code that applies normal fixes and improvements as part of a regular development cycle
+    - Vulnerability remediation activity that simply replaces a known-bad component(s) with a better version of the exact same thing, running in the exact same way with no changes to processes
 
 ### SCN-TRF-NIP — Notification of Initial Plans (MUST)
+_Applies to: Providers_
 Providers MUST notify all necessary parties of initial plans for transformative changes at least 30 business days before starting transformative changes, including a summary of any likely security impacts or changes in risk. _(timeframe: 30 bizdays)_
+- _Notify via:_ FedRAMP Certification Data (update: FedRAMP Certification Data) — All Necessary Parties
 - _Evidence artifacts:_ At least the most recent initial SCN notification for a transformative change including the date it was sent and the date the change was applied. Additional examples may be provided. If no transformative SCN notifications have been sent then this artifact is not required.
 
 ### SCN-TRF-NFP — Notification of Final Plans (MUST)
+_Applies to: Providers_
 Providers MUST notify all necessary parties of final plans for transformative changes at least 10 business days before starting transformative changes, including updates to all previously sent information. _(timeframe: 10 bizdays)_
+- _Notify via:_ FedRAMP Certification Data (update: FedRAMP Certification Data) — All Necessary Parties
 - _Evidence artifacts:_ At least the most recent final SCN notification for a transformative change including the date it was sent and the date the change was applied. Additional examples may be provided. If no transformative SCN notifications have been sent then this artifact is not required.
 
 ### SCN-TRF-NAF — Notification After Finishing (MUST)
+_Applies to: Providers_
 Providers MUST notify all necessary parties within 5 business days after finishing transformative changes, including updates to all previously sent information. _(timeframe: 5 bizdays)_
+- _Notify via:_ FedRAMP Certification Data (update: FedRAMP Certification Data) — All Necessary Parties
 - _Evidence artifacts:_ At least the most recent post deployment SCN notification for a transformative change including the date it was sent and the date the change was applied. Additional examples may be provided. If no transformative SCN notifications have been sent then this artifact is not required.
 
 ### SCN-TRF-NAV — Notification After Verification (MUST)
+_Applies to: Providers_
 Providers MUST notify all necessary parties within 5 business days after completing the verification, assessment, and/or validation of transformative changes, also including the following information: _(timeframe: 5 bizdays)_
 - Updates to all previously sent information
 - Summary of any new risks identified and/or vulnerabilities resulting from the change (if applicable)
 - Copy of the security assessment report (if applicable)
+- _Notify via:_ FedRAMP Certification Data (update: FedRAMP Certification Data) — All Necessary Parties
 - _Evidence artifacts:_ At least the most recent after verification SCN notification for a transformative change including the date it was sent and the date the change was applied. Additional examples may be provided. If no transformative SCN notifications have been sent then this artifact is not required.
 
 ### SCN-TRF-UPD — Update Documentation (MUST)
+_Applies to: Providers_
 Providers MUST publish updated service documentation and other materials to reflect transformative changes within 30 business days after finishing transformative changes. _(timeframe: 30 bizdays)_
 - _Note:_ This requirement is focused on service documentation like user guides, information listed in the marketplace, and other such materials; it does not require updating the system security plan or FedRAMP Certification Package.
 - _Evidence artifacts:_ Date of the most recent transformative change and the date of the corresponding documentation update. If no documentation updates were required as the result of this change, explain how this was determined.
 
 ### SCN-TRF-TPR — Third-Party Review (SHOULD)
+_Applies to: Providers_
 Providers SHOULD engage a third-party assessor to review the scope and impact of the planned change before starting transformative changes if human validation is necessary; such reviews SHOULD be limited to security decisions that require human validation.
 - _Note:_ Activities that match the transformative significant change type are rare for a cloud service offering, adjusted for the size, scale, and complexity of the service. Small cloud service offerings may go years without transformative changes, while hyperscale providers may release multiple transformative changes per year.
+- _Example — Tips on transformative changes:_
+    - Alters the service risk profile or require new or significantly different actions to address customer responsibilities
+    - Requires significant new design, development and testing with discrete associated project planning, budget, marketing, etc.
+    - Requires extensive updates to security assessments, documentation, and how a large number of security requirements are met and validated
+    - The addition, removal, or replacement of a critical third party service that handles a significant portion of information (e.g., IaaS change)
+    - Increasing the security categorization of a service within the offering that actively handles federal customer data (does NOT include impact change of entire offering - see FedRAMP Certification class change)
+    - Replacement of underlying management planes or paradigm shift in workload orchestration (e.g., bare-metal servers or virtual machines to containers, migration to kubernetes)
+    - Datacenter migration where large amounts of federal customer data is moved across boundaries different from normal day-to-day operations
+    - Adding a new AI-based capability that impacts federal customer data in a different way than existing services or capabilities (such as integrating a new third-party service or training on federal customer data)
 - _Evidence artifacts:_ Third Party assesment report OR explanation why a third party assessor was not engaged
 
 
@@ -1256,11 +1590,12 @@ Providers SHOULD engage a third-party assessor to review the scope and impact of
 The Security Decision Record replaced a traditional System Security Plan with a persistently maintained, verified, and validated record of the security decisions made by the cloud service provider over the lifecycle of their cloud service offering.
 
 - Subset **CSO** (General Provider Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
-- **20x** — required; obtain 2026-07-04, maintain 2027-01-01, optional adoption 2026-07-04, grace ends 2027-01-01 (or next assessment)
-- **rev5** — required; obtain 2027-01-01, maintain 2027-08-01, optional adoption 2026-07-04, grace ends 2027-08-01 (or next assessment)
+- **20x** — required (Consolidated Rules for 2026); obtaining initial certification 2026-07-04; maintaining certification 2027-01-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends at the first FedRAMP independent assessment started after 2027-01-01 (MUST adopt, else certification revoked)
+- **rev5** — required (Consolidated Rules for 2026); obtaining initial certification 2027-01-01; maintaining certification 2027-08-01 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends at the first FedRAMP independent assessment started after 2027-08-01 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/security-decision-record/
 
 ### SDR-CSO-FRR — FedRAMP Rules (MUST)
+_Applies to: Providers_
 Providers MUST supply a Security Decision Record, in both human-readable and JSON formats, that includes at least all of the following information for each applicable FedRAMP rule:
 - Explanation of how the rule is followed, or an explanation of the reason and resulting risk to customers for not following the rule.
 - Verification that the implementation is appropriate for the rule, or that the reason for not implementing is accepted by a senior official.
@@ -1269,22 +1604,27 @@ Providers MUST supply a Security Decision Record, in both human-readable and JSO
 - Independent validation.
 - Any responses or clarifications to the comments in the independent verification or validation.
 - Rule-specific artifacts (if applicable).
+- _JSON schema:_ FedRAMP Security Decision Record Schema https://fedramp.gov/schemas/fedramp-security-decision-record-schema-2026-06-24.json
 
 ### SDR-CSO-MTD — Security Decision Record Metadata (MUST)
+_Applies to: Providers_
 Providers MUST also include the following basic metadata in their Security Decision Record:
 - Version
 - Date and time of last update
 - Source of update
 
 ### SDR-CSX-KSI — Key Security Indicators (MUST) [20x only]
+_Applies to: Providers_
 Providers MUST also include short and simple high-level summaries of at least the following for each applicable Key Security Indicator:
 - Explanation of measures (and their objectives) that demonstrate the Key Security Indicator, or an explanation of the reason and resulting risk to customers for not having measures available for that Key Security Indicator.
 - Explanation of the cycle for any measures that are implemented persistently (if applicable).
 - Verification that the measures demonstrate the Key Security Indicator, or that the reason for not having them is accepted.
 - Verification that the automation in place is accurate and sufficient to demonstrate appropriate measures for the Key Security Indicator, or that automation is not necessary for each measure.
 - Validation that the measures are accurately produced and are in place and working as intended, or that the reason for not having them is valid.
+- _JSON schema:_ FedRAMP Security Decision Record Schema https://fedramp.gov/schemas/fedramp-security-decision-record-schema-2026-06-24.json
 
 ### SDR-CSX-KMT — Key Security Indicator Metrics [20x only]
+_Applies to: Providers_
 - **Class A (MAY):** Providers with 20x Class A Certifications MAY also include historical metrics in their Security Decision Record.
 - **Class B (MUST):** Providers with 20x Class B Certifications MUST also include historical metrics in their Security Decision Record, supplying at least the following information for each applicable Key Security Indicator:
     - Summary of each metric over the past 30 days
@@ -1294,8 +1634,10 @@ Providers MUST also include short and simple high-level summaries of at least th
     - Summary of metric up to the past year (where available)
     - All daily metric data up to the past year (where available)
 - **Class D (MUST):** Providers with 20x Class D Certifications MUST significantly supersede the minimum requirements for lower Classes, with specifics to be set during the 20x Phase 4 Pilot.
+- _JSON schema:_ FedRAMP Security Decision Record Schema https://fedramp.gov/schemas/fedramp-security-decision-record-schema-2026-06-24.json
 
 ### SDR-CSF-CTF — Rev5 Controls (MUST) [rev5 only]
+_Applies to: Providers_
 Providers MUST also include short and simple high-level summaries of at least the following for each applicable Rev5 Control:
 - Any organization-defined parameter values.
 - Implementation status, one of Implemented, Partially Implemented, Planned, Alternative Implementation, or Not Applicable.
@@ -1314,57 +1656,71 @@ The Vulnerability Detection and Response rules require providers to continuously
 
 - Subset **CSO** (General Provider Responsibilities): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
 - Subset **TFR** (Timeframes): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
-- Effective: required {"obtain": "2026-12-07", "maintain": "2026-12-07", "optional_adoption": "2026-07-04", "grace": {"default": "2027-03-07", "until_next_assessment": false}}
+- **20x and Rev5** — required (Mandated by CISA BOD 26-04); obtaining initial certification 2026-12-07; maintaining certification 2026-12-07 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends 2027-03-07 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/vulnerability-detection-and-response/
 
 ### VDR-CSO-DET — Vulnerability Detection (MUST)
+_Applies to: Providers_
 Providers MUST systematically, persistently, and promptly discover and identify vulnerabilities within their cloud service offering using appropriate techniques such as assessment, scanning, threat intelligence, vulnerability disclosure mechanisms, bug bounties, penetration testing, incident response, automated control testing, supply chain monitoring, and other relevant capabilities; this process is called vulnerability detection. Vulnerability detection includes persistently verifying and validating that information resources and processes are operating as intended and documented for FedRAMP Practices.
 - _Note:_ FedRAMP's vulnerability detection (and response) rules are intended to set modern expectations for maintaining the security of a cloud service. Historical FedRAMP guidance on vulnerability scanning or continuous monitoring generally focused only on CVE-type vulnerabilities while leaving other types of vulnerabilities and exposures unaddressed.
 - _Note:_ Providers are encouraged to leverage their existing holistic security review, architecture review, and similar processes to meet these requirements. FedRAMP strongly discourages providers from implementing separate vulnerability detection and response processes for FedRAMP reporting that are operated by independent compliance branches unless these processes are consuming data directly from the areas of the cloud service that actively maintain it.
+- **Warning:** Vulnerability Detection and Response includes all efforts to identify weaknesses in a system and is NOT limited to traditional vulnerability scanning or testing. An out-of-date control statement in the Security Decision Record is a vulnerability that must be detected and remediated just like any other vulnerability.
 
 ### VDR-CSO-RES — Vulnerability Response (MUST)
+_Applies to: Providers_
 Providers MUST systematically, persistently, and promptly track, evaluate, monitor, mitigate, remediate, assess exploitation of, report, and otherwise manage all detected vulnerabilities within their cloud service offering; this process is called vulnerability response.
 - _Note:_ If it is not possible to fully mitigate vulnerabilities or remediate vulnerabilities, providers SHOULD instead partially mitigate vulnerabilities promptly, progressively, and persistently.
 - _Note:_ FedRAMP does not use the terms "mitigation" and "remediation" interchangeably. Mitigation is the process of reducing the risk and impact of a vulnerability through partial mitigation and even full mitigation; remediation is the process of entirely eliminating the vulnerability. A fully mitigated vulnerability will still exist (with negligible risk) until it has been remediated. This separation is based on the plain language definitions of these words.
 - _Note:_ Please refer to FedRAMP Definitions for strict interpretation in the FedRAMP context.
 
 ### VDR-CSO-FAV — Failures Are Vulnerabilities (MUST)
+_Applies to: Providers_
 Providers MUST treat problems or failures with their vulnerability detection and response processes as vulnerabilities.
 
 ### VDR-CSO-DFR — Design For Resilience (SHOULD)
+_Applies to: Providers_
 Providers SHOULD make design and architecture decisions for their cloud service offering that mitigate the risk of vulnerabilities by default AND decrease the risk and complexity of vulnerability detection and response.
 
 ### VDR-CSO-ADT — Automate Detection (SHOULD)
+_Applies to: Providers_
 Providers SHOULD use automated services to improve and streamline vulnerability detection and response.
 
 ### VDR-CSO-DAC — Detect After Changes (SHOULD)
+_Applies to: Providers_
 Providers SHOULD automatically perform vulnerability detection on representative samples of new or significantly changed information resources.
 
 ### VDR-CSO-MSP — Maintain Security (SHOULD NOT)
+_Applies to: Providers_
 Providers SHOULD NOT weaken the security of information resources to facilitate vulnerability scanning, detection, or assessment activities.
 
 ### VDR-CSO-AKE — Avoid KEVs (SHOULD NOT)
+_Applies to: Providers_
 Providers SHOULD NOT deploy or otherwise activate new machine-based information resources with Known Exploited Vulnerabilities.
 
 ### VDR-CSO-SIR — Sampling (MAY)
+_Applies to: Providers_
 Providers MAY sample effectively identical information resources, especially machine-based information resources, when performing vulnerability detection UNLESS doing so would decrease the efficiency or effectiveness of vulnerability detection.
 
 ### VDR-TFR-NMV — Non-Machine Verification and Validation (MUST)
+_Applies to: Providers_
 Providers MUST verify and validate the status of non-machine-based information resources at least once every 3 months. _(timeframe: 3 months)_
 
 ### VDR-TFR-PDD — Persistent Drift Detection
+_Applies to: Providers_
 - **Class A (SHOULD):** Providers with Class A Certifications SHOULD persistently perform vulnerability detection on all information resources that are likely to drift, at least once every 3 months. _(timeframe: 3 months)_
 - **Class B (SHOULD):** Providers with Class B Certifications SHOULD persistently perform vulnerability detection on all information resources that are likely to drift, at least once every month. _(timeframe: 1 months)_
 - **Class C (SHOULD):** Providers with Class C Certifications SHOULD persistently perform vulnerability detection on all information resources that are likely to drift, at least once every 14 days. _(timeframe: 14 days)_
 - **Class D (SHOULD):** Providers with Class D Certifications SHOULD persistently perform vulnerability detection on all information resources that are likely to drift, at least once every 7 days. _(timeframe: 7 days)_
 
 ### VDR-TFR-PCD — Persistently Complete Detection
+_Applies to: Providers_
 - **Class A (SHOULD):** Providers with Class A Certifications SHOULD persistently perform vulnerability detection on all information resources that are NOT likely to drift, at least once every 6 months. _(timeframe: 6 months)_
 - **Class B (SHOULD):** Providers with Class B Certifications SHOULD persistently perform vulnerability detection on all information resources that are NOT likely to drift, at least once every 6 months. _(timeframe: 6 months)_
 - **Class C (SHOULD):** Providers with Class C Certifications SHOULD persistently perform vulnerability detection on all information resources that are NOT likely to drift, at least once every month. _(timeframe: 1 months)_
 - **Class D (SHOULD):** Providers with Class D Certifications SHOULD persistently perform vulnerability detection on all information resources that are NOT likely to drift, at least once every month. _(timeframe: 1 months)_
 
 ### VDR-TFR-PVR — Mitigation and Remediation Expectations
+_Applies to: Providers_
 - **Class A (SHOULD):** Providers with Class A Certifications SHOULD partially mitigate vulnerabilities, fully mitigate vulnerabilities, or remediate vulnerabilities to a lower potential agency impact within the timeframes from evaluation shown below, factoring for the current Potential Agency Impact N-rating as defined in VER-EVA-EPA (Estimate Potential Agency Impact), internet reachability, and likely exploitability.
     - PAIN 2: Internet-Reachable Vulnerability + Likely Exploitable Vulnerability 96 days; Not Internet-Reachable Vulnerability + Likely Exploitable Vulnerability 160 days; Not Likely Exploitable Vulnerability 192 days
     - PAIN 3: Internet-Reachable Vulnerability + Likely Exploitable Vulnerability 32 days; Not Internet-Reachable Vulnerability + Likely Exploitable Vulnerability 64 days; Not Likely Exploitable Vulnerability 192 days
@@ -1387,24 +1743,29 @@ Providers MUST verify and validate the status of non-machine-based information r
     - PAIN 5: Internet-Reachable Vulnerability + Likely Exploitable Vulnerability 12 hours; Not Internet-Reachable Vulnerability + Likely Exploitable Vulnerability 1 days; Not Likely Exploitable Vulnerability 8 days
 
 ### VDR-TFR-RMN — Remaining Vulnerabilities (SHOULD)
+_Applies to: Providers_
 Providers SHOULD mitigate or remediate remaining vulnerabilities during routine operations as determined necessary by the provider.
 
 ### VDR-TFR-KEV — Remediate KEVs (SHOULD)
+_Applies to: Providers_
 Providers SHOULD remediate Known Exploited Vulnerabilities according to the due dates in the CISA Known Exploited Vulnerabilities Catalog (even if the vulnerability has been fully mitigated) as required by CISA Binding Operational Directive (BOD) 26-04 or any successor guidance from CISA.
 - _Reference:_ CISA BOD 26-04 https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk
 
 ### VDR-TFR-PSD — Persistent Sample Detection
+_Applies to: Providers_
 - **Class A (SHOULD):** Providers with Class A Certifications SHOULD persistently perform vulnerability detection on representative samples of similar machine-based information resources, at least once every 14 days. _(timeframe: 14 days)_
 - **Class B (SHOULD):** Providers with Class B Certifications SHOULD persistently perform vulnerability detection on representative samples of similar machine-based information resources, at least once every 7 days. _(timeframe: 7 days)_
 - **Class C (SHOULD):** Providers with Class C Certifications SHOULD persistently perform vulnerability detection on representative samples of similar machine-based information resources, at least once every 3 days. _(timeframe: 3 days)_
 - **Class D (SHOULD):** Providers with Class D Certifications SHOULD persistently perform vulnerability detection on representative samples of similar machine-based information resources, at least once per day. _(timeframe: 1 days)_
 
 ### VDR-TFR-MVX — Persistent Machine Verification and Validation for 20x [20x only]
+_Applies to: Providers_
 - **Class A (SHOULD):** Providers of FedRAMP 20x Class A offerings SHOULD verify and validate the status of machine-based information resources at least once every month. _(timeframe: 1 months)_
 - **Class B (MUST):** Providers of FedRAMP 20x Class B offerings MUST verify and validate the status of machine-based information resources at least once every 7 days. _(timeframe: 7 days)_
 - **Class C (MUST):** Providers of FedRAMP 20x Class C offerings MUST verify and validate the status of machine-based information resources at least once every 3 days. _(timeframe: 3 days)_
 
 ### VDR-TFR-MVF — Persistent Machine Verification and Validation for Rev5 [rev5 only]
+_Applies to: Providers_
 - **Class B (SHOULD):** Providers of FedRAMP Rev5 Class B offerings SHOULD verify and validate the status of machine-based information resources at least once every month. _(timeframe: 1 months)_
 - **Class C (MUST):** Providers of FedRAMP Rev5 Class C offerings MUST verify and validate the status of machine-based information resources at least once every month. _(timeframe: 1 months)_
 - **Class D (MUST):** Providers of FedRAMP Rev5 Class D offerings MUST verify and validate the status of machine-based information resources at least once every month. _(timeframe: 1 months)_
@@ -1419,28 +1780,34 @@ The Vulnerability Evaluation and Reporting rules require cloud service providers
 - Subset **EVA** (Evaluation): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
 - Subset **RPT** (Reporting): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
 - Subset **TFR** (Timeframes): types 20x/Rev5; paths Program/Agency; classes B/C/D; affects Providers
-- Effective: required {"obtain": "2026-12-07", "maintain": "2026-12-07", "optional_adoption": "2026-07-04", "grace": {"default": "2027-03-07", "until_next_assessment": false}}
+- **20x and Rev5** — required (Mandated by CISA BOD 26-04); obtaining initial certification 2026-12-07; maintaining certification 2026-12-07 (SHOULD adopt, else corrective action plan); optional adoption 2026-07-04; grace period ends 2027-03-07 (MUST adopt, else certification revoked)
 - Web: https://www.fedramp.gov/2026/reference/vulnerability-evaluation-and-reporting/
 
 ### VER-FRP-ARP — Additional Requirements (MAY)
+_Applies to: FedRAMP_
 FedRAMP MAY require providers to share additional vulnerability information, alternative reports, or to report at an alternative frequency as a condition of a FedRAMP Corrective Action Plan or other agreements with federal agencies.
 
 ### VER-FRP-ADV — Sensitive Details (MAY)
+_Applies to: FedRAMP_
 FedRAMP MAY require providers to share additional information or details about vulnerabilities, including sensitive information that would likely lead to exploitation, as part of review, response or investigation by necessary parties.
 
 ### VER-AGM-RVR — Review Vulnerability Reports (SHOULD)
+_Applies to: Agencies_
 Agencies SHOULD review the information provided in vulnerability reports at appropriate and reasonable intervals commensurate with the expectations and risk posture indicated by their Authorization to Operate, and SHOULD use automated processing and filtering of machine readable information from cloud service providers.
 - _Note:_ FedRAMP recommends that agencies only review overdue and accepted vulnerabilities Potential Agency Impact N-rating > 2 unless the cloud service provider recommends mitigations or the service is included in a higher risk federal information system. Furthermore, accepted vulnerabilities generally only need to be reviewed when they are added or during an updated risk assessment due to changes in the agency's use or authorization.
 
 ### VER-AGM-MAP — Maintain Agency Plans of Action and Milestones (SHOULD)
+_Applies to: Agencies_
 Agencies SHOULD use vulnerability information reported by the Provider to maintain Plans of Action and Milestones for agency security programs when relevant according to agency security policies (such as if the agency takes action to mitigate the risk of exploitation or authorized the continued use of a cloud service with accepted vulnerabilities that put agency information systems at risk).
 
 ### VER-EVA-ELX — Evaluate Exploitability (MUST)
+_Applies to: Providers_
 Providers MUST evaluate detected vulnerabilities, considering the context of the cloud service offering, to determine if they are likely exploitable vulnerabilities.
 - _Note:_ The simple reality is that most traditional vulnerabilities discovered by scanners or during assessment are not likely to be exploitable; exploitation typically requires an unrealistic set of circumstances that will not occur during normal operation. The likelihood of exploitation will vary depending on so many factors that FedRAMP will not recommend a specific framework for approaching this beyond these rules.
 - _Note:_ The proof, ultimately, is in the pudding - providers who regularly evaluate vulnerabilities as not likely exploitable without careful consideration are more likely to suffer from an adverse impact where the root cause was an exploited vulnerability that was improperly evaluated. If done recklessly or deliberately, such actions will have a negative impact on a provider's FedRAMP Certification.
 
 ### VER-EVA-EIR — Evaluate Internet-Reachability (MUST)
+_Applies to: Providers_
 Providers MUST evaluate detected vulnerabilities, considering the context of the cloud service offering, to determine if they are internet-reachable vulnerabilities.
 - _Note:_ FedRAMP focuses on internet-reachable (rather than internet-accessible) to ensure that any service that might receive a payload from the internet is prioritized if that service has a vulnerability that can be triggered by processing the data in the payload.
 - _Note:_ The simplest way to prevent exploitation of internet-reachable vulnerabilities is to intercept, inspect, filter, sanitize, reject, or otherwise deflect triggering payloads before they are processed by the vulnerable resource; once this prevention is in place the vulnerability should no longer be considered an internet-reachable vulnerability.
@@ -1448,6 +1815,7 @@ Providers MUST evaluate detected vulnerabilities, considering the context of the
 - _Note:_ Another simple example is the infamous Log4Shell (https://en.wikipedia.org/wiki/Log4Shell) vulnerability from 2021, where exploitation was possible via vulnerable internet-reachable resources deep in the application stack that were often not internet-accessible themselves.
 
 ### VER-EVA-EPA — Estimate Potential Agency Impact (MUST)
+_Applies to: Providers_
 Providers MUST evaluate detected vulnerabilities, considering the context of the cloud service offering, to estimate the potential agency impact of exploitation on government customers AND assign one of the following Potential Agency Impact N-ratings (PAIN):
 - **N1**: Exploitation could be expected to have minimal customer effects on one or more agencies that use the cloud service offering.
 - **N2**: Exploitation could be expected to have narrow customer effects on one or more agencies that use the cloud service offering.
@@ -1456,15 +1824,19 @@ Providers MUST evaluate detected vulnerabilities, considering the context of the
 - **N5**: Exploitation could be expected to have a debilitating customer effect on more than one agency that uses the cloud service offering.
 
 ### VER-EVA-AIA — Assume It's Automatable (MUST)
+_Applies to: Providers_
 Providers MUST assume the exploitation of vulnerabilities can be automated UNLESS they have evidence proving otherwise.
 
 ### VER-EVA-GRV — Group Vulnerabilities (SHOULD)
+_Applies to: Providers_
 Providers SHOULD evaluate detected vulnerabilities, considering the context of the cloud service offering, to identify logical groupings of affected information resources that may improve the efficiency and effectiveness of vulnerability response by consolidating further activity; FedRAMP Vulnerability Detection and Response rules are then applied to these consolidated groupings of vulnerabilities instead of each individual detected instance.
 
 ### VER-EVA-EFP — Evaluate False Positives (SHOULD)
+_Applies to: Providers_
 Providers SHOULD evaluate detected vulnerabilities, considering the context of the cloud service offering, to determine if they are false positive vulnerabilities.
 
 ### VER-EVA-EFA — Evaluation Factors (SHOULD)
+_Applies to: Providers_
 Providers SHOULD consider at least the following factors when considering the context of the cloud service offering to evaluate detected vulnerabilities:
 - **Criticality**: How important are the systems or information that might be impacted by the vulnerability?
 - **Reachability**: How might a threat actor reach the vulnerability and how likely is that?
@@ -1476,9 +1848,12 @@ Providers SHOULD consider at least the following factors when considering the co
 - **Known Threats**: How might already known threats leverage the vulnerability and how likely is that?
 
 ### VER-RPT-PER — Persistent Reporting (MUST)
+_Applies to: Providers_
 Providers MUST report vulnerability detection and response activity (including persistent verification and validation) to all necessary parties persistently, summarizing ALL activity since the previous report; these reports are FedRAMP Certification Data and are subject to FedRAMP Certification Data Sharing rules.
+- _JSON schema:_ FedRAMP Vulnerability Detail Report (VER-RPT-VDT) https://fedramp.gov/schemas/fedramp-vulnerability-detail-report-schema-2026-06-24.json
 
 ### VER-RPT-VDT — Vulnerability Details (MUST)
+_Applies to: Providers_
 Providers MUST include the following information (if applicable) on detected vulnerabilities when reporting on vulnerability detection and response activity, UNLESS it is an accepted vulnerability:
 - Provider's internally assigned tracking identifier
 - Time and source of the detection
@@ -1491,9 +1866,11 @@ Providers MUST include the following information (if applicable) on detected vul
 - Is it currently or is it likely to become an overdue vulnerability or not? If so, explain.
 - Any supplementary information the provider responsibly determines will help federal agencies assess or mitigate the risk to their federal customer data within the cloud service offering resulting from the vulnerability
 - Final disposition of the vulnerability
+- _JSON schema:_ FedRAMP Vulnerability Detail Report (VER-RPT-VDT) https://fedramp.gov/schemas/fedramp-vulnerability-detail-report-schema-2026-06-24.json
 - _Evidence artifacts:_ A recent vulnerability report or a sample vulnerability report
 
 ### VER-RPT-AVI — Accepted Vulnerability Info (MUST)
+_Applies to: Providers_
 Providers MUST include the following information on accepted vulnerabilities when reporting on vulnerability detection and response activity:
 - Provider's internally assigned tracking identifier
 - Time and source of the detection
@@ -1503,44 +1880,59 @@ Providers MUST include the following information on accepted vulnerabilities whe
 - Currently estimated Potential Agency Impact N-rating
 - Explanation of why this is an accepted vulnerability
 - Any supplementary information the provider determines will responsibly help federal agencies assess or mitigate the risk to their federal customer data within the cloud service offering resulting from the accepted vulnerability
+- _JSON schema:_ FedRAMP Accepted Vulnerability Info (VER-RPT-AVI) https://fedramp.gov/schemas/fedramp-accepted-vulnerability-info-schema-2026-06-24.json
 - _Evidence artifacts:_ A recent vulnerability report or a sample vulnerability report
 
 ### VER-RPT-NID — Responsible Disclosure (MUST NOT)
+_Applies to: Providers_
 Providers MUST NOT irresponsibly disclose specific sensitive information about vulnerabilities that would likely lead to exploitation, but MUST disclose sufficient information for informed risk-based decision-making to all necessary parties.
 - _Note:_ This requirement will be superseded in the event of formal action related to an investigation or corrective action plan.
 
 ### VER-RPT-HLO — High-Level Overviews (SHOULD)
+_Applies to: Providers_
 Providers SHOULD include high-level overviews of ALL vulnerability detection and response activities conducted during this period for the cloud service offering; this includes vulnerability disclosure programs, bug bounty programs, penetration testing, assessments, etc.
 
 ### VER-RPT-RPD — Responsible Public Disclosure (MAY)
+_Applies to: Providers_
 Providers MAY responsibly disclose vulnerabilities publicly or with other parties if the provider determines doing so will NOT likely lead to exploitation.
 
 ### VER-TFR-MHR — Monthly Activity Report (MUST)
+_Applies to: Providers_
 Providers MUST report vulnerability detection and response activity to all necessary parties in a consistent format that is human readable at least monthly. _(timeframe: 1 months)_
 - _Evidence artifacts:_ A recent vulnerability report or a sample vulnerability report
 
 ### VER-TFR-MAV — Mark Accepted Vulnerabilities (MUST)
+_Applies to: Providers_
 Providers MUST categorize any vulnerability that is not or will not be fully mitigated or remediated within 192 days of evaluation as an accepted vulnerability. _(timeframe: 192 days)_
 
 ### VER-TFR-MRH — Historical Activity
+_Applies to: Providers_
 - **Class A (MAY):** Providers with Class A Certifications MAY make all recent historical vulnerability detection and response activity available in JSON format for automated retrieval by all necessary parties (e.g. using an API service or similar); this information MAY be updated persistently, at least once every month. _(timeframe: 1 months)_
+    - _Evidence artifacts:_ URL and access instructions for historical vulnerability detection and response activity in machine readable format
 - **Class B (SHOULD):** Providers with Class B Certifications SHOULD make all recent historical vulnerability detection and response activity available in JSON format for automated retrieval by all necessary parties (e.g. using an API service or similar); this information SHOULD be updated persistently, at least once every month. _(timeframe: 1 months)_
+    - _Evidence artifacts:_ URL and access instructions for historical vulnerability detection and response activity in machine readable format | or an explanation of why machine readable content is not being provided
 - **Class C (SHOULD):** Providers with Class C Certifications SHOULD make all recent historical vulnerability detection and response activity available in JSON format for automated retrieval by all necessary parties (e.g. using an API service or similar); this information SHOULD be updated persistently, at least once every 14 days. _(timeframe: 14 days)_
+    - _Evidence artifacts:_ URL and access instructions for historical vulnerability detection and response activity in machine readable format | or an explanation of why machine readable content is not being provided
 - **Class D (SHOULD):** Providers with Class D Certifications SHOULD make all recent historical vulnerability detection and response activity available in JSON format for automated retrieval by all necessary parties (e.g. using an API service or similar); this information SHOULD be updated persistently, at least once every 7 days. _(timeframe: 7 days)_
+    - _Evidence artifacts:_ URL and access instructions for historical vulnerability detection and response activity in machine readable format | or an explanation of why machine readable content is not being provided
+- _JSON schema:_ FedRAMP Historical Vulnerability Evaluation and Reporting Activity (VER-TFR-MRH) https://fedramp.gov/schemas/fedramp-historical-ver-activity-schema-2026-06-24.json
 
 ### VER-TFR-EVU — Evaluate Vulnerabilities Quickly
+_Applies to: Providers_
 - **Class A (SHOULD):** Providers with Class A Certifications SHOULD evaluate ALL vulnerabilities as required by VER-EVA (Evaluation) within 14 days of detection. _(timeframe: 14 days)_
 - **Class B (SHOULD):** Providers with Class B Certifications SHOULD evaluate ALL vulnerabilities as required by VER-EVA (Evaluation) within 7 days of detection. _(timeframe: 7 days)_
 - **Class C (SHOULD):** Providers with Class C Certifications SHOULD evaluate ALL vulnerabilities as required by VER-EVA (Evaluation) within 5 days of detection. _(timeframe: 5 days)_
 - **Class D (SHOULD):** Providers with Class D Certifications SHOULD evaluate ALL vulnerabilities as required by VER-EVA (Evaluation) within 2 days of detection. _(timeframe: 2 days)_
 
 ### VER-TFR-IRI — Internet-Reachable Incidents
+_Applies to: Providers_
 - **Class A (MAY):** Providers with Class A Certifications MAY treat internet-reachable likely exploitable vulnerabilities where Potential Agency Impact N-rating > 3 as a FedRAMP Reportable Incident until they are partially mitigated vulnerabilities at N3 or below.
 - **Class B (MAY):** Providers with Class B Certifications MAY treat internet-reachable likely exploitable vulnerabilities where Potential Agency Impact N-rating > 3 as a FedRAMP Reportable Incident until they are partially mitigated vulnerabilities at N3 or below.
 - **Class C (SHOULD):** Providers with Class C Certifications SHOULD treat internet-reachable likely exploitable vulnerabilities where Potential Agency Impact N-rating > 3 as a FedRAMP Reportable Incident until they are partially mitigated vulnerabilities at N3 or below.
 - **Class D (SHOULD):** Providers with Class D Certifications SHOULD treat internet-reachable likely exploitable vulnerabilities where Potential Agency Impact N-rating > 3 as a FedRAMP Reportable Incident until they are partially mitigated vulnerabilities at N3 or below.
 
 ### VER-TFR-NRI — Non-Internet-Reachable Incidents
+_Applies to: Providers_
 - **Class A (MAY):** Providers with Class A Certifications MAY treat likely exploitable vulnerabilities that are NOT internet-reachable where Potential Agency Impact N-rating = 5 as a FedRAMP Reportable Incident until they are partially mitigated vulnerabilities at N4 or below.
 - **Class B (MAY):** Providers with Class B Certifications MAY treat likely exploitable vulnerabilities that are NOT internet-reachable where Potential Agency Impact N-rating = 5 as a FedRAMP Reportable Incident until they are partially mitigated vulnerabilities at N4 or below.
 - **Class C (MAY):** Providers with Class C Certifications MAY treat likely exploitable vulnerabilities that are NOT internet-reachable where Potential Agency Impact N-rating = 5 as a FedRAMP Reportable Incident until they are partially mitigated vulnerabilities at N4 or below.

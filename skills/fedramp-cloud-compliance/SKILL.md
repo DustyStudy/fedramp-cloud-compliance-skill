@@ -45,8 +45,10 @@ can refresh them from FedRAMP's live machine-readable sources.
     replace the base SSP. Both are human-readable plus JSON.
   - **VDR/VER** vulnerability reporting replaces provider-maintained POA&Ms.
 - Key dates:
-  - 2027-01-01: CR26 becomes mandatory.
-  - 2027-06-11: last day FedRAMP accepts new Rev5 certification applications.
+  - 2026-12-07: VDR/VER vulnerability rules become mandatory (CISA BOD 26-04; grace
+    period to 2027-03-07). This is earlier than the general date.
+  - 2027-01-01: CR26 becomes mandatory, subject to per-ruleset effective dates.
+  - 2027-06-11: FedRAMP stops accepting new Rev5 certification applications.
   - The full timeline is in [references/program-2026.md](references/program-2026.md).
 
 ## Pick the reference for the task
@@ -54,7 +56,7 @@ can refresh them from FedRAMP's live machine-readable sources.
 | Task | Load |
 |---|---|
 | Path/class selection, timeline, what each ruleset covers, 20x vs Rev5 | [references/program-2026.md](references/program-2026.md) |
-| Exact rule text (VDR, VER, IEC, SCN, CCM, CMU, MAS, SDR, CPO, FRC, …) | `grep` [references/generated/rules.md](references/generated/rules.md) for the rule ID or `## <CODE>` — don't load the whole file (135 KB) |
+| Exact rule text (VDR, VER, IEC, SCN, CCM, CMU, MAS, SDR, CPO, FRC, …) | `grep` [references/generated/rules.md](references/generated/rules.md) for the rule ID or `## <CODE>` — don't load the whole file (~200 KB) |
 | KSI statements and their related 800-53 controls | [references/generated/ksi.md](references/generated/ksi.md) |
 | Is control X in Class B/C/D? FedRAMP parameters? | [references/generated/rev5-baselines.md](references/generated/rev5-baselines.md), then `fedramp.py lookup` |
 | AWS implementation (GovCloud, FIPS endpoints, Security Hub, Config, KMS…) | [references/aws.md](references/aws.md) |

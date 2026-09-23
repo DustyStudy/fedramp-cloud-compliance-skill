@@ -11,7 +11,7 @@ detail with `python scripts/fedramp.py lookup <ID>`. The generated files in
 |---|---|
 | FedRAMP Authorization / ATO / P-ATO | FedRAMP **Certification** (Rev5 or 20x *type*) |
 | Low / Moderate / High baseline | Rev5 **Class B / C / D**. They loosely align, but FedRAMP says there is "not a direct correlation", because providers tailor and agencies categorize their own systems (FIPS 199/200) |
-| FedRAMP Ready | Retired. No Ready submissions after 2026-07-28, so seek **20x Class A** instead |
+| FedRAMP Ready | Retired. No Ready submissions after 2026-07-28, so seek **20x Class A** instead. Existing Ready holders MUST convert by the later of their annual-assessment expiry or 2026-11-17 (`FRC-CSF-RDY`). Ready status is removed entirely on 2027-12-31 |
 | JAB P-ATO / agency ATO | **Program Certification** (by FedRAMP, no sponsor) vs **Agency Certification** (agency sponsor, Rev5 only) |
 | System Security Plan (SSP) | **Certification Package Overview (CPO)** + **Security Decision Record (SDR)**, both human-readable **and** JSON (`CPO-CSO-OVR`, `SDR-CSO-FRR`) |
 | Provider POA&M / monthly ConMon deliverables | **VDR/VER** vulnerability detection, evaluation, and reporting (`VER-TFR-MHR` monthly report) + **Ongoing Certification Report** every 3 months (`CCM-OCR-AVL`). Agencies keep POA&Ms only for *agency-owned* actions |
@@ -68,13 +68,23 @@ agency sponsor requires Rev5.
 | 2026-08-03 | 20x Class A pipeline opens |
 | 2026-08-10 | Temporary Rev5 Program pipelines (B/C) open |
 | 2026-08-31 | 20x Class B & C pipelines open |
+| 2026-11-17 | Earliest deadline for existing FedRAMP Ready holders to convert (`FRC-CSF-RDY`; later of this or annual-assessment expiry) |
+| 2026-12-07 | VDR and VER mandatory ("Mandated by CISA BOD 26-04"); grace to 2027-03-07 |
 | 2027-01-01 | CR26 mandatory for all stakeholders (per-ruleset dates vary; see below) |
 | 2027-06-11 | No new Rev5 certification applications accepted |
 
-Each ruleset has its own **obtain / maintain / optional adoption / grace** dates for 20x
-and for Rev5. They are listed at the top of every ruleset section in
-`generated/rules.md`. Example: Rev5 SDR must be maintained by 2027-08-01, and CMU's Rev5
-grace period ends 2027-06-01. Always quote the ruleset-specific date.
+Each ruleset has its own dates for 20x and for Rev5. They are listed at the top of every
+ruleset section in `generated/rules.md`. FedRAMP's 2026.09.22 wording:
+
+- **Maintaining certification:** existing providers SHOULD adopt the ruleset by this date,
+  or a corrective action plan is required.
+- **Grace period ends:** they MUST have adopted by then, or certification is revoked. For
+  some rulesets the grace period is "the first FedRAMP independent assessment started
+  after <date>".
+
+Example: existing Rev5 providers SHOULD adopt SDR by 2027-08-01, and MUST adopt it by
+their first independent assessment started after 2027-08-01. CMU's Rev5 grace period ends
+2027-06-01. Always quote the ruleset-specific date.
 
 ## Rulesets at a glance (grep `generated/rules.md` for `## <CODE>`)
 
@@ -86,9 +96,9 @@ grace period ends 2027-06-01. Always quote the ruleset-specific date.
 | MAS | Minimum Assessment Scope | Boundary = every information resource likely to handle, or affect the CIA of, federal customer data (`MAS-CSO-IIR`); flows; third-party resources |
 | CMU | Cryptographic Module Use | Document all modules (`CMU-CSO-CMD`). Validated (CMVP) modules: Class A/B MAY, C SHOULD, D MUST (`CMU-CSO-UVM`). Agency tenants SHOULD default to validated crypto (`CMU-CSO-CAT`) |
 | SCG | Secure Configuration Guide | Customer-facing guide explaining the security impact of settings |
-| VDR | Vulnerability Detection & Response | Detection cadence (20x machine V&V: B every 7 days, C every 3 days; Rev5: monthly), mitigation timeframes by PAIN × internet-reachability × exploitability (`VDR-TFR-PVR`), KEVs per CISA BOD 26-04 (`VDR-TFR-KEV`) |
+| VDR | Vulnerability Detection & Response | Mandatory 2026-12-07 (CISA BOD 26-04). Machine V&V cadence: 20x A monthly (SHOULD), B every 7 days, C every 3 days (MUST) (`VDR-TFR-MVX`); Rev5 monthly (B SHOULD, C/D MUST) (`VDR-TFR-MVF`). Non-machine resources every 3 months (`VDR-TFR-NMV`, MUST). Mitigation timeframes by PAIN × internet-reachability × exploitability (`VDR-TFR-PVR`, SHOULD). KEVs per CISA due dates (`VDR-TFR-KEV`, SHOULD) |
 | VER | Vulnerability Evaluation & Reporting | PAIN N1–N5 rating (`VER-EVA-EPA`), assume automatable, monthly activity report (`VER-TFR-MHR`), accepted vulnerabilities |
-| IEC | Incident Evaluation & Communication | Reportable = affects CIA of federal customer data (`IEC-CSO-EFR`). Default PAIN 5 unless rated (`IEC-CSO-DPR`). Initial/ongoing/final reports with PAIN-based deadlines. Initial report (`IEC-CSO-IIR`): A/B N1–N2 1 business day, N3–N5 6 h; C N1 1 business day, N2 24 h, N3–N5 1 h; D N1–N2 1 h, N3–N5 15 min |
+| IEC | Incident Evaluation & Communication | Reportable = affects, or is likely to affect, the **confidentiality or integrity** of federal customer data (`IEC-CSO-EFR`). Availability-only events are not reportable incidents under this rule. Default PAIN 5 unless rated (`IEC-CSO-DPR`). Initial/ongoing/final reports with PAIN-based deadlines. Initial report (`IEC-CSO-IIR`): A/B N1–N2 1 business day, N3–N5 6 h; C N1 1 business day, N2 24 h, N3–N5 1 h; D N1–N2 1 h, N3–N5 15 min |
 | SCN | Significant Change Notification | Adaptive: notify within 10 business days after. Transformative: initial plans ≥30 business days before, final plans ≥10 business days before, then within 5 business days after finishing and 5 after verification. Routine recurring: no notification |
 | CCM | Collaborative Continuous Monitoring | Ongoing Certification Report every 3 months. Quarterly review meeting (C/D MUST, B SHOULD) |
 | IVV | Independent V&V | 20x: all KSIs assessed yearly (B–D). Rev5: all applicable controls over each 3-year cycle |
@@ -107,8 +117,11 @@ total. Five are **Optional** for Class B but required for Class C: `KSI-CNA-EIS`
 `generated/ksi.md`.
 
 KSIs are outcome statements. They are validated by assessing the provider's *measures*
-(`SDR-CSX-KSI`), which should be automated and produce metrics wherever possible. Class B+
-must supply 30-day and up-to-1-year metric summaries (`SDR-CSX-KMT`). When mapping cloud
+(`SDR-CSX-KSI`), which should be automated and produce metrics wherever possible. `SDR-CSX-KMT`
+sets the metric requirements by class:
+- Class B must supply 30-day and up-to-1-year metric summaries.
+- Class C must also supply all daily metric data for up to a year.
+- Class D requirements are to be set in the 20x Phase 4 pilot. When mapping cloud
 features to KSIs, name the measure, how often it runs, and where its output is stored.
 
 ## Machine-readable package
