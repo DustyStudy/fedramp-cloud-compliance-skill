@@ -1,0 +1,40 @@
+name: Refresh generated references
+
+# Weekly: rebuild references/generated/ from FedRAMP's machine-readable rules and
+# open a PR when FedRAMP has published changes.
+on:
+  schedule:
+    - cron: "17 13 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Rebuild references
+        run: python3 skills/fedramp-cloud-compliance/scripts/fedramp.py build
+
+      - name: Validate cited IDs still exist
+        run: python3 skills/fedramp-cloud-compliance/scripts/fedramp.py check
+
+      - name: Open PR if anything changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet; then echo "No upstream changes."; exit 0; fi
+          version=$(grep -oP 'Consolidated Rules \*\*\K[^*]+' skills/fedramp-cloud-compliance/references/generated/rules.md | head -1)
+          branch="refresh/fedramp-rules-${version}-$(date +%Y%m%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git commit -am "Refresh generated references from FedRAMP rules ${version}"
+          git push origin "$branch"
+          gh pr create --title "Refresh FedRAMP references (${version})" \
+            --body "Automated rebuild via \`fedramp.py build\`. Review the diff and the [FedRAMP changelog](https://www.fedramp.gov/2026/changelog/) for anything the hand-written references (program-2026.md, cloud guides) need to reflect."

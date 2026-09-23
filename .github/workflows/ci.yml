@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate skill
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Compile script
+        run: python3 -m py_compile skills/fedramp-cloud-compliance/scripts/fedramp.py
+
+      - name: Check cited rule, KSI, and control IDs against FedRAMP's live data
+        run: python3 skills/fedramp-cloud-compliance/scripts/fedramp.py check
+
+      - name: Smoke-test lookup
+        run: python3 skills/fedramp-cloud-compliance/scripts/fedramp.py lookup KSI-IAM-APM VDR-TFR-PVR "AC-2(1)"
