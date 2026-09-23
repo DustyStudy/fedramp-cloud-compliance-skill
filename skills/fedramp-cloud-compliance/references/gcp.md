@@ -2,7 +2,7 @@
 
 Starting points for implementation, not proof of compliance. **Before you assert that a
 service is authorized, check the live FedRAMP/DoD scope list:**
-https://docs.cloud.google.com/architecture/security/fedramp-dod-compliance-scope
+https://docs.cloud.google.com/docs/security/compliance/fedramp-dod-compliance-scope
 (general list: https://cloud.google.com/security/compliance/services-in-scope)
 
 ## Authorization posture and inheritance
@@ -15,17 +15,24 @@ https://docs.cloud.google.com/architecture/security/fedramp-dod-compliance-scope
   - The **FedRAMP High** package adds US-only data location plus personnel and support
     controls. Google states that FedRAMP High on Google Cloud requires Assured Workloads
     *and* Assured Support.
-  - The **FedRAMP Moderate** package is documented mainly with support-personnel
-    controls. Set `gcp.resourceLocations` yourself if you need location restriction. The Terraform
-  `google_assured_workloads_workload.compliance_regime` values include `FEDRAMP_MODERATE`,
+  - The **FedRAMP Moderate** package sets support-personnel controls. When you create the
+    folder, you also choose a location that the folder's org policy enforces: resources
+    can only be created or used in allowed locations.
+- The Terraform `google_assured_workloads_workload.compliance_regime` values include `FEDRAMP_MODERATE`,
   `FEDRAMP_HIGH`, `IL2`, `IL4`, `IL5`, `CJIS`, `ITAR`, and `IRS_1075`. The regime is
   **immutable**, so choose it before creating projects.
-- **Get Google's FedRAMP package (SSP, CRM):** request it under NDA through your Google
-  account team, or through the FedRAMP PMO package request form (agencies). Compliance
-  Reports Manager has public attestations, not the full package. The CSP inherits PE and most MA/MP, and nothing for its own IAM,
-  configuration, logging, or application.
-- Every Google service you use is a **third-party information resource** under
-  `MAS-CSO-TPR`.
+- **Get Google's FedRAMP materials:**
+  - The **Customer Responsibility Matrix** can be downloaded in the console from Audit
+    Manager's compliance documents (needs `roles/auditmanager.auditor`).
+  - The **SSP** needs an NDA: request it through your Google account team, or through the
+    FedRAMP PMO package request form (agencies).
+
+  The CSP inherits the physical and environmental (PE) controls. For how other
+  families split between Google and the customer, use the CRM from Audit Manager. The
+  CSP inherits nothing for its own IAM, configuration, logging, or application.
+- **Google services as third-party information resources:** `MAS-CSO-TPR` (when `MAS-CSO-IIR` applies) covers the third-party resources likely to
+  handle, or affect, federal customer data. For each, document usage and configuration,
+  justification, mitigations, and compensating controls.
 
 ## Cryptography (CMU, SC-8, SC-12, SC-13, SC-28)
 
@@ -53,7 +60,7 @@ https://docs.cloud.google.com/architecture/security/fedramp-dod-compliance-scope
 | AC | Cloud IAM (predefined/custom roles, no basic roles), IAM Conditions, **Privileged Access Manager** (JIT grants), IAM deny policies, org policy `iam.allowedPolicyMemberDomains`, VPC Service Controls perimeters | Role design, reviews, least privilege |
 | AU | Cloud Audit Logs (Admin Activity always on; **enable Data Access logs** for in-scope services); aggregated **org-level log sinks** to a locked log bucket (bucket lock / retention policy) or BigQuery; VPC Flow Logs; firewall rules logging | Event selection, review, retention, log access |
 | CA / CM | **Security Command Center Premium** (the Enterprise tier is deprecated and shuts down 2027-05-21) with **Compliance Manager** (includes a NIST SP 800-53 framework), Security Health Analytics, posture management; Assured Workloads violation monitoring; Cloud Asset Inventory; OS Config / VM Manager | Baselines, change control, remediation, inventory accuracy |
-| CP | Backup and DR Service; regional/multi-regional services; Cloud SQL HA + PITR; GCS object versioning / retention | RTO/RPO, restore testing |
+| CP | Backup and DR; regional/multi-regional services; Cloud SQL HA + PITR; GCS object versioning / retention | RTO/RPO, restore testing |
 | IA | Cloud Identity / Workspace or a federated IdP with **phishing-resistant 2SV** (security keys / passkeys enforced); Workload Identity Federation instead of service-account keys (`iam.disableServiceAccountKeyCreation`); OS Login (`compute.requireOsLogin` enforces OS Login only; 2FA also needs instance/project metadata `enable-oslogin-2fa = TRUE`) | IdP policy, authenticator lifecycle |
 | IR | SCC threat detection (Event Threat Detection, Container Threat Detection), Google SecOps (Chronicle) SIEM/SOAR, Pub/Sub notifications to ticketing | IR plan, PAIN rating, IEC reporting |
 | RA / SI | Artifact Analysis (container scanning), VM Manager vulnerability reports, GKE security posture, Web Security Scanner, Sensitive Data Protection (DLP) | VER evaluation, VDR timeframes, KEV remediation |
@@ -62,6 +69,8 @@ https://docs.cloud.google.com/architecture/security/fedramp-dod-compliance-scope
 | PE / MA / MP | Inherited from Google for the infrastructure; **Access Transparency** and **Access Approval** give visibility and control over Google personnel access | Your own endpoints and media |
 
 ## KSI measure ideas (20x)
+
+> _Guidance:_ these are suggested measures, not FedRAMP requirements. FedRAMP defines the KSI outcomes (`generated/ksi.md`); you choose the measures.
 
 | KSI | Example GCP measure |
 |---|---|
@@ -79,12 +88,12 @@ https://docs.cloud.google.com/architecture/security/fedramp-dod-compliance-scope
 
 ```hcl
 resource "google_assured_workloads_workload" "fedramp" {
-  compliance_regime = "FEDRAMP_MODERATE"      # or FEDRAMP_HIGH; immutable
-  display_name      = "fedramp-boundary"
-  location          = "us"                      # "us" multi-region is a supported workload location for both FedRAMP packages
-  organization      = var.org_id                # bare numeric org ID
-  billing_account   = "billingAccounts/${var.billing_account}"
-  provisioned_resources_parent = "folders/${var.parent_folder}"   # parent under which AW creates its folder
+  compliance_regime            = "FEDRAMP_MODERATE" # or FEDRAMP_HIGH; immutable
+  display_name                 = "fedramp-boundary"
+  location                     = "us"       # "us" multi-region is a supported workload location for both FedRAMP packages
+  organization                 = var.org_id # bare numeric org ID
+  billing_account              = "billingAccounts/${var.billing_account}"
+  provisioned_resources_parent = "folders/${var.parent_folder}" # parent under which AW creates its folder
 
   resource_settings {
     display_name  = "fedramp-boundary"
@@ -99,9 +108,13 @@ locals {
 }
 
 resource "google_org_policy_policy" "no_sa_keys" {
-  name   = "folders/${local.aw_folder}/policies/iam.disableServiceAccountKeyCreation"  # no "constraints/" prefix
+  name   = "folders/${local.aw_folder}/policies/iam.disableServiceAccountKeyCreation" # no "constraints/" prefix
   parent = "folders/${local.aw_folder}"
-  spec { rules { enforce = "TRUE" } }    # boolean constraints only; list constraints use values {}
+  spec {
+    rules {
+      enforce = "TRUE" # boolean constraints only; list constraints use values {}
+    }
+  }
 }
 ```
 

@@ -239,7 +239,8 @@ def fmt_effective(label: str, eff: dict) -> str:
     return (f"- **{label}** — {eff.get('is')} ({eff.get('current_status', '')}); "
             f"obtaining initial certification {d.get('obtain')}; maintaining certification "
             f"{d.get('maintain')} (SHOULD adopt, else corrective action plan); "
-            f"optional adoption {d.get('optional_adoption')}; grace period ends {grace_txt} "
+            + (f"optional adoption {d['optional_adoption']}; " if d.get("optional_adoption") else "")
+            + f"grace period ends {grace_txt} "
             f"(MUST adopt, else certification revoked)")
 
 

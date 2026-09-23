@@ -3,6 +3,46 @@
 All notable changes to this repo are documented here. Format loosely
 follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.3.0] - 2026-09-23
+
+Second, independent verification pass (four reviewers with no access to the first audit):
+366 claims verified, 12 wrong (all fixed), 3 unverifiable (reworded), 42 guidance.
+
+### Fixed
+- Azure:
+  - The FedRAMP/NIST initiatives contain Modify/DeployIfNotExists Guest Configuration
+    prerequisites, so the assignment snippet now includes a managed identity and location.
+  - Corrected the Gov vs commercial policy counts (NIST R5 is larger in Gov).
+  - Storage `public_network_access` replaces the deprecated argument (azurerm 5.5.0+).
+  - `azuread_authentication_only` lives inside the `azuread_administrator` block.
+  - The ACR content trust date is "starting" 2026-05-31.
+  - CJIS/IRS 1075 are also supported on commercial Azure.
+- GCP:
+  - The org-policy snippet was invalid HCL (single-line nested block).
+  - The FedRAMP Moderate package enforces the folder location.
+  - The CRM is downloadable from Audit Manager.
+  - Cloud SQL/GKE `deletion_protection` only protects against Terraform; use API-level flags.
+  - Added `gcp.restrictTLSVersion`. Updated the scope URL.
+- AWS:
+  - `MAS-CSO-TPR` scope and contents.
+  - The Security Hub CSPM rename date (June 2025) and the `_v2` Terraform resources for the
+    new Security Hub.
+  - FedRAMP scope notes for Shield Advanced, Security Incident Response, and CodeArtifact.
+  - Post-quantum FIPS ELB policies.
+- FedRAMP:
+  - `SDR-CSX-KMT` Class D "MUST significantly supersede".
+  - AU-9(4)/AU-9(3)/AU-12(1) class labels.
+  - Wording for Checkov `soft_fail` and for `sensitive`.
+- `fedramp.py` no longer prints "optional adoption None".
+- All Terraform snippets pass `terraform fmt`.
+
+### Changed
+- Unverifiable claims reworded to what can be verified: inheritance now says "PE; see the
+  provider's CRM for other families", AWS FIPS endpoint coverage, and the Azure SymCrypt
+  attribution.
+- Guidance is now labelled as such: KSI measure ideas, the IaC severity scale, and "usual
+  choice" advice. `SKILL.md` tells the agent to present guidance as recommendations.
+
 ## [0.2.0] - 2026-09-23
 
 Accuracy audit against primary sources (provider docs and GitHub repos for aws v6,

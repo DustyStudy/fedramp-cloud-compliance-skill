@@ -9,7 +9,7 @@ Fix: <attribute/value or code change>
 Maps to: <800-53 control(s)> · <KSI(s)> · <rule ID(s) if any>
 ```
 
-Severity guide:
+Severity guide (_guidance_: FedRAMP defines no IaC severity scale, so adjust it to your program's risk methodology):
 - **Critical:** public exposure of data or admin surfaces, or no encryption for federal
   customer data.
 - **High:** missing audit logging, wildcard IAM, long-lived credentials, or non-validated
@@ -53,7 +53,7 @@ validated modules are MAY for A/B, SHOULD for C, and MUST for D.
 - [ ] Break-glass accounts are documented and monitored, not created ad hoc.
 - [ ] Secrets come from a secrets manager or key vault, not variables, `default` values,
       or state outputs (IA-5(7), KSI-SVC-ASM).
-      - `sensitive = true` only redacts CLI output. The value is still written in plaintext
+      - `sensitive = true` only redacts CLI and HCP Terraform UI output. The value is still written in plaintext
         to state and saved plan files.
       - Prefer `ephemeral` variables/resources and write-only arguments (Terraform 1.10+
         and 1.11+) where the provider supports them.
@@ -63,7 +63,8 @@ validated modules are MAY for A/B, SHOULD for C, and MUST for D.
 - [ ] No ingress from `0.0.0.0/0` / `::/0` / `*` / `Internet` except to explicitly public
       front doors (LB/WAF/CDN), and never to SSH/RDP/DB/admin ports.
 - [ ] Data stores are private. AWS: `publicly_accessible = false`, S3 public access block.
-      Azure: `public_network_access_enabled = false` + private endpoints. GCP: `sql.restrictPublicIp`,
+      Azure: public network access disabled (`public_network_access_enabled = false`, or
+      `public_network_access = "Disabled"` on storage in azurerm 5.5.0+) + private endpoints. GCP: `sql.restrictPublicIp`,
       public access prevention.
 - [ ] Egress is controlled (firewall/NAT with allow-lists) for Class C/D workloads.
 - [ ] Kubernetes API endpoints are private or restricted to authorized CIDRs.
@@ -80,18 +81,20 @@ validated modules are MAY for A/B, SHOULD for C, and MUST for D.
       `https_only = true`).
 - [ ] Storage is only reachable over TLS (S3 `aws:SecureTransport` deny, Azure
       `https_traffic_only_enabled`). GCS has no bucket-level TLS-only setting, so confirm
-      that clients use the HTTPS endpoints.
+      that clients use the HTTPS endpoints, and use org policy `gcp.restrictTLSVersion` to
+      block TLS 1.0/1.1.
 - [ ] The crypto modules in use can be listed for `CMU-CSO-CMD`. Flag services that have
       no FIPS endpoint.
 
 ## 5. Logging and monitoring (AU-2, AU-3, AU-6, AU-9, AU-11, AU-12, SI-4; KSI-MLA-*)
 - [ ] Control-plane audit logging is org-wide and multi-region: AWS org CloudTrail with
       log file validation + KMS; Azure diagnostic settings to Log Analytics on the
-      subscription, Entra, and every resource; GCP org sink + Data Access logs.
+      subscription, Entra, and every resource; GCP org sink + Data Access logs (for Class D
+      also AU-12(1), a system-wide, time-correlated audit trail).
 - [ ] Data-plane/access logging is on for data stores and load balancers where relevant.
 - [ ] Log storage is immutable (Object Lock / immutable blob / GCS bucket lock), and
-      access is restricted to a small security role (AU-9(4); for Class D also AU-9(3),
-      AU-12(1); KSI-MLA-ALA).
+      access is restricted to a small security role (AU-9; AU-9(4) for Class C/D; AU-9(3)
+      for Class D; KSI-MLA-ALA).
 - [ ] Retention is set explicitly. Don't default to "never expire" or 1 day. The period
       comes from the SDR / AU-11 decision.
 - [ ] Threat detection is enabled org-wide (GuardDuty / Defender for Cloud / SCC), and
@@ -114,8 +117,11 @@ validated modules are MAY for A/B, SHOULD for C, and MUST for D.
       with `fedramp.py lookup VDR-TFR-PDD`.
 - [ ] Resources are replaced rather than modified in place where feasible
       (KSI-CMT-RMV): immutable images, launch templates, node pool rotation.
-- [ ] Provider-side deletion protection on stateful in-boundary resources, e.g. RDS
-      `deletion_protection`, Key Vault purge protection, or GCP `deletion_protection`.
+- [ ] API-level deletion protection on stateful in-boundary resources, e.g. RDS
+      `deletion_protection`, Key Vault purge protection, Cloud SQL
+      `settings.deletion_protection_enabled`, or Compute `deletion_protection`. On Cloud
+      SQL and GKE, the top-level `deletion_protection` argument only blocks *Terraform*
+      from deleting the resource.
       `lifecycle { prevent_destroy = true }` is only a guard inside Terraform. It does
       nothing once the resource block is removed, or for changes made outside Terraform.
 
@@ -146,7 +152,7 @@ SDR/CPO documents themselves, and all agency-facing reporting (CCM, VER, IEC, SC
   NIST 800-53 or FedRAMP framework**. `--framework` selects the IaC type, and compliance
   filtering (`--policy-metadata-filter`) needs a Prisma Cloud API key. Use it for
   misconfiguration findings, and map them to controls yourself. Pin the version, and set
-  `soft_fail: false` in CI (the action's default).
+  `soft_fail: false` in CI. Unset means a hard fail, but state it explicitly.
 - **Trivy** (`trivy config`) is the successor to tfsec for IaC misconfiguration scanning.
 - **terraform test** with mock providers (`mock_provider`, `override_resource`; Terraform
   1.7+) to assert security-relevant attributes.
