@@ -66,6 +66,11 @@ python skills/fedramp-cloud-compliance/scripts/fedramp.py build   # regenerate r
 python skills/fedramp-cloud-compliance/scripts/fedramp.py check   # verify cited IDs + links
 ```
 
+`tests/` unit-tests the script's ID parsing, rendering and `check` logic
+against a small fixture, so they run offline (`python -m pytest tests`).
+CI runs them, then runs `check` against FedRAMP's live data. A separate
+workflow runs Gitleaks, Checkov and Trivy on every PR and weekly.
+
 ## ⚠️ Disclaimer
 
 This skill supports the *implementation and documentation* of security requirements. It is
