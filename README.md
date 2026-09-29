@@ -82,11 +82,8 @@ AWS, Microsoft, or Google.
 
 ## Related
 
-- [fedramp-terraform-library](https://github.com/DustyStudy/fedramp-terraform-library) and
-  [fedramp-cfn-library](https://github.com/DustyStudy/fedramp-cfn-library): AWS modules
+- [fedramp-terraform-library](https://github.com/DustyStudy/fedramp-terraform-library): AWS modules
   implementing many of the patterns described here.
-- [multicloud-baselines-tf](https://github.com/DustyStudy/multicloud-baselines-tf): Azure and GCP
-  baselines.
 
 ## License
 
