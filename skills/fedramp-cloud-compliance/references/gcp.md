@@ -126,7 +126,7 @@ resource "google_org_policy_policy" "no_sa_keys" {
   `sql.managed.restrictPublicIp`, `compute.managed.vmExternalIpAccess`, and
   `iam.managed.allowedPolicyMembers`. Check which form your org uses.
   `sql.restrictPublicIp` only affects new instances.
-- [gcp-org-baseline-tf](https://github.com/DustyStudy/gcp-org-baseline-tf) contains related
+- [multicloud-baselines-tf](https://github.com/DustyStudy/multicloud-baselines-tf/tree/main/gcp) contains related
   org-baseline patterns.
 
 ## Common GCP findings

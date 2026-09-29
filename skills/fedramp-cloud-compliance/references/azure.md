@@ -118,7 +118,7 @@ resource "azurerm_management_group_policy_assignment" "fedramp_high" {
 - These examples target `hashicorp/azurerm` v5 (5.0.0 was released 2026-07-27). Several
   names and defaults changed between v4 and v5. Check the v5 upgrade guide against
   existing code.
-- [azure-baseline-tf](https://github.com/DustyStudy/azure-baseline-tf) and
+- [multicloud-baselines-tf](https://github.com/DustyStudy/multicloud-baselines-tf/tree/main/azure) and
   [azure-lighthouse-tf](https://github.com/DustyStudy/azure-lighthouse-tf) contain related
   baseline patterns.
 
