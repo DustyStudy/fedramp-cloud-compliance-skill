@@ -1,7 +1,23 @@
 # Changelog
 
 All notable changes to this repo are documented here. Format loosely
-follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Releases are tagged
+`vX.Y.Z`.
+
+## [Unreleased]
+
+## [0.4.0] - 2026-09-29
+
+### Added
+- Offline unit tests for `fedramp.py` (`tests/test_fedramp.py`): control-ID parsing, rule and
+  KSI rendering, parameter lookup, and the `check` command's detection of unknown IDs, broken
+  links and bad frontmatter. They use fixture data, not the network.
+- Security scanning in CI: Gitleaks, Checkov and Trivy on every PR and weekly.
+
+### Changed
+- License changed from Apache 2.0 to MIT. Releases up to and including 0.3.1 remain
+  available under Apache 2.0.
+- README: removed links to repos that are no longer public.
 
 ## [0.3.1] - 2026-09-24
 
@@ -130,3 +146,10 @@ FedRAMP/2026-markdown).
   KSIs, definitions, and Rev5 Class B/C/D baselines (155/322/409).
 - CI validating every cited rule/KSI/control ID, and a weekly workflow that
   opens a PR when FedRAMP publishes rule changes.
+
+[Unreleased]: https://github.com/DustyStudy/fedramp-cloud-compliance-skill/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/DustyStudy/fedramp-cloud-compliance-skill/compare/v0.3.1...v0.4.0
+[0.3.1]: https://github.com/DustyStudy/fedramp-cloud-compliance-skill/compare/v0.3.0...v0.3.1
+[0.3.0]: https://github.com/DustyStudy/fedramp-cloud-compliance-skill/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/DustyStudy/fedramp-cloud-compliance-skill/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/DustyStudy/fedramp-cloud-compliance-skill/releases/tag/v0.1.0
