@@ -1,7 +1,7 @@
 # FedRAMP Cloud Compliance Skill
 
 [![CI](https://github.com/DustyStudy/fedramp-cloud-compliance-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/DustyStudy/fedramp-cloud-compliance-skill/actions/workflows/ci.yml)
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
 An [Agent Skill](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview) that helps
 Claude Code and other skill-aware agents do FedRAMP work on **AWS, Azure, and Google Cloud**. It is
@@ -87,5 +87,5 @@ AWS, Microsoft, or Google.
 
 ## License
 
-Apache 2.0. FedRAMP rule text in `references/generated/` is US Government work reproduced from
-FedRAMP's public repositories.
+MIT. Releases up to and including 0.3.1 were published under Apache 2.0. FedRAMP rule text in
+`references/generated/` is US Government work reproduced from FedRAMP's public repositories.
