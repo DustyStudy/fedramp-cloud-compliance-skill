@@ -52,6 +52,7 @@ Template:
 For **20x KSIs** (`SDR-CSX-KSI`), also include:
 - the measures and their objectives
 - the cycle for persistent measures
+- verification that the measures demonstrate the KSI
 - verification that the automation is accurate and sufficient
 - validation that the measures are produced correctly
 

@@ -113,7 +113,8 @@ data "aws_partition" "current" {} # never hard-code "arn:aws:"; GovCloud is "aws
   reusable modules for many of these patterns: org CloudTrail, GuardDuty, Security Hub,
   the Config conformance pack, and FIPS VPC endpoints.
 - These examples target `hashicorp/aws` v6. In v6, `data.aws_region.name` is deprecated in
-  favour of `.region`, and `aws_partition.id` in favour of `.partition`.
+  favour of `.region`. Since 6.47.0, `data.aws_region.id` is deprecated in favour of
+  `.region` too, and `aws_partition.id` in favour of `.partition`.
 
 ## Common AWS findings (feed into terraform-checks.md)
 

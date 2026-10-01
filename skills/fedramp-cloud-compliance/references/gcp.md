@@ -2,13 +2,14 @@
 
 Starting points for implementation, not proof of compliance. **Before you assert that a
 service is authorized, check the live FedRAMP/DoD scope list:**
-https://docs.cloud.google.com/docs/security/compliance/fedramp-dod-compliance-scope
-(general list: https://cloud.google.com/security/compliance/services-in-scope)
+https://docs.cloud.google.com/architecture/security/fedramp-dod-compliance-scope
+(the general list at https://cloud.google.com/security/compliance/services-in-scope has no
+FedRAMP column)
 
 ## Authorization posture and inheritance
 
 - Google Cloud holds FedRAMP authorizations for many services in US regions. Coverage is
-  per service, so check the services-in-scope list.
+  per service, so check the FedRAMP/DoD scope list.
 - **Assured Workloads** enforces a compliance regime on a folder that it creates. It
   limits the folder to services in scope for that regime and applies org policies. The
   other controls depend on the package:
@@ -22,13 +23,14 @@ https://docs.cloud.google.com/docs/security/compliance/fedramp-dod-compliance-sc
   `FEDRAMP_HIGH`, `IL2`, `IL4`, `IL5`, `CJIS`, `ITAR`, and `IRS_1075`. The regime is
   **immutable**, so choose it before creating projects.
 - **Get Google's FedRAMP materials:**
-  - The **Customer Responsibility Matrix** can be downloaded in the console from Audit
-    Manager's compliance documents (needs `roles/auditmanager.auditor`).
-  - The **SSP** needs an NDA: request it through your Google account team, or through the
-    FedRAMP PMO package request form (agencies).
+  - Google's FedRAMP page says the **Customer Responsibility Matrix** and the **SSP** are
+    provided under an NDA, through Google sales or your Google Cloud representative.
+    Agencies can also use the FedRAMP PMO package request form.
+  - The CRM can also be downloaded in the console from Audit Manager's compliance
+    documents (needs `roles/auditmanager.auditor`).
 
   The CSP inherits the physical and environmental (PE) controls. For how other
-  families split between Google and the customer, use the CRM from Audit Manager. The
+  families split between Google and the customer, use Google's CRM. The
   CSP inherits nothing for its own IAM, configuration, logging, or application.
 - **Google services as third-party information resources:** `MAS-CSO-TPR` (when `MAS-CSO-IIR` applies) covers the third-party resources likely to
   handle, or affect, federal customer data. For each, document usage and configuration,
@@ -49,7 +51,7 @@ https://docs.cloud.google.com/docs/security/compliance/fedramp-dod-compliance-sc
   `FIPS_202205` profile, which requires TLS_1_2, or `RESTRICTED`/`CUSTOM`. `TLS_1_3`
   requires `RESTRICTED`. Cloud SQL: `ip_configuration.ssl_mode = "ENCRYPTED_ONLY"` or
   `TRUSTED_CLIENT_CERTIFICATE_REQUIRED` (not supported on SQL Server). `require_ssl` was
-  removed in provider 6.0.
+  removed in provider 6.0.1.
 - **Your own code:** use a validated module. On GKE, check whether the node image and
   your binaries run in FIPS mode.
 

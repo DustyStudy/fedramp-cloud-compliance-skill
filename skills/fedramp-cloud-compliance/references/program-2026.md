@@ -76,9 +76,11 @@ agency sponsor requires Rev5.
 Each ruleset has its own dates for 20x and for Rev5. They are listed at the top of every
 ruleset section in `generated/rules.md`. FedRAMP's 2026.09.22 wording:
 
-- **Maintaining certification:** existing providers SHOULD adopt the ruleset by this date,
+- **Obtaining Initial Certification:** a provider applying for initial certification after
+  this date MUST adopt the ruleset, or certification is denied.
+- **Maintaining Ongoing Certification:** existing providers SHOULD adopt the ruleset by this date,
   or a corrective action plan is required.
-- **Grace period ends:** they MUST have adopted by then, or certification is revoked. For
+- **Grace Period Ends:** they MUST have adopted by then, or certification is revoked. For
   some rulesets the grace period is "the first FedRAMP independent assessment started
   after <date>".
 
@@ -91,7 +93,7 @@ their first independent assessment started after 2027-08-01. CMU's Rev5 grace pe
 | Code | Ruleset | What engineers usually need from it |
 |---|---|---|
 | FRC | FedRAMP Certification | Package contents (`FRC-CSO-PKG`), JSON schema validity (`FRC-CSO-JSN`), Class A rules, applying, class changes |
-| CPO | Certification Package Overview | Replaces the base SSP. Package maintenance cadence: 20x B monthly / C every 2 weeks / D weekly; Rev5 B/C yearly, D every 6 months (`CPO-CSX-CPM`, `CPO-CSF-CPM`) |
+| CPO | Certification Package Overview | Replaces the base SSP. Package maintenance cadence: 20x A every 3 months (SHOULD), B monthly / C every 2 weeks / D weekly; Rev5 B/C yearly, D every 6 months (`CPO-CSX-CPM`, `CPO-CSF-CPM`) |
 | SDR | Security Decision Record | Per-rule explanation + verification + validation + independent V&V; 20x adds KSI measures and metrics |
 | MAS | Minimum Assessment Scope | Boundary = every information resource likely to handle, or affect the CIA of, federal customer data (`MAS-CSO-IIR`); flows; third-party resources |
 | CMU | Cryptographic Module Use | Document all modules (`CMU-CSO-CMD`). Validated (CMVP) modules: Class A/B MAY, C SHOULD, D MUST (`CMU-CSO-UVM`). Agency tenants SHOULD default to validated crypto (`CMU-CSO-CAT`) |
