@@ -6,6 +6,38 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Releases are t
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-10-01
+
+Monthly maintenance pass. The generated references are unchanged (rules 2026.09.13.02; the
+2026.09.22.01 release was content-only). The network policy blocked csrc.nist.gov,
+aws.amazon.com, docs.aws.amazon.com, learn.microsoft.com, docs.cloud.google.com,
+registry.terraform.io and fedramp.gov, so claims that depend only on those sites were not
+re-verified in this pass.
+
+### Fixed
+- `program-2026.md`: the effective-date labels now match FedRAMP's deadline pages
+  ("Obtaining Initial Certification", "Maintaining Ongoing Certification", "Grace Period
+  Ends"), and the missing Obtaining label is added.
+  https://github.com/FedRAMP/2026-markdown/blob/main/providers/updating/deadlines/rev5.md
+- `program-2026.md`: the `CPO-CSX-CPM` cadence now includes 20x Class A (every 3 months,
+  SHOULD). https://github.com/FedRAMP/rules
+- `documentation.md`: added the missing `SDR-CSX-KSI` item, verification that the measures
+  demonstrate the KSI. https://github.com/FedRAMP/rules
+- `aws.md`: `data.aws_region.id` and `aws_partition.id` were deprecated in provider 6.47.0.
+  https://github.com/hashicorp/terraform-provider-aws/blob/main/CHANGELOG.md
+- `azure.md`: in commercial Azure most FedRAMP/NIST initiative members are Manual, not
+  Audit/AuditIfNotExists (e.g. 496 of 709 in FedRAMP High).
+  https://github.com/Azure/azure-policy/tree/master/built-in-policies/policySetDefinitions
+- `gcp.md`:
+  - The scope-list URL now uses the path Google's FedRAMP page links to.
+    https://cloud.google.com/security/compliance/fedramp
+  - The general services-in-scope page has no FedRAMP column.
+    https://cloud.google.com/security/compliance/services-in-scope
+  - Added the documented NDA route for the CRM and SSP.
+    https://cloud.google.com/security/compliance/fedramp
+  - `require_ssl` was removed in provider 6.0.1, not 6.0.0.
+    https://github.com/hashicorp/terraform-provider-google/blob/main/website/docs/guides/version_6_upgrade.html.markdown
+
 ## [0.4.0] - 2026-09-29
 
 ### Added
