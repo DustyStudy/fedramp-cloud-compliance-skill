@@ -63,6 +63,12 @@ TTL = 24 * 3600
 
 # --------------------------------------------------------------------------- fetching
 
+def write_lf(path: Path, text: str) -> None:
+    """Write UTF-8 with LF line endings on every OS (the repo stores LF)."""
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(text)
+
+
 def fetch(url: str) -> str:
     CACHE.mkdir(parents=True, exist_ok=True)
     path = CACHE / re.sub(r"[^A-Za-z0-9._-]", "_", url.split("githubusercontent.com/")[-1])
@@ -88,7 +94,7 @@ def fetch(url: str) -> str:
             "Offline and no cache: grep the bundled snapshot in references/generated/ "
             "(rules.md, ksi.md, definitions.md, rev5-baselines.md) instead."
         )
-    path.write_text(text, encoding="utf-8")
+    write_lf(path, text)
     return text
 
 
@@ -340,7 +346,7 @@ def build(out_dir: Path) -> None:
         lines += [f"### {kid} — {ind['name']}", ksi_statement(ind), ""]
         if ind.get("controls"):
             lines += [f"Related controls: {ksi_controls(ind)}", ""]
-    (out_dir / "ksi.md").write_text("\n".join(lines), encoding="utf-8")
+    write_lf(out_dir / "ksi.md", "\n".join(lines))
 
     # Rules ------------------------------------------------------------------
     lines = header("FedRAMP Consolidated Rules for 2026 — rule digest", src, version)
@@ -360,7 +366,7 @@ def build(out_dir: Path) -> None:
         rl = rule_lines(rid, rule)
         rl[0] += tag
         lines += rl + [""]
-    (out_dir / "rules.md").write_text("\n".join(lines), encoding="utf-8")
+    write_lf(out_dir / "rules.md", "\n".join(lines))
 
     # Definitions --------------------------------------------------------------
     lines = header("FedRAMP Definitions (FRD)", src, version)
@@ -370,7 +376,7 @@ def build(out_dir: Path) -> None:
         for note in [dv["note"]] if dv.get("note") else dv.get("notes", []) or []:
             lines.append(f"- _Note:_ {note}")
         lines.append("")
-    (out_dir / "definitions.md").write_text("\n".join(lines), encoding="utf-8")
+    write_lf(out_dir / "definitions.md", "\n".join(lines))
 
     # Rev5 baselines -----------------------------------------------------------
     counts = {c: sum(1 for v in controls.values() if c in v["classes"]) for c in "BCD"}
@@ -393,7 +399,7 @@ def build(out_dir: Path) -> None:
             marks = ["✓" if c in v["classes"] else "" for c in "BCD"]
             lines.append(f"| {fmt_control(*k)} | {v['title']} | {' | '.join(marks)} | {p} |")
         lines.append("")
-    (out_dir / "rev5-baselines.md").write_text("\n".join(lines), encoding="utf-8")
+    write_lf(out_dir / "rev5-baselines.md", "\n".join(lines))
     print(f"wrote {out_dir} (rules {version}; B={counts['B']} C={counts['C']} D={counts['D']})")
 
 
