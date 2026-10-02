@@ -33,8 +33,8 @@ check the live list:** https://aws.amazon.com/compliance/services-in-scope/FedRA
   AWS FIPS endpoints page (https://aws.amazon.com/compliance/fips/). Services without one
   belong in the `CMU-CSO-CMD` module list.
 - **KMS:** use customer-managed keys (CMKs) with `enable_key_rotation = true`. The KMS
-  HSM holds CMVP #4884 (FIPS 140-3, Overall Level 3, active). Checked on 2026-09-23, it is
-  an **interim validation with a sunset date of 2026-11-17**, and it was the only active
+  HSM holds CMVP #4884 (FIPS 140-3, Overall Level 3, active). Checked on 2026-10-02, it is
+  an **interim validation with a sunset date of 2029-11-17**, and it was the only active
   KMS certificate. Re-check csrc.nist.gov before you cite it in a `CMU-CSO-CMD` module
   list. Use CloudHSM when you need dedicated key custody.
 - **TLS on load balancers:** use FIPS security policies on ALB/NLB listeners, e.g.

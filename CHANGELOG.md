@@ -6,6 +6,12 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Releases are t
 
 ## [Unreleased]
 
+### Fixed
+- `aws.md`: CMVP #4884 (AWS Key Management Service HSM) sunsets on 2029-11-17, not
+  2026-11-17. NIST lists it as Active, FIPS 140-3, Overall Level 3, interim, initial
+  validation 2024-11-18, and it is still the only active AWS KMS certificate.
+  https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/4884
+
 ## [0.4.1] - 2026-10-01
 
 Monthly maintenance pass. The generated references are unchanged (rules 2026.09.13.02; the
