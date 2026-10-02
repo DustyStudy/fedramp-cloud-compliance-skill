@@ -11,6 +11,8 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Releases are t
   2026-11-17. NIST lists it as Active, FIPS 140-3, Overall Level 3, interim, initial
   validation 2024-11-18, and it is still the only active AWS KMS certificate.
   https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/4884
+- `fedramp.py`: `build` and the fetch cache now always write LF line endings, so running
+  `build` on Windows no longer leaves a CRLF-only diff in `references/generated/`.
 
 ## [0.4.1] - 2026-10-01
 
