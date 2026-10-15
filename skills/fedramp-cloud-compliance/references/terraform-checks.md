@@ -105,7 +105,8 @@ validated modules are MAY for A/B, SHOULD for C, and MUST for D.
       `enabled_features = ["RootCredentialsManagement", "RootSessions"]`, managed from the
       management account, then root credentials removed from member accounts (AC-2, AC-6,
       IA-2). **GovCloud differs:** GovCloud root users have no console sign-in and can't
-      use MFA devices, and their access keys exist only if requested from AWS Support, so
+      use MFA devices, and their access keys exist only if requested from AWS Support (or issued to a
+      solution provider), so
       there are no root credentials to manage centrally. Enable `RootSessions` for
       privileged root tasks on member accounts, and flag any GovCloud root access keys
       that were requested and never deleted.
@@ -185,10 +186,11 @@ validated modules are MAY for A/B, SHOULD for C, and MUST for D.
 - [ ] Encryption at rest is on for every data store, with customer-managed keys where the
       SDR says so (S3/EBS/RDS/…; Storage/SQL/disks; GCS/SQL/BigQuery CMEK).
 - [ ] Keys: rotation enabled, deletion/purge protection, and key policies restrict admins
-      vs. users (separation of duties, AC-5). AWS KMS rotates only symmetric
-      encryption keys with AWS-generated material automatically. Symmetric keys with
-      imported material support on-demand rotation. Asymmetric and HMAC keys (e.g. the
-      DNSSEC KSK key) need a documented manual rollover instead of `enable_key_rotation`.
+      vs. users (separation of duties, AC-5). AWS KMS rotates only symmetric encryption
+      keys with AWS-generated material automatically. Symmetric keys with imported
+      material support on-demand rotation. Asymmetric keys, HMAC keys, and keys in custom
+      key stores (e.g. the DNSSEC KSK key) need a documented manual rollover instead of
+      `enable_key_rotation`.
 - [ ] TLS 1.2+ on every listener/endpoint. FIPS-capable policies where available
       (AWS ELB FIPS policies, `use_fips_endpoint = true`; GCP SSL policy `FIPS_202205`;
       AKS `fips_enabled`). Plain HTTP is redirected or disabled (App Service

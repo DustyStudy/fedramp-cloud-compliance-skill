@@ -22,18 +22,22 @@ make the system compliant or certified.
   `use_fips_endpoint = true` and `allowed_account_ids`. The S3 backend sets
   `use_fips_endpoint = true` as well. The one exception is the commercial account-vending
   step in §1.
-- KMS CMKs: `enable_key_rotation = true` on symmetric keys, `deletion_window_in_days`
-  between 7 and 30, and key policies that separate key admins from key users.
+- KMS CMKs: `enable_key_rotation = true` on every key that supports it (symmetric, with
+  AWS-generated material, outside custom key stores), a documented rotation for the
+  rest, `deletion_window_in_days` between 7 and 30, and key policies that separate key
+  admins from key users.
 - S3: all four Block Public Access settings, versioning, server access logging, SSE-KMS,
   and a `Deny` on `aws:SecureTransport = "false"`. The exception is buckets that receive
-  S3 server access logs or ALB/NLB access logs directly: those need SSE-S3 in the same
-  Region, then replication into the KMS-encrypted archive (terraform-checks.md §5).
+  S3 server access logs or ALB access logs directly: those need SSE-S3 in the same
+  Region (NLB access logs can use a CMK), then replication into the KMS-encrypted
+  archive (terraform-checks.md §5).
 - No `0.0.0.0/0` or `::/0` ingress on 22 or 3389. Use SSM Session Manager.
 - GitHub Actions authenticate with OIDC. Never use static access keys.
 - Run `terraform fmt` and `terraform validate`, then `terraform plan` and review the
   saved plan. Never use `terraform apply -auto-approve` or `destroy -auto-approve`.
 - Don't put export-controlled data in account names, emails, OU names, IAM names, tags,
-  or policy documents. AWS says this metadata may leave the GovCloud Regions.
+  or policy documents. AWS's GovCloud service pages say these metadata fields must not
+  contain export-controlled data.
 
 ## Build order
 
@@ -60,7 +64,9 @@ plans rather than from a laptop.
 - The boundary: which accounts, Regions, and services are in scope (`MAS-CSO-IIR`), and
   the third-party resources (`MAS-CSO-TPR`).
 - Home Region. _Guidance:_ use `us-gov-west-1` as the home Region, because the IAM control
-  plane, Organizations policy operations, and org-root operations only run there. Use
+  plane and the Route 53 control plane are there, and the Organizations policy-type
+  operations (`EnablePolicyType`, `DisablePolicyType`, `DeletePolicy`) and any operation
+  on the org root only work there. Use
   `us-gov-east-1` for recovery copies and failover.
 - The IdP, and how it enforces phishing-resistant MFA (KSI-IAM-APM).
 - Which services you'll use. Check each one on the FedRAMP services-in-scope page and in
@@ -101,7 +107,7 @@ _Guidance:_ a typical layout:
 
 | OU | Accounts |
 |---|---|
-| Root | GovCloud management account. Org, policies, and billing only; no workloads |
+| Root | GovCloud management account. Org and policies only; no workloads. Billing runs through the paired commercial accounts |
 | Security | Log archive; security tooling (delegated admin for GuardDuty, Security Hub CSPM, Config, Inspector, Access Analyzer) |
 | Infrastructure | Network hub; shared services and CI (pipeline roles, runners) |
 | Workloads/Prod, Workloads/NonProd | One account per workload and environment |
@@ -121,9 +127,9 @@ Control Tower in GovCloud (verified):
 
 _Guidance:_ for a Terraform-first build, the usual choice is plain Organizations managed
 in Terraform. Use Control Tower when the team wants its controls library and dashboard.
-Then accept that account creation and enrollment stay outside Terraform, and don't manage
-the same trail, Config setup, or SCPs from both Terraform and Control Tower. Whichever you
-pick, record who owns each guardrail.
+Account creation can still use the commercial Terraform step in §1, but enrollment goes
+through Control Tower. Don't manage the same trail, Config setup, or SCPs from both
+Terraform and Control Tower. Whichever you pick, record who owns each guardrail.
 
 ## 3. Bootstrap: state backend and first pipeline roles
 
@@ -187,17 +193,21 @@ _Guidance:_ baseline set:
 - **Trusted access and delegated admins.** Enable trusted access with
   `aws_organizations_aws_service_access`, then make the security tooling account the
   admin with each service's own resource where one exists:
-  `aws_guardduty_organization_admin_account`, `aws_securityhub_organization_admin_account`,
+  `aws_guardduty_organization_admin_account`,
+  `aws_securityhub_organization_admin_account`,
   `aws_inspector2_delegated_admin_account`. Config and Access Analyzer use
   `aws_organizations_delegated_administrator`. GuardDuty, Security Hub CSPM, and
-  Inspector admins are per Region, so set them and their auto-enable configuration
-  (e.g. `aws_guardduty_organization_configuration`) in both GovCloud Regions. AWS says to
-  check which services support trusted access in the Organizations console in GovCloud.
+  Inspector admins are per Region, so set them and their auto-enable configuration (e.g.
+  `aws_guardduty_organization_configuration`) in both GovCloud Regions. Security Hub
+  CSPM central configuration sets the same admin in the linked Regions for you. AWS says
+  to check which services support trusted access in the Organizations console in
+  GovCloud.
 - **Org trail** (terraform-checks.md §5): all Regions, log file validation, a CMK, data
   events where federal customer data lives, delivered to an Object Lock bucket in the log
   archive account.
-- _Guidance:_ **turn on Config, GuardDuty, and Inspector in both GovCloud Regions**, even when one
-  Region has no workloads, so activity there is still recorded and detected.
+- _Guidance:_ **turn on Config, GuardDuty, and Inspector in both GovCloud Regions**,
+  even when one Region has no workloads, so activity there is still recorded and
+  detected.
 - **GuardDuty in GovCloud** (verified):
   - Runtime Monitoring needs the `com.amazonaws.<region>.guardduty-data-fips` VPC endpoint.
   - Entity lists aren't available; IP address lists are.
@@ -228,10 +238,12 @@ _Guidance:_ baseline set:
     audience `urn:amazon:webservices:govcloud`.
   - Access Analyzer policy generation isn't available, so write least-privilege policies
     from CloudTrail data or by hand.
-- **Root user.** It has no console sign-in and can't use MFA. Access keys are issued only
-  on request through AWS Support. Use Organizations root sessions (`RootSessions`) for
-  privileged tasks on member accounts.
-- **Break-glass.** _Guidance:_ the root user can't serve as break-glass, so keep one or two
+- **Root user.** It has no console sign-in and can't use MFA. Access keys are issued on
+  request through AWS Support (or, for solution providers, by their AWS representative).
+  Use Organizations root sessions (`RootSessions`) for privileged tasks on member
+  accounts.
+- **Break-glass.** _Guidance:_ root access keys from AWS Support can restore IAM admin
+  access, but that's a slow last resort, not immediate break-glass. Keep one or two
   IAM users with hardware MFA in the management account, and alarm on every sign-in.
   SCPs don't restrict the management account, but they do restrict the roles those users
   assume in member accounts. So define a recovery role in each member account (e.g.
@@ -256,17 +268,19 @@ _Guidance:_ baseline set:
   directions of a flow use the same AZ.
 - **Egress.** Centralize it (NAT plus firewall domain allowlists). Workload VPCs have no
   internet gateway (KSI-CNA-RNT, KSI-CNA-MAT).
-- **DNS.** Use Route 53 Resolver DNS Firewall and query logging, and private hosted zones
-  shared across accounts.
+- **DNS.** Use Route 53 Resolver DNS Firewall and Resolver query logging. Associate
+  private hosted zones with VPCs in other accounts (cross-account VPC association), or
+  share Resolver rules through RAM.
 - **VPC endpoints.** Create interface endpoints for the AWS APIs that workloads call.
   Give each an endpoint policy where the service supports one
   (`VpcEndpointPolicySupported`). Where it doesn't, restrict access with security groups
-  and the resource or identity policies. Use the FIPS service name where the service offers one
-  (e.g. `guardduty-data-fips`), and check the GovCloud endpoints page per service.
-  Private connectivity alone doesn't make the TLS FIPS-validated.
-- **Runners.** GitHub-hosted runners reach AWS over public endpoints. Self-hosted runners
-  in a private subnet reach the VPC endpoints, and are needed if apply has to reach
-  private resources. Harden and patch them like any other in-boundary compute.
+  and the resource or identity policies. Use the FIPS service name where the service
+  offers one (e.g. `guardduty-data-fips`), and check the GovCloud endpoints page per
+  service. Private connectivity alone doesn't make the TLS FIPS-validated.
+- **Runners.** GitHub-hosted runners reach AWS over public endpoints unless you configure
+  GitHub's private networking for them. _Guidance:_ when apply has to reach private
+  resources, the usual choice is self-hosted runners in a private subnet that use the VPC
+  endpoints. Harden and patch them like any other in-boundary compute.
 
 ## 8. Workload account baseline
 

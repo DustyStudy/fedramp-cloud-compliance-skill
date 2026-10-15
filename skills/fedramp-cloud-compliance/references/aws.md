@@ -36,7 +36,8 @@ For a new GovCloud build (accounts, landing zone, bootstrap, guardrails, network
   AWS FIPS endpoints page (https://aws.amazon.com/compliance/fips/). Services without one
   belong in the `CMU-CSO-CMD` module list.
 - **KMS:** use customer-managed keys (CMKs) with `enable_key_rotation = true` (symmetric
-  encryption keys only; asymmetric keys such as a DNSSEC KSK key need a manual rollover). The KMS
+  keys with AWS-generated material only; asymmetric, HMAC, and custom key store keys, such
+  as a DNSSEC KSK key, need a manual rollover). The KMS
   HSM holds CMVP #4884 (FIPS 140-3, Overall Level 3, active). Checked on 2026-10-02, it is
   an **interim validation with a sunset date of 2029-11-17**, and it was the only active
   KMS certificate. Re-check csrc.nist.gov before you cite it in a `CMU-CSO-CMD` module
