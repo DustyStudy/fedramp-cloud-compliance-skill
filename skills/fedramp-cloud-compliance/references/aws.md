@@ -59,7 +59,7 @@ check the live list:** https://aws.amazon.com/compliance/services-in-scope/FedRA
 | AC (access) | IAM Identity Center; IAM roles; Organizations SCPs and resource control policies (RCPs); permission boundaries; IAM Access Analyzer (external + unused access); S3 Block Public Access (account + org) | Define roles, review access, enforce least privilege, disable unused identities (AC-2, AC-6) |
 | AU (audit) | Organization CloudTrail (all regions, log file validation, KMS, data events where needed); CloudWatch Logs; S3 Object Lock for log archives; Security Lake / SIEM integration; VPC Flow Logs; ALB/WAF/VPC Resolver (formerly Route 53 Resolver) query logs | Choose event types (AU-2), review logs (AU-6), set retention, protect log access (AU-9) |
 | CA / CM (assessment, config) | AWS Config (all resources, org aggregator) + conformance packs `Operational-Best-Practices-for-FedRAMP-Low/-Moderate/-HighPart1/-HighPart2`, `…-for-NIST-800-53-rev-5`; Security Hub CSPM **NIST SP 800-53 Rev. 5** standard (`standards/nist-800-53/v/5.0.0`); Control Tower controls; Systems Manager State Manager / Inventory | Baselines (CM-2/6), change control (CM-3), inventory accuracy (CM-8), and remediation workflow |
-| CP (contingency) | AWS Backup (org backup policies, Vault Lock, cross-region/cross-account copies); multi-AZ; Elastic Disaster Recovery; Route 53 health checks | Set RTO/RPO, *test* restores (CP-4, CP-9, KSI-RPL-TRC) |
+| CP (contingency) | AWS Backup (org backup policies in commercial regions only; GovCloud organizations can't use backup policies, so deploy backup plans per account, e.g. with StackSets or Terraform; Vault Lock, cross-region/cross-account copies); multi-AZ; Elastic Disaster Recovery; Route 53 health checks | Set RTO/RPO, *test* restores (CP-4, CP-9, KSI-RPL-TRC) |
 | IA (identification) | Identity Center with external IdP and **phishing-resistant MFA** (FIDO2/passkeys, PIV/CAC), required by FedRAMP guidance on IA-2(1)/(2); IAM Roles Anywhere; no IAM users or long-lived access keys; root MFA via hardware key | Enforce MFA strength at the IdP, manage authenticators (IA-5), handle non-user identities (KSI-IAM-SNU) |
 | IR (incident) | GuardDuty (org, all protection plans in use); Security Hub / Security Hub CSPM findings aggregation; Detective; EventBridge → SNS/ticketing or on-call tooling; AWS Security Incident Response (East/West only on the FedRAMP scope page). SSM Incident Manager closed to new customers on 2025-11-07, so don't design new processes around it | IR plan, PAIN rating, and FedRAMP reporting timelines (IEC ruleset); after-action reviews |
 | RA / SI (vuln, integrity) | Amazon Inspector (EC2, ECR, Lambda; SBOM export); ECR enhanced scanning; SSM Patch Manager; GuardDuty Malware Protection; CloudTrail log integrity; Macie (sensitive data discovery; not listed for GovCloud as of 2026-09) | Evaluate each vuln (VER-EVA-*), meet VDR timeframes, handle KEVs (`VDR-TFR-KEV`) |
@@ -109,6 +109,17 @@ data "aws_partition" "current" {} # never hard-code "arn:aws:"; GovCloud is "aws
   `template_body` limit (Moderate is about 50.6 KB), so upload the reviewed copy to S3 and
   use `template_s3_uri` instead. For multi-account deployments, use
   `aws_config_organization_conformance_pack`.
+- **Organization policy types in GovCloud** (checked 2026-10-15 in the GovCloud User
+  Guide): SCPs, RCPs, tag policies, and EC2 and S3 declarative policies are available;
+  backup, chat application, and AI services opt-out policies are not. Policy-type
+  operations and the org root only work against `us-gov-west-1`. Manage them with
+  `aws_organizations_policy` (`type = "SERVICE_CONTROL_POLICY"`,
+  `"RESOURCE_CONTROL_POLICY"`, `"DECLARATIVE_POLICY_EC2"`, …) and
+  `aws_organizations_policy_attachment`.
+- **Route 53 public hosted zones** in GovCloud became available in 2025-04 and support
+  DNSSEC signing; the KSK's KMS key must be in `us-gov-west-1`.
+- Every `provider "aws"` block sets `allowed_account_ids`, so a plan run with the wrong
+  credentials fails instead of changing another account.
 - [fedramp-terraform-library](https://github.com/DustyStudy/fedramp-terraform-library) has
   reusable modules for many of these patterns: org CloudTrail, GuardDuty, Security Hub,
   the Config conformance pack, and FIPS VPC endpoints.
@@ -135,3 +146,21 @@ data "aws_partition" "current" {} # never hard-code "arn:aws:"; GovCloud is "aws
   `encryption_config`. On Kubernetes 1.28+, EKS envelope-encrypts API data by default
   with an AWS-owned key, so the finding is about key custody, not missing encryption.
 - Logs without retention or KMS (`aws_cloudwatch_log_group`).
+- GitHub OIDC role trusts with a wildcard `sub` (`repo:org/*`, `*`) or no `sub` condition
+  at all, or one role used for both plan and apply.
+- IMDSv1 still allowed: `metadata_options.http_tokens` not `"required"` on instances or
+  launch templates, and no `aws_ec2_instance_metadata_defaults`.
+- An org trail with management events only, when buckets hold federal customer data or
+  logs (no S3 data event selectors).
+- Member accounts that still have root credentials, with no centralized root access
+  management (`aws_iam_organizations_features`), or default VPCs left in place.
+- VPC endpoints with no `policy`, i.e. the default full-access endpoint policy, where the
+  service supports endpoint policies (check `VpcEndpointPolicySupported` in
+  `aws ec2 describe-vpc-endpoint-services` first).
+- _Guidance:_ public-sharing and IMDS settings fixed resource by resource, with no EC2
+  declarative policy, RCPs, or other enforced baseline at the org level. Report it as a
+  gap only if new accounts actually come up without the settings.
+- Public hosted zones without DNSSEC signing (SC-20).
+- Provider blocks without `allowed_account_ids`.
+- GitHub OIDC apply roles that trust any workflow in a repo instead of the central
+  reusable workflow (`job_workflow_ref`).

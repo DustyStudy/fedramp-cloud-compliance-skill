@@ -130,3 +130,30 @@ def test_check_requires_frontmatter(skill_dir, capsys):
 
     assert fedramp.check(skill_dir) == 1
     assert "missing or invalid frontmatter" in capsys.readouterr().out
+
+
+def _load_with_env(monkeypatch, **env):
+    for k, v in env.items():
+        monkeypatch.setenv(k, v)
+    mod = importlib.util.module_from_spec(importlib.util.spec_from_file_location("fedramp_pinned", SCRIPT))
+    mod.__spec__.loader.exec_module(mod)
+    return mod
+
+
+def test_refs_pin_download_urls(monkeypatch):
+    mod = _load_with_env(monkeypatch, FEDRAMP_SKILL_RULES_REF="abc123", FEDRAMP_SKILL_MD_REF="v1.2")
+    assert "/FedRAMP/rules/abc123/" in mod.RULES_URL
+    assert mod.MD_BASE.endswith("/FedRAMP/2026-markdown/v1.2/")
+    assert mod.SOURCES_URL.startswith(mod.MD_BASE)
+
+
+@pytest.mark.parametrize("ref", ["a b", "../main", "main?x=1"])
+def test_invalid_refs_are_rejected(monkeypatch, ref):
+    with pytest.raises(SystemExit):
+        _load_with_env(monkeypatch, FEDRAMP_SKILL_RULES_REF=ref)
+
+
+def test_data_banner_goes_to_stderr(capsys):
+    fedramp.data_banner(RULES)
+    out, err = capsys.readouterr()
+    assert out == "" and "2026.09.22" in err
