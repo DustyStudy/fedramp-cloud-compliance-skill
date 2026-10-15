@@ -7,7 +7,11 @@ Under CR26, the monolithic SSP is replaced by:
   `SDR-CSX-KSI` / `SDR-CSX-KMT`)
 
 Both must be **human-readable and JSON**, and the JSON must be valid against FedRAMP's
-schemas (`FRC-CSO-JSN`, https://github.com/FedRAMP/schemas). Existing Rev5 systems can
+schemas (`FRC-CSO-JSN`, https://github.com/FedRAMP/schemas). Public JSON must also work
+with ordinary web apps: CORS that lets other origins read it, `Content-Type:
+application/json`, and `X-Content-Type-Options: nosniff`. The fedramp.gov schema validator
+fails without CORS. On AWS that means the S3/CloudFront CORS configuration plus a
+CloudFront response headers policy. Existing Rev5 systems can
 still hold legacy SSPs until their ruleset grace dates. Check the SDR and CPO rev5 dates
 at the top of those sections in `generated/rules.md`.
 
@@ -57,8 +61,9 @@ For **20x KSIs** (`SDR-CSX-KSI`), also include:
 - validation that the measures are produced correctly
 
 Metrics by class (`SDR-CSX-KMT`):
-- **Class B:** 30-day and up-to-1-year metric summaries.
-- **Class C:** also all daily metric data for up to a year.
+- **Class B (SHOULD):** 30-day and up-to-1-year metric summaries.
+- **Class C (MUST):** those summaries plus all daily metric data, including the status of
+  persistent validation, for up to a year.
 - **Class D:** MUST significantly supersede the lower classes, with specifics to be set in
   the 20x Phase 4 pilot.
 

@@ -1,7 +1,8 @@
 # FedRAMP program orientation — Consolidated Rules for 2026 (CR26)
 
 Hand-written summary, checked against FedRAMP Consolidated Rules **2026.09.13.02**
-and the fedramp.gov/2026 site as of 2026-09-23. Rule IDs are given so you can confirm any
+and the fedramp.gov/2026 site as of 2026-09-23. Rule changes through **2026.10.13.01** were
+reviewed on 2026-10-15. Rule IDs are given so you can confirm any
 detail with `python scripts/fedramp.py lookup <ID>`. The generated files in
 `generated/` are the verbatim source, and this file is only a map to them.
 
@@ -99,8 +100,8 @@ their first independent assessment started after 2027-08-01. CMU's Rev5 grace pe
 | CMU | Cryptographic Module Use | Document all modules (`CMU-CSO-CMD`). Validated (CMVP) modules: Class A/B MAY, C SHOULD, D MUST (`CMU-CSO-UVM`). Agency tenants SHOULD default to validated crypto (`CMU-CSO-CAT`) |
 | SCG | Secure Configuration Guide | Customer-facing guide explaining the security impact of settings |
 | VDR | Vulnerability Detection & Response | Mandatory 2026-12-07 (CISA BOD 26-04). Machine V&V cadence: 20x A monthly (SHOULD), B every 7 days, C every 3 days (MUST) (`VDR-TFR-MVX`); Rev5 monthly (B SHOULD, C/D MUST) (`VDR-TFR-MVF`). Non-machine resources every 3 months (`VDR-TFR-NMV`, MUST). Mitigation timeframes by PAIN × internet-reachability × exploitability (`VDR-TFR-PVR`, SHOULD). KEVs per CISA due dates (`VDR-TFR-KEV`, SHOULD) |
-| VER | Vulnerability Evaluation & Reporting | PAIN N1–N5 rating (`VER-EVA-EPA`), assume automatable, monthly activity report (`VER-TFR-MHR`), accepted vulnerabilities |
-| IEC | Incident Evaluation & Communication | Reportable = affects, or is likely to affect, the **confidentiality or integrity** of federal customer data (`IEC-CSO-EFR`). Availability-only events are not reportable incidents under this rule. Default PAIN 5 unless rated (`IEC-CSO-DPR`). Initial/ongoing/final reports with PAIN-based deadlines. Initial report (`IEC-CSO-IIR`): A/B N1–N2 1 business day, N3–N5 6 h; C N1 1 business day, N2 24 h, N3–N5 1 h; D N1–N2 1 h, N3–N5 15 min |
+| VER | Vulnerability Evaluation & Reporting | PAIN N0–N5 rating (`VER-EVA-EPA`; N0, added in 2026.10.13.01, means exploitation is extremely unlikely to have any adverse effect on agencies), assume automatable, monthly activity report (`VER-TFR-MHR`), accepted vulnerabilities |
+| IEC | Incident Evaluation & Communication | Reportable = affects, or is likely to affect, the **confidentiality or integrity** of federal customer data (`IEC-CSO-EFR`). Availability-only events are not reportable incidents under this rule, but agency contracts, the CISA federal incident notification guidelines, and DFARS 252.204-7012 (for DoD) can still require reporting outages that IEC doesn't count. Default PAIN 5 unless rated (`IEC-CSO-DPR`). Initial/ongoing/final reports with PAIN-based deadlines. Initial report (`IEC-CSO-IIR`): A/B N1–N2 1 business day, N3–N5 6 h; C N1 1 business day, N2 24 h, N3–N5 1 h; D N1–N2 1 h, N3–N5 15 min |
 | SCN | Significant Change Notification | Adaptive: notify within 10 business days after. Transformative: initial plans ≥30 business days before, final plans ≥10 business days before, then within 5 business days after finishing and 5 after verification. Routine recurring: no notification |
 | CCM | Collaborative Continuous Monitoring | Ongoing Certification Report every 3 months. Quarterly review meeting (C/D MUST, B SHOULD) |
 | IVV | Independent V&V | 20x: all KSIs assessed yearly (B–D). Rev5: all applicable controls over each 3-year cycle |
@@ -121,8 +122,10 @@ total. Five are **Optional** for Class B but required for Class C: `KSI-CNA-EIS`
 KSIs are outcome statements. They are validated by assessing the provider's *measures*
 (`SDR-CSX-KSI`), which should be automated and produce metrics wherever possible. `SDR-CSX-KMT`
 sets the metric requirements by class:
-- Class B must supply 30-day and up-to-1-year metric summaries.
-- Class C must also supply all daily metric data for up to a year.
+- Class B SHOULD supply 30-day and up-to-1-year metric summaries (this was MUST before
+  2026.10.13.01).
+- Class C MUST supply those summaries plus all daily metric data, including the status of
+  persistent validation, for up to a year.
 - Class D MUST significantly supersede the lower classes, with specifics to be set in the
   20x Phase 4 pilot.
 

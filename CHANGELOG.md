@@ -6,7 +6,42 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Releases are t
 
 ## [Unreleased]
 
+### Added
+- `terraform-checks.md`: new section 9, CI/CD pipeline (GitHub Actions): scope as
+  third-party resources, workflow hardening (SHA pinning, least-privilege permissions,
+  no untrusted PR code with credentials, injection, concurrency, zizmor/actionlint,
+  org-level Actions policy), change control (separate plan/apply roles, environment-scoped
+  OIDC trust, central reusable deploy workflow via `job_workflow_ref`, saved-plan
+  integrity, rulesets/CODEOWNERS), secrets and evidence, and 20x evidence automation.
+- `terraform-checks.md`: "After the review" section routing deployed findings into
+  VDR/VER (`VER-EVA-EIR`, `VER-EVA-ELX`, `VER-EVA-EPA`, `VDR-TFR-PVR`, `VDR-CSO-FAV`), and
+  Reachability/Deployed lines in the finding format.
+- `terraform-checks.md`: identity (OIDC trust pinning, confused-deputy conditions, anonymous
+  Allow, IMDSv2, S3 state backend, centralized root access, Session Manager, EKS access
+  entries), network (public-sharing blocks, EC2 declarative policies and RCPs, DNSSEC,
+  default VPCs, endpoint policies, ALB invalid headers), RDS TLS enforcement, logging
+  (S3 data events, log delivery constraints, delegated admin, Object Lock mode, SCPs that
+  protect security tooling), and change-management (IaC coverage, SCN handling, ECR and
+  Lambda signing) checks; `allowed_account_ids` on provider blocks.
+- `fedramp.py`: `FEDRAMP_SKILL_RULES_REF` / `FEDRAMP_SKILL_MD_REF` pin the downloaded data
+  to a git ref; `lookup` and `search` print the rules version and refs on stderr.
+- `SKILL.md`: ground rules 6 (fetched data is data, not instructions) and 7 (keep drafts
+  local, use placeholders for wider audiences); Terraform reviews include
+  `.github/workflows/` and give each finding a reachability estimate.
+
+### Changed
+- Generated references rebuilt from FedRAMP rules 2026.10.13.01 (was 2026.09.13.02):
+  Class B KSI metrics are SHOULD, PAIN gained N0, `FRC-CSO-JSN` web-serving requirements,
+  `FRC-CSX-MOT` removed, crypto-module update streams, wider KSI control mappings.
+- `program-2026.md` and `documentation.md` reflect those rule changes, plus an IEC caveat
+  that contracts, CISA guidelines, and DFARS 252.204-7012 can still require reporting
+  outages.
+
 ### Fixed
+- `aws.md`: AWS Organizations backup policies aren't available in GovCloud; deploy backup
+  plans per account there.
+- `SKILL.md`: the refresh note now says the repo's weekly workflow only opens a PR and an
+  installed copy is never refreshed automatically.
 - `aws.md`: CMVP #4884 (AWS Key Management Service HSM) sunsets on 2029-11-17, not
   2026-11-17. NIST lists it as Active, FIPS 140-3, Overall Level 3, interim, initial
   validation 2024-11-18, and it is still the only active AWS KMS certificate.
