@@ -7,6 +7,13 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Releases are t
 ## [Unreleased]
 
 ### Added
+- `references/govcloud-build.md`: a staged guide for building an AWS GovCloud environment
+  with Terraform and GitHub Actions: build defaults, paired-account creation with
+  `CreateGovCloudAccount`, Control Tower vs plain Organizations, state and OIDC bootstrap,
+  guardrail policies, logging and security tooling, identity, network, workload
+  baseline, evidence, and a dated table of GovCloud feature gaps.
+- SKILL.md: a "Build an AWS GovCloud environment" workflow and task-table row; the
+  description now covers building.
 - `terraform-checks.md`: new section 9, CI/CD pipeline (GitHub Actions): scope as
   third-party resources, workflow hardening (SHA pinning, least-privilege permissions,
   no untrusted PR code with credentials, injection, concurrency, zizmor/actionlint,
@@ -38,6 +45,16 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Releases are t
   outages.
 
 ### Fixed
+- GovCloud root guidance: GovCloud root users have no console sign-in or MFA, so
+  `aws.md` and `terraform-checks.md` no longer suggest hardware root MFA or central root
+  credential management there; they point to Organizations root sessions instead.
+- AWS Backup restore testing and Inspector Lambda code scanning are marked unavailable
+  in GovCloud.
+- KMS automatic rotation is limited to symmetric keys; symmetric keys with imported
+  material rotate on demand, and asymmetric keys (e.g. the DNSSEC KSK key) need a manual
+  rollover.
+- `terraform-checks.md`: the org-only RCP on STS leaves out `AssumeRoleWithWebIdentity`
+  and `AssumeRoleWithSAML`, which would otherwise block GitHub OIDC and IdP federation.
 - `aws.md`: AWS Organizations backup policies aren't available in GovCloud; deploy backup
   plans per account there.
 - `SKILL.md`: the refresh note now says the repo's weekly workflow only opens a PR and an

@@ -1,6 +1,6 @@
 ---
 name: fedramp-cloud-compliance
-description: FedRAMP compliance for workloads on AWS, Azure, and Google Cloud under the FedRAMP Consolidated Rules for 2026 (20x and Rev5). Use when mapping NIST SP 800-53 Rev5 controls or 20x Key Security Indicators (KSIs) to cloud services, reviewing Terraform and its GitHub Actions deployment pipelines for FedRAMP issues, drafting Security Decision Records / Certification Package Overviews / legacy SSP narratives / customer responsibility matrices, planning a certification path or class (A/B/C/D), or answering questions about FedRAMP rules such as vulnerability response timeframes, incident reporting, significant change notification, continuous monitoring, and cryptographic modules. Triggers include FedRAMP, 20x, KSI, Rev5, Class B/C/D, Low/Moderate/High baseline, 800-53, ATO, 3PAO, ConMon, POA&M, GovCloud, Azure Government, Assured Workloads, FIPS 140.
+description: FedRAMP compliance for workloads on AWS, Azure, and Google Cloud under the FedRAMP Consolidated Rules for 2026 (20x and Rev5). Use when mapping NIST SP 800-53 Rev5 controls or 20x Key Security Indicators (KSIs) to cloud services, reviewing Terraform and its GitHub Actions deployment pipelines for FedRAMP issues, building AWS GovCloud environments (accounts, landing zone, guardrails, network) with Terraform and GitHub Actions, drafting Security Decision Records / Certification Package Overviews / legacy SSP narratives / customer responsibility matrices, planning a certification path or class (A/B/C/D), or answering questions about FedRAMP rules such as vulnerability response timeframes, incident reporting, significant change notification, continuous monitoring, and cryptographic modules. Triggers include FedRAMP, 20x, KSI, Rev5, Class B/C/D, Low/Moderate/High baseline, 800-53, ATO, 3PAO, ConMon, POA&M, GovCloud, Azure Government, Assured Workloads, FIPS 140.
 ---
 
 # FedRAMP Cloud Compliance
@@ -75,6 +75,7 @@ can refresh them from FedRAMP's live machine-readable sources.
 | KSI statements and their related 800-53 controls | [references/generated/ksi.md](references/generated/ksi.md) |
 | Is control X in Class B/C/D? FedRAMP parameters? | [references/generated/rev5-baselines.md](references/generated/rev5-baselines.md), then `fedramp.py lookup` |
 | AWS implementation (GovCloud, FIPS endpoints, Security Hub, Config, KMS…) | [references/aws.md](references/aws.md) |
+| Building a new AWS GovCloud environment (accounts, landing zone, bootstrap, guardrails, network, evidence) | [references/govcloud-build.md](references/govcloud-build.md) + [references/aws.md](references/aws.md) |
 | Azure implementation (Azure Government, Policy initiatives, Entra, Defender…) | [references/azure.md](references/azure.md) |
 | GCP implementation (Assured Workloads, org policy, SCC, VPC-SC…) | [references/gcp.md](references/gcp.md) |
 | Reviewing Terraform / IaC and its GitHub Actions pipeline | [references/terraform-checks.md](references/terraform-checks.md) + the cloud file |
@@ -107,6 +108,18 @@ can refresh them from FedRAMP's live machine-readable sources.
 3. Don't claim that a clean review means the system is compliant. Also list the
    controls Terraform cannot show at all, like training, IR procedures, and recovery
    testing.
+
+### Build an AWS GovCloud environment
+1. Settle stage 0 of [references/govcloud-build.md](references/govcloud-build.md) first:
+   type and class, boundary, home Region, IdP, and services. Ask about anything you
+   can't tell from the repo instead of assuming it.
+2. Build in the guide's stage order. Generate Terraform and workflows that follow its
+   build defaults, and check each stage's "done when" before starting the next.
+3. Review everything generated against
+   [references/terraform-checks.md](references/terraform-checks.md) before handing it
+   over. Give the user `terraform plan` commands to run and review; never apply for them.
+4. Point out the GovCloud feature gaps that affect their design, and record each design
+   decision as an SDR entry ([references/documentation.md](references/documentation.md)).
 
 ### Draft documentation
 Follow [references/documentation.md](references/documentation.md). Write in the

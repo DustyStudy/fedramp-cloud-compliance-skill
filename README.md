@@ -44,6 +44,7 @@ Then ask things like:
 
 - "Which Azure services and settings support KSI-IAM-APM and IA-2(1)?"
 - "Review this Terraform for FedRAMP Class C issues."
+- "Help me build a Class D landing zone in AWS GovCloud with Terraform and GitHub Actions."
 - "Draft SDR entries for the VDR ruleset for our GKE-based service."
 - "How long do we have to send an initial incident report for a PAIN 4 incident at Class D?"
 
@@ -55,6 +56,7 @@ Then ask things like:
 | `references/generated/rev5-baselines.md` | [`FedRAMP/2026-markdown`](https://github.com/FedRAMP/2026-markdown) control pages (NIST SP 800-53 Rev5 OSCAL + FedRAMP Class B/C/D baselines) | Same |
 | `references/program-2026.md` | Hand-written summary of the above, citing rule IDs | CI checks every cited ID still exists |
 | `references/{aws,azure,gcp}.md`, `terraform-checks.md`, `documentation.md` | Hand-written. Identifiers (Azure Policy initiative IDs, AWS conformance pack names, GCP Assured Workloads regimes) checked against provider sources on 2026-09-23 | Review when providers change; each file links the live services-in-scope list |
+| `references/govcloud-build.md` | Hand-written GovCloud build guide. GovCloud behavior checked against the AWS GovCloud (US) User Guide on 2026-10-15 | Same; its feature-gap table is dated |
 
 `scripts/fedramp.py` has no dependencies beyond the Python 3.9+ standard library:
 

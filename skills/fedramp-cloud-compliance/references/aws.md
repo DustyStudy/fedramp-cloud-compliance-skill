@@ -4,6 +4,9 @@ Starting points for implementation, not proof of compliance. AWS changes its ser
 authorizations and features often. **Before you assert that a service is authorized,
 check the live list:** https://aws.amazon.com/compliance/services-in-scope/FedRAMP/
 
+For a new GovCloud build (accounts, landing zone, bootstrap, guardrails, network), follow
+[govcloud-build.md](govcloud-build.md).
+
 ## Authorization posture and inheritance
 
 - **AWS GovCloud (US-West `us-gov-west-1`, US-East `us-gov-east-1`)** is the usual choice
@@ -32,7 +35,9 @@ check the live list:** https://aws.amazon.com/compliance/services-in-scope/FedRA
   regions publish FIPS endpoints for many services, but not all. Check each service on the
   AWS FIPS endpoints page (https://aws.amazon.com/compliance/fips/). Services without one
   belong in the `CMU-CSO-CMD` module list.
-- **KMS:** use customer-managed keys (CMKs) with `enable_key_rotation = true`. The KMS
+- **KMS:** use customer-managed keys (CMKs) with `enable_key_rotation = true` (symmetric
+  keys with AWS-generated material only; asymmetric, HMAC, and custom key store keys, such
+  as a DNSSEC KSK key, need a manual rollover). The KMS
   HSM holds CMVP #4884 (FIPS 140-3, Overall Level 3, active). Checked on 2026-10-02, it is
   an **interim validation with a sunset date of 2029-11-17**, and it was the only active
   KMS certificate. Re-check csrc.nist.gov before you cite it in a `CMU-CSO-CMD` module
@@ -60,9 +65,9 @@ check the live list:** https://aws.amazon.com/compliance/services-in-scope/FedRA
 | AU (audit) | Organization CloudTrail (all regions, log file validation, KMS, data events where needed); CloudWatch Logs; S3 Object Lock for log archives; Security Lake / SIEM integration; VPC Flow Logs; ALB/WAF/VPC Resolver (formerly Route 53 Resolver) query logs | Choose event types (AU-2), review logs (AU-6), set retention, protect log access (AU-9) |
 | CA / CM (assessment, config) | AWS Config (all resources, org aggregator) + conformance packs `Operational-Best-Practices-for-FedRAMP-Low/-Moderate/-HighPart1/-HighPart2`, `…-for-NIST-800-53-rev-5`; Security Hub CSPM **NIST SP 800-53 Rev. 5** standard (`standards/nist-800-53/v/5.0.0`); Control Tower controls; Systems Manager State Manager / Inventory | Baselines (CM-2/6), change control (CM-3), inventory accuracy (CM-8), and remediation workflow |
 | CP (contingency) | AWS Backup (org backup policies in commercial regions only; GovCloud organizations can't use backup policies, so deploy backup plans per account, e.g. with StackSets or Terraform; Vault Lock, cross-region/cross-account copies); multi-AZ; Elastic Disaster Recovery; Route 53 health checks | Set RTO/RPO, *test* restores (CP-4, CP-9, KSI-RPL-TRC) |
-| IA (identification) | Identity Center with external IdP and **phishing-resistant MFA** (FIDO2/passkeys, PIV/CAC), required by FedRAMP guidance on IA-2(1)/(2); IAM Roles Anywhere; no IAM users or long-lived access keys; root MFA via hardware key | Enforce MFA strength at the IdP, manage authenticators (IA-5), handle non-user identities (KSI-IAM-SNU) |
+| IA (identification) | Identity Center with external IdP and **phishing-resistant MFA** (FIDO2/passkeys, PIV/CAC), required by FedRAMP guidance on IA-2(1)/(2); IAM Roles Anywhere; no IAM users or long-lived access keys; commercial: root MFA via hardware key. GovCloud: root has no console sign-in or MFA, so delete any root access keys obtained from AWS Support and use Organizations root sessions for privileged tasks | Enforce MFA strength at the IdP, manage authenticators (IA-5), handle non-user identities (KSI-IAM-SNU) |
 | IR (incident) | GuardDuty (org, all protection plans in use); Security Hub / Security Hub CSPM findings aggregation; Detective; EventBridge → SNS/ticketing or on-call tooling; AWS Security Incident Response (East/West only on the FedRAMP scope page). SSM Incident Manager closed to new customers on 2025-11-07, so don't design new processes around it | IR plan, PAIN rating, and FedRAMP reporting timelines (IEC ruleset); after-action reviews |
-| RA / SI (vuln, integrity) | Amazon Inspector (EC2, ECR, Lambda; SBOM export); ECR enhanced scanning; SSM Patch Manager; GuardDuty Malware Protection; CloudTrail log integrity; Macie (sensitive data discovery; not listed for GovCloud as of 2026-09) | Evaluate each vuln (VER-EVA-*), meet VDR timeframes, handle KEVs (`VDR-TFR-KEV`) |
+| RA / SI (vuln, integrity) | Amazon Inspector (EC2, ECR, Lambda; SBOM export. GovCloud has no Lambda code scanning or managed code repository scanning, and the Linux deep-inspection plugin isn't FIPS compliant); ECR enhanced scanning; SSM Patch Manager; GuardDuty Malware Protection; CloudTrail log integrity; Macie (sensitive data discovery; not listed for GovCloud as of 2026-09) | Evaluate each vuln (VER-EVA-*), meet VDR timeframes, handle KEVs (`VDR-TFR-KEV`) |
 | SC (boundary, crypto) | VPC design with private subnets; security groups; Network Firewall; WAF; Shield Advanced (East/West only on the FedRAMP scope page); PrivateLink / VPC endpoints (FIPS); KMS; ACM; Route 53 Resolver DNS Firewall | Deny-by-default flows (SC-7), boundary docs, crypto module list (CMU) |
 | SR (supply chain) | ECR with image signing (AWS Signer / Notation); Inspector SBOMs. CodeArtifact is not on the FedRAMP services-in-scope page | Vendor risk process, provenance verification |
 | PE / MA / MP | Inherited from AWS for the infrastructure layer | Your own endpoints/media, if any are in scope |
@@ -80,7 +85,7 @@ check the live list:** https://aws.amazon.com/compliance/services-in-scope/FedRA
 | MLA-OSM / MLA-LET / MLA-RVL | CloudTrail org-trail status + Security Lake/SIEM ingest health; alert → ticket SLAs |
 | MLA-EVC | Security Hub CSPM NIST 800-53 standard score over time |
 | SVC-SIN / SVC-VCM | Config rules for encryption at rest, FIPS/TLS listener policies, `s3-bucket-ssl-requests-only` |
-| RPL-ABO / RPL-TRC | AWS Backup job success + restore-testing results (AWS Backup restore testing) |
+| RPL-ABO / RPL-TRC | AWS Backup job success + restore-test results. AWS Backup restore testing works in commercial regions; it isn't available in GovCloud, so schedule restore jobs yourself (e.g. EventBridge + Step Functions) and record the results |
 | PIY-GIV | AWS Config advanced query / Resource Explorer inventory export |
 | SCR-MON | Inspector SBOM + ECR scan results for third-party dependencies |
 
@@ -152,8 +157,9 @@ data "aws_partition" "current" {} # never hard-code "arn:aws:"; GovCloud is "aws
   launch templates, and no `aws_ec2_instance_metadata_defaults`.
 - An org trail with management events only, when buckets hold federal customer data or
   logs (no S3 data event selectors).
-- Member accounts that still have root credentials, with no centralized root access
-  management (`aws_iam_organizations_features`), or default VPCs left in place.
+- Commercial: member accounts that still have root credentials, with no centralized root
+  access management (`aws_iam_organizations_features`). GovCloud: root access keys that
+  were requested from AWS Support and never deleted. Either: default VPCs left in place.
 - VPC endpoints with no `policy`, i.e. the default full-access endpoint policy, where the
   service supports endpoint policies (check `VpcEndpointPolicySupported` in
   `aws ec2 describe-vpc-endpoint-services` first).
