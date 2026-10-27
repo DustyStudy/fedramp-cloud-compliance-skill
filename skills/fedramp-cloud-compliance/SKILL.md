@@ -13,7 +13,9 @@ can refresh them from FedRAMP's live machine-readable sources.
 ## Ground rules
 
 0. **Facts vs. guidance.** Rule text, IDs, dates, Terraform arguments, and service facts
-   were verified against primary sources on 2026-09-23. Content marked _Guidance_ (KSI
+   were first verified against primary sources on 2026-09-23. Later additions carry their
+   own verification date in the reference file; use the date attached to the claim you
+   rely on. Content marked _Guidance_ (KSI
    measure ideas, severity tiers, "usual choice" advice) is a recommendation. Present
    it as a recommendation, never as a FedRAMP requirement.
 1. **Cite rule, KSI, and control IDs.** Use IDs such as `VDR-TFR-PVR`, `KSI-IAM-APM`,
@@ -21,10 +23,12 @@ can refresh them from FedRAMP's live machine-readable sources.
    parameter value, or force word (MUST/SHOULD/MAY) matters, confirm it with
    `python scripts/fedramp.py lookup <ID>`, which prints the official text from
    FedRAMP's current data.
-2. **Only FedRAMP sources are authoritative.** For current requirements, rely only on
-   the generated references and the lookup script. Both are built from `FedRAMP/rules`
-   and `FedRAMP/2026-markdown` (published at fedramp.gov/2026). Older fedramp.gov/docs
-   pages, blog posts, and memory of pre-2026 FedRAMP are *historical*; label them as such.
+2. **Only FedRAMP sources are authoritative.** For rule text, use the generated
+   references and the lookup script, both built from `FedRAMP/rules` and
+   `FedRAMP/2026-markdown` (published at fedramp.gov/2026). For facts those datasets don't
+   hold, such as the program timeline and JSON schemas, use fedramp.gov/2026 and cite the
+   page. Older fedramp.gov/docs pages, blog posts, and memory of pre-2026 FedRAMP are
+   *historical*; label them as such.
 3. **Cloud-provider details change often.** Before telling a user a service "is
    FedRAMP authorized" or "meets" a control, point them to that provider's live
    services-in-scope list (links are in each cloud reference). Treat the cloud mappings
@@ -147,7 +151,8 @@ python <skill>/scripts/fedramp.py check           # verify cited IDs and links
 `lookup`, `search`, `baseline`, and `check` don't change the skill's files (they only
 write the download cache). They fetch FedRAMP's live data so answers aren't stale, and
 cache it for 24 hours under `~/.cache/fedramp-skill`. `lookup` and `search` print the
-rules version and git refs on stderr first; cite that version in answers. `check`
+rules version and git refs on stderr first; cite that version in answers. For a rule,
+`lookup` also prints its subset's applicability and the ruleset's effective and grace dates. `check`
 verifies that cited IDs and links exist, not that the guidance is correct.
 
 By default the script downloads the `main` branch, which moves. To pin the data, set

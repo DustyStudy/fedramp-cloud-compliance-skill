@@ -157,3 +157,66 @@ def test_data_banner_goes_to_stderr(capsys):
     fedramp.data_banner(RULES)
     out, err = capsys.readouterr()
     assert out == "" and "2026.09.22" in err
+
+
+class _Resp:
+    def __init__(self, body=None, exc=None):
+        self.body, self.exc = body, exc
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *a):
+        return False
+
+    def read(self):
+        if self.exc:
+            raise self.exc
+        return self.body.encode()
+
+
+def test_cache_keeps_similar_refs_apart(tmp_path, monkeypatch):
+    monkeypatch.setattr(fedramp, "CACHE", tmp_path)
+    bodies = iter(["branch-A", "branch-B"])
+    monkeypatch.setattr(fedramp.urllib.request, "urlopen", lambda req, timeout: _Resp(next(bodies)))
+    base = "https://raw.githubusercontent.com/FedRAMP/rules/"
+    assert fedramp.fetch(base + "review/a/x.json") == "branch-A"
+    assert fedramp.fetch(base + "review_a/x.json") == "branch-B"
+
+
+def test_truncated_download_falls_back_to_stale_cache(tmp_path, monkeypatch):
+    monkeypatch.setattr(fedramp, "CACHE", tmp_path)
+    monkeypatch.setattr(fedramp, "TTL", -1)  # every cache entry is stale
+    url = "https://raw.githubusercontent.com/FedRAMP/rules/main/x.json"
+    monkeypatch.setattr(fedramp.urllib.request, "urlopen", lambda req, timeout: _Resp("cached"))
+    fedramp.fetch(url)
+    truncated = fedramp.http.client.IncompleteRead(b"partial", 100)
+    monkeypatch.setattr(fedramp.urllib.request, "urlopen", lambda req, timeout: _Resp(exc=truncated))
+    assert fedramp.fetch(url) == "cached"
+    with pytest.raises(SystemExit):
+        fedramp.fetch(url + "?uncached")
+
+
+def test_lookup_prints_ruleset_applicability_and_dates(monkeypatch, capsys):
+    rules = {
+        **RULES,
+        "FRR": {
+            "VDR": {
+                **RULES["FRR"]["VDR"],
+                "info": {
+                    **RULES["FRR"]["VDR"]["info"],
+                    "subsets": {
+                        "TFR": {"name": "Timeframes", "applicability": {"types": ["20x"], "classes": ["B", "C"]}},
+                        "OTH": {"name": "Other", "applicability": {"types": ["rev5"]}},
+                    },
+                    "effective": {"obtaining": "2026-12-07"},
+                },
+            }
+        },
+    }
+    monkeypatch.setattr(fedramp, "load_rules", lambda: rules)
+    monkeypatch.setattr(fedramp, "fmt_effective", lambda typ, eff: f"- {typ}: {eff['obtaining']}")
+    fedramp.lookup(["VDR-TFR-PVR"])
+    out = capsys.readouterr().out
+    assert "**TFR**" in out and "**OTH**" not in out
+    assert "2026-12-07" in out

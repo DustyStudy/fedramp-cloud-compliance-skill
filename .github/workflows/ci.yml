@@ -25,6 +25,11 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Lint (ruff)
+        run: |
+          pip install --quiet "ruff==0.16.9"
+          ruff check .
+
       - name: Compile script
         run: python3 -m py_compile skills/fedramp-cloud-compliance/scripts/fedramp.py
 
