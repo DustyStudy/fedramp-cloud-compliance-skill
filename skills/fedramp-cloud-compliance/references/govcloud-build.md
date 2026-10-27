@@ -29,8 +29,8 @@ make the system compliant or certified.
 - S3: all four Block Public Access settings, versioning, server access logging, SSE-KMS,
   and a `Deny` on `aws:SecureTransport = "false"`. The exception is buckets that receive
   S3 server access logs or ALB access logs directly: those need SSE-S3 in the same
-  Region (NLB access logs can use a CMK), then replication into the KMS-encrypted
-  archive (terraform-checks.md §5).
+  Region (NLB access logs can use a CMK), then a copy into the KMS-encrypted archive
+  with SSE-KMS set on the copy; plain replication keeps SSE-S3 (terraform-checks.md §5).
 - No `0.0.0.0/0` or `::/0` ingress on 22 or 3389. Use SSM Session Manager.
 - GitHub Actions authenticate with OIDC. Never use static access keys.
 - Run `terraform fmt` and `terraform validate`, then `terraform plan` and review the

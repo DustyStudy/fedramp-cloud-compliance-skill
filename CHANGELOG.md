@@ -7,6 +7,8 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Releases are t
 ## [Unreleased]
 
 ### Added
+- CI lints `fedramp.py` and the tests with ruff (`E F I UP B S`), and a CodeQL workflow
+  analyzes the Python.
 - `references/govcloud-build.md`: a staged guide for building an AWS GovCloud environment
   with Terraform and GitHub Actions: build defaults, paired-account creation with
   `CreateGovCloudAccount`, Control Tower vs plain Organizations, state and OIDC bootstrap,
@@ -37,6 +39,11 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Releases are t
   `.github/workflows/` and give each finding a reachability estimate.
 
 ### Changed
+- `fedramp.py lookup <rule>` also prints the rule's subset applicability (types, paths,
+  classes) and the ruleset's effective and grace dates.
+- `SKILL.md`: rule text comes from the generated data; facts it doesn't hold (timeline,
+  schemas) come from fedramp.gov/2026 with a citation. The 2026-09-23 verification date
+  now applies only to the original content; later additions carry their own dates.
 - Generated references rebuilt from FedRAMP rules 2026.10.13.01 (was 2026.09.13.02):
   Class B KSI metrics are SHOULD, PAIN gained N0, `FRC-CSO-JSN` web-serving requirements,
   `FRC-CSX-MOT` removed, crypto-module update streams, wider KSI control mappings.
@@ -45,6 +52,22 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Releases are t
   outages.
 
 ### Fixed
+- `gcp.md`: Assured Workloads folder placement no longer defines the boundary;
+  out-of-folder resources that handle or affect federal data stay in scope
+  (`MAS-CSO-IIR`, `MAS-CSO-TPR`).
+- `terraform-checks.md`: environment protection does not restrict artifact downloads, so
+  saved plans need deploy-role-only storage or encryption.
+- `terraform-checks.md`, `govcloud-build.md`: SSE-S3 access logs are copied into the CMK
+  archive with SSE-KMS set; native replication keeps SSE-S3.
+- `terraform-checks.md`, `aws.md`: `"Resource": "*"` is flagged only where the action
+  supports resource-level permissions; required wildcards are limited and documented.
+- `aws.md`: the provider example sets `allowed_account_ids`.
+- `fedramp.py`: cache files are keyed by a hash of the full URL, so refs such as
+  `review/a` and `review_a` no longer share an entry. Old cache files are ignored.
+- `fedramp.py`: a truncated download (`IncompleteRead`) falls back to the stale cache
+  like other network errors.
+- `fedramp.py build`: the generated header no longer attributes the markdown mirror's
+  rules commit to the separately downloaded rules JSON.
 - GovCloud root guidance: GovCloud root users have no console sign-in or MFA, so
   `aws.md` and `terraform-checks.md` no longer suggest hardware root MFA or central root
   credential management there; they point to Organizations root sessions instead.

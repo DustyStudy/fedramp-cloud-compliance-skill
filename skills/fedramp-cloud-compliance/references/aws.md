@@ -94,7 +94,8 @@ For a new GovCloud build (accounts, landing zone, bootstrap, guardrails, network
 ```hcl
 provider "aws" {
   region            = "us-gov-west-1" # or a commercial US region if the service authorization allows
-  use_fips_endpoint = true
+  use_fips_endpoint   = true
+  allowed_account_ids = [var.account_id]
   default_tags { tags = { "fedramp:boundary" = "in" } }
 }
 
@@ -141,7 +142,9 @@ data "aws_partition" "current" {} # never hard-code "arn:aws:"; GovCloud is "aws
   deprecated.
 - `aws_security_group` ingress from `0.0.0.0/0` / `::/0` on admin ports.
 - CloudTrail missing `is_multi_region_trail`, `enable_log_file_validation`, or `kms_key_id`.
-- `aws_iam_policy` with `"Action": "*"` / `"Resource": "*"`. IAM users with access keys.
+- `aws_iam_policy` `Allow` statements with `"Action": "*"`, or `"Resource": "*"` on actions
+  that support resource-level permissions (judge `Deny` statements separately). IAM users
+  with access keys.
 - `aws_db_instance` / `aws_rds_cluster` (Aurora) without `storage_encrypted` (plus
   `kms_key_id` for a CMK), `iam_database_authentication_enabled`, or
   `deletion_protection`, or an instance with `publicly_accessible = true`.

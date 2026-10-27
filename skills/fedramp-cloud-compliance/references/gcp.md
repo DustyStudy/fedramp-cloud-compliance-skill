@@ -120,8 +120,11 @@ resource "google_org_policy_policy" "no_sa_keys" {
 }
 ```
 
-- Put all in-boundary projects under the Assured Workloads folder. Resources created
-  outside it are outside the boundary.
+- Put all in-boundary projects under the Assured Workloads folder. Folder placement does
+  not set the assessment boundary: a resource outside the folder that is likely to handle
+  federal customer data, or that affects its confidentiality, integrity, or availability
+  (CI/CD, shared networking, identity, logging), is still in scope under `MAS-CSO-IIR`.
+  Document third-party resources under `MAS-CSO-TPR`.
 - These examples target `hashicorp/google` v8 (8.0.0 was released 2026-08-26).
 - Google also offers *managed* versions of several constraints, e.g.
   `iam.managed.disableServiceAccountKeyCreation`, `compute.managed.requireOsLogin`,

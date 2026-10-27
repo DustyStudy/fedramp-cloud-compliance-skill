@@ -49,8 +49,11 @@ validated modules are MAY for A/B, SHOULD for C, and MUST for D.
       (`CM-2`, `SI-7`, `SR-3`, `SR-11`, KSI-SCR-MIT).
 
 ## 2. Identity and access (AC-2, AC-6, IA-2, IA-5, IA-5(7); KSI-IAM-*)
-- [ ] No wildcard `Action`/`Resource` (AWS) or broad built-in roles (Azure Owner/Contributor
-      at a broad scope, GCP `roles/owner`/`roles/editor`) granted to humans or workloads.
+- [ ] No wildcard `Action` (AWS) or broad built-in roles (Azure Owner/Contributor at a broad
+      scope, GCP `roles/owner`/`roles/editor`) granted to humans or workloads. Scope
+      `Resource` to ARNs wherever the action supports resource-level permissions; where AWS
+      requires `"Resource": "*"` (e.g. `ec2:DescribeInstances`), limit the actions, add the
+      supported condition keys, and record the exception. Judge `Deny` statements separately.
 - [ ] No long-lived credentials: AWS `aws_iam_access_key`/IAM users, Azure SP client
       secrets where a managed identity is possible, GCP `google_service_account_key`
       (KSI-IAM-SNU).
@@ -226,8 +229,10 @@ validated modules are MAY for A/B, SHOULD for C, and MUST for D.
 - [ ] ALB access logs, S3 server access logs, and VPC Resolver query logs reach the
       central log archive. ALB and S3 server access logs can only be delivered to an
       SSE-S3 bucket in the same Region (S3: same account too, no Object Lock default
-      retention), so deliver locally and replicate into the CMK-encrypted, Object-Locked
-      archive, or ship them through Firehose/SIEM. Flag a design that points them
+      retention), so deliver locally, then copy them into the CMK-encrypted, Object-Locked
+      archive with SSE-KMS set on the copy (S3 Batch Operations, a Lambda copy, or a
+      Firehose/SIEM pipeline). Native S3 replication keeps the source's SSE-S3 encryption
+      on the replica, so it does not re-encrypt them with the CMK. Flag a design that points them
       directly at a CMK or Object Lock bucket, because delivery will fail (AU-2, AU-9,
       AU-12).
 - [ ] Security services (GuardDuty, Security Hub CSPM, Config, Inspector, Macie, IAM
@@ -407,9 +412,11 @@ standards, not FedRAMP rules.
       secrets, or GCP key JSON in repo, environment, or org secrets; OIDC only
       (IA-5, KSI-IAM-SNU).
 - [ ] Secret scanning with push protection is on for every repo.
-- [ ] Saved plan artifacts contain cleartext sensitive values: upload them only if needed,
-      with short `retention-days`, restricted to the deploy environment, or encrypt them
-      (SC-28).
+- [ ] Saved plan artifacts contain cleartext sensitive values. Anyone with read access to
+      the repo can download Actions artifacts; environment protection rules do not limit
+      downloads. Keep plans in storage only the deploy roles can read, or encrypt them
+      before upload with a key only the apply job can use, and set a short
+      `retention-days` (SC-28).
 - [ ] Plan output posted to PRs or job summaries (tfcmt, Atlantis, custom scripts) is a
       summary or redacted, because anyone with repo read access sees it. `sensitive`
       only masks marked values; data sources and some attributes can still print secrets

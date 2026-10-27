@@ -1,0 +1,10 @@
+line-length = 100
+target-version = "py311"
+
+[lint]
+select = ["E", "F", "I", "UP", "B", "S"]
+ignore = ["E501"]  # long table/markdown strings; no formatter enforced here
+
+[lint.per-file-ignores]
+# Tests check with assert and use fixture data.
+"tests/*" = ["S"]
