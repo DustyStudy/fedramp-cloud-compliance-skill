@@ -52,6 +52,9 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Releases are t
   outages.
 
 ### Fixed
+- `fedramp.py`: control parsing fails with an error when a control heading or its class
+  applicability markup isn't recognized, instead of silently dropping the control or its
+  classes (which made `baseline` and `lookup` report wrong class membership).
 - `gcp.md`: Assured Workloads folder placement no longer defines the boundary;
   out-of-folder resources that handle or affect federal data stay in scope
   (`MAS-CSO-IIR`, `MAS-CSO-TPR`).

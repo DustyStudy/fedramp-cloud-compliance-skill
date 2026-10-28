@@ -197,6 +197,31 @@ def test_truncated_download_falls_back_to_stale_cache(tmp_path, monkeypatch):
         fedramp.fetch(url + "?uncached")
 
 
+CONTROL_MD = """# Audit
+
+## AU-2 (Event Logging) { #au-2 }
+
+<span class="subset-applicability__tag">Class B</span> <span class="subset-applicability__tag">Class C</span>
+
+Body text.
+"""
+
+
+def test_load_controls_reads_classes(monkeypatch):
+    monkeypatch.setattr(fedramp, "fetch", lambda url: CONTROL_MD)
+    assert fedramp.load_controls()[("AU", 2, None)]["classes"] == ["B", "C"]
+
+
+@pytest.mark.parametrize("markdown", [
+    CONTROL_MD.replace('tag">Class C', 'tag" data-x="1">Class C'),
+    CONTROL_MD.replace("(Event Logging) { #au-2 }", "Event Logging"),
+])
+def test_load_controls_fails_on_unrecognized_markup(monkeypatch, markdown):
+    monkeypatch.setattr(fedramp, "fetch", lambda url: markdown)
+    with pytest.raises(SystemExit, match="format changed"):
+        fedramp.load_controls()
+
+
 def test_lookup_prints_ruleset_applicability_and_dates(monkeypatch, capsys):
     rules = {
         **RULES,
