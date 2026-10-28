@@ -155,9 +155,14 @@ def load_controls() -> dict:
         for sec in sections[1:]:
             m = HEADING_RE.match(sec)
             if not m:
-                continue
+                raise SystemExit(f"error: unrecognized control heading in {slug}.md: "
+                                 f"{sec.splitlines()[0]!r}; the FedRAMP markdown format changed")
             key = (m.group(1), int(m.group(2)), int(m.group(3)) if m.group(3) else None)
             classes = re.findall(r'subset-applicability__tag">Class ([A-D])', sec)
+            # A changed tag would otherwise read as "not in this class" instead of failing.
+            if len(classes) != sec.count("subset-applicability__tag"):
+                raise SystemExit(f"error: unrecognized class applicability markup in {slug}.md "
+                                 f"under {sec.splitlines()[0]!r}; the FedRAMP markdown format changed")
             body = sec.split("\n", 1)[1]
             body = re.sub(r"<div.*?</div>", "", body, flags=re.S)
             body = body.split("**External Link", 1)[0].split("!!! info", 1)[0]
