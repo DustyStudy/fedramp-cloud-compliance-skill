@@ -52,7 +52,7 @@ jobs:
           persist-credentials: false
 
       - name: Run Checkov (blocking)
-        uses: bridgecrewio/checkov-action@c10e2438743528f9e4549758fad8b7a62052541d # v12.3136.0
+        uses: bridgecrewio/checkov-action@45edc9d8856b664db2ec251f5f8632361f0a67aa # v12.3139.0
         with:
           directory: .
           quiet: true
@@ -91,7 +91,7 @@ jobs:
 
       # Code scanning needs a public repo (or paid Code Security), so private runs gate on the SARIF instead.
       - name: Upload results to the Security tab
-        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
         if: always() && hashFiles('trivy-results.sarif') != '' && github.event.repository.visibility == 'public'
         with:
           sarif_file: trivy-results.sarif
