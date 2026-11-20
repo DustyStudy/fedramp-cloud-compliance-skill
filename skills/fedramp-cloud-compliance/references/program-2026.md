@@ -1,8 +1,8 @@
 # FedRAMP program orientation — Consolidated Rules for 2026 (CR26)
 
 Hand-written summary, checked against FedRAMP Consolidated Rules **2026.09.13.02**
-and the fedramp.gov/2026 site as of 2026-09-23. Rule changes through **2026.10.13.01** were
-reviewed on 2026-10-15. Rule IDs are given so you can confirm any
+and the fedramp.gov/2026 site as of 2026-09-23. Rule changes through **2026.11.02.01** were
+reviewed on 2026-11-19. Rule IDs are given so you can confirm any
 detail with `python scripts/fedramp.py lookup <ID>`. The generated files in
 `generated/` are the verbatim source, and this file is only a map to them.
 
@@ -12,7 +12,7 @@ detail with `python scripts/fedramp.py lookup <ID>`. The generated files in
 |---|---|
 | FedRAMP Authorization / ATO / P-ATO | FedRAMP **Certification** (Rev5 or 20x *type*) |
 | Low / Moderate / High baseline | Rev5 **Class B / C / D**. They loosely align, but FedRAMP says there is "not a direct correlation", because providers tailor and agencies categorize their own systems (FIPS 199/200) |
-| FedRAMP Ready | Retired. No Ready submissions after 2026-07-28, so seek **20x Class A** instead. Existing Ready holders MUST convert by the later of their annual-assessment expiry or 2026-11-17 (`FRC-CSF-RDY`). Ready status is removed entirely on 2027-12-31 |
+| FedRAMP Ready | Retired. No Ready submissions after 2026-07-28, so seek **20x Class A** instead. Existing Ready holders MUST convert by the later of their annual-assessment expiry or 2026-11-17 (`FRC-CSF-RDY`); 2026-11-17 has passed, so only a later annual-assessment expiry still extends the deadline. Ready status is removed entirely on 2027-12-31 |
 | JAB P-ATO / agency ATO | **Program Certification** (by FedRAMP, no sponsor) vs **Agency Certification** (agency sponsor, Rev5 only) |
 | System Security Plan (SSP) | **Certification Package Overview (CPO)** + **Security Decision Record (SDR)**, both human-readable **and** JSON (`CPO-CSO-OVR`, `SDR-CSO-FRR`) |
 | Provider POA&M / monthly ConMon deliverables | **VDR/VER** vulnerability detection, evaluation, and reporting (`VER-TFR-MHR` monthly report) + **Ongoing Certification Report** every 3 months (`CCM-OCR-AVL`). Agencies keep POA&Ms only for *agency-owned* actions |
@@ -69,7 +69,7 @@ agency sponsor requires Rev5.
 | 2026-08-03 | 20x Class A pipeline opens |
 | 2026-08-10 | Temporary Rev5 Program pipelines (B/C) open |
 | 2026-08-31 | 20x Class B & C pipelines open |
-| 2026-11-17 | Earliest deadline for existing FedRAMP Ready holders to convert (`FRC-CSF-RDY`; later of this or annual-assessment expiry) |
+| 2026-11-17 | Fixed conversion date for existing FedRAMP Ready holders (passed); the deadline is this or their annual-assessment expiry, whichever is later (`FRC-CSF-RDY`) |
 | 2026-12-07 | VDR and VER mandatory ("Mandated by CISA BOD 26-04"); grace to 2027-03-07 |
 | 2027-01-01 | CR26 mandatory for all stakeholders (per-ruleset dates vary; see below) |
 | 2027-06-11 | No new Rev5 certification applications accepted |
@@ -100,7 +100,7 @@ their first independent assessment started after 2027-08-01. CMU's Rev5 grace pe
 | CMU | Cryptographic Module Use | Document all modules (`CMU-CSO-CMD`). Validated (CMVP) modules: Class A/B MAY, C SHOULD, D MUST (`CMU-CSO-UVM`). Agency tenants SHOULD default to validated crypto (`CMU-CSO-CAT`) |
 | SCG | Secure Configuration Guide | Customer-facing guide explaining the security impact of settings |
 | VDR | Vulnerability Detection & Response | Mandatory 2026-12-07 (CISA BOD 26-04). Machine V&V cadence: 20x A monthly (SHOULD), B every 7 days, C every 3 days (MUST) (`VDR-TFR-MVX`); Rev5 monthly (B SHOULD, C/D MUST) (`VDR-TFR-MVF`). Non-machine resources every 3 months (`VDR-TFR-NMV`, MUST). Mitigation timeframes by PAIN × internet-reachability × exploitability (`VDR-TFR-PVR`, SHOULD). KEVs per CISA due dates (`VDR-TFR-KEV`, SHOULD) |
-| VER | Vulnerability Evaluation & Reporting | PAIN N0–N5 rating (`VER-EVA-EPA`; N0, added in 2026.10.13.01, means exploitation is extremely unlikely to have any adverse effect on agencies), assume automatable, monthly activity report (`VER-TFR-MHR`), accepted vulnerabilities |
+| VER | Vulnerability Evaluation & Reporting | PAIN N0–N5 rating (`VER-EVA-EPA`; N0, added in 2026.10.05.01, means exploitation is extremely unlikely to have any adverse effect on agencies), assume automatable, monthly activity report (`VER-TFR-MHR`), accepted vulnerabilities |
 | IEC | Incident Evaluation & Communication | Reportable = affects, or is likely to affect, the **confidentiality or integrity** of federal customer data (`IEC-CSO-EFR`). Availability-only events are not reportable incidents under this rule, but agency contracts, the CISA federal incident notification guidelines, and DFARS 252.204-7012 (for DoD) can still require reporting outages that IEC doesn't count. Default PAIN 5 unless rated (`IEC-CSO-DPR`). Initial/ongoing/final reports with PAIN-based deadlines. Initial report (`IEC-CSO-IIR`): A/B N1–N2 1 business day, N3–N5 6 h; C N1 1 business day, N2 24 h, N3–N5 1 h; D N1–N2 1 h, N3–N5 15 min |
 | SCN | Significant Change Notification | Adaptive: notify within 10 business days after. Transformative: initial plans ≥30 business days before, final plans ≥10 business days before, then within 5 business days after finishing and 5 after verification. Routine recurring: no notification |
 | CCM | Collaborative Continuous Monitoring | Ongoing Certification Report every 3 months. Quarterly review meeting (C/D MUST, B SHOULD) |
@@ -123,7 +123,7 @@ KSIs are outcome statements. They are validated by assessing the provider's *mea
 (`SDR-CSX-KSI`), which should be automated and produce metrics wherever possible. `SDR-CSX-KMT`
 sets the metric requirements by class:
 - Class B SHOULD supply 30-day and up-to-1-year metric summaries (this was MUST before
-  2026.10.13.01).
+  2026.10.08.01).
 - Class C MUST supply those summaries plus all daily metric data, including the status of
   persistent validation, for up to a year.
 - Class D MUST significantly supersede the lower classes, with specifics to be set in the

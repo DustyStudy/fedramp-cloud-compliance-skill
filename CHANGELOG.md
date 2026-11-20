@@ -92,6 +92,57 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Releases are t
 - `fedramp.py`: `build` and the fetch cache now always write LF line endings, so running
   `build` on Windows no longer leaves a CRLF-only diff in `references/generated/`.
 
+## [0.4.2] - 2026-11-19
+
+Monthly maintenance pass. The generated references already match rules 2026.11.02.01
+(refreshed by the automated PRs); that release adds the FRD-MAS definition and an
+upgrade note but changes no hand-written claim.
+https://github.com/FedRAMP/2026-markdown/blob/main/changelog.md
+
+### Fixed
+- `program-2026.md`: the 2026-11-17 FedRAMP Ready conversion date has passed, so only a
+  later annual-assessment expiry still extends the deadline (`FRC-CSF-RDY`). PAIN N0 was
+  added in 2026.10.05.01 and Class B KSI metrics became SHOULD in 2026.10.08.01 (both
+  were attributed to 2026.10.13.01). Review header moved to 2026.11.02.01.
+  https://github.com/FedRAMP/2026-markdown/blob/main/changelog.md
+- `govcloud-build.md`: since 2026-11-09, STS cross-partition identity federation
+  (`GetWebIdentityToken` + `AssumeRoleWithWebIdentity`) issues temporary credentials
+  between GovCloud and commercial; only direct `AssumeRole` still fails.
+  https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_outbound_cross_partition.html
+- `govcloud-build.md`, `aws.md`: GovCloud organizations also support declarative policies
+  for Security Hub, Amazon Inspector, and GuardDuty.
+  https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-organizations.html
+- `govcloud-build.md`: Security Hub CSPM central configuration is a legacy feature;
+  declarative policies are recommended and the two are mutually exclusive.
+  https://docs.aws.amazon.com/securityhub/latest/userguide/central-configuration-intro.html
+- `aws.md`: services-in-scope column headers quoted exactly ("formerly Moderate
+  baseline"); Macie and Security Hub CSPM scope re-checked as of 2026-11; the provider
+  example passes `terraform fmt -check`.
+  https://aws.amazon.com/compliance/services-in-scope/FedRAMP/
+- `azure.md`: initiative member counts updated (FedRAMP High 183 Gov / 707 commercial,
+  Moderate 183 / 638, NIST R5 893 / 693; 496 of 707 Manual).
+  https://github.com/Azure/azure-policy/tree/master/built-in-policies/policySetDefinitions
+- `gcp.md`: Google states the FedRAMP Moderate data boundary has no data residency
+  controls, so the claim that its folder enforces locations is removed.
+  https://docs.cloud.google.com/docs/security/compliance/fedramp-implementation-guide
+- `gcp.md`: GKE security posture vulnerability scanning is deprecated, shutdown scheduled
+  by 2026-06-16.
+  https://docs.cloud.google.com/kubernetes-engine/docs/concepts/about-security-posture-dashboard
+- `terraform-checks.md`:
+  - GitHub OIDC immutable `sub` format is the default for repos created, renamed or
+    transferred after 2026-07-15. https://docs.github.com/en/actions/reference/security/oidc
+  - azurerm storage `public_network_access_enabled` is deprecated and will be removed in
+    v6.0. https://github.com/hashicorp/terraform-provider-azurerm/blob/v5.14.0/internal/services/storage/storage_account_resource.go
+  - Server TLS: removed argument names replaced with Azure `require_secure_transport` and
+    Cloud SQL `ssl_mode`. https://learn.microsoft.com/en-us/azure/postgresql/security/security-tls,
+    https://github.com/hashicorp/terraform-provider-google/blob/v8.12.0/website/docs/guides/version_6_upgrade.html.markdown
+  - CloudTrail advanced event selector fields are `eventCategory` and `resources.type`.
+    https://github.com/hashicorp/terraform-provider-aws/blob/v6.73.0/website/docs/r/cloudtrail.html.markdown
+  - S3 server access log buckets can't have Object Lock enabled at all.
+    https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html
+  - Terraform policy is generally available as of Terraform 1.17.0.
+    https://github.com/hashicorp/terraform/blob/v1.17.2/CHANGELOG.md
+
 ## [0.4.1] - 2026-10-01
 
 Monthly maintenance pass. The generated references are unchanged (rules 2026.09.13.02; the
