@@ -16,9 +16,10 @@ FedRAMP column)
   - The **FedRAMP High** package adds US-only data location plus personnel and support
     controls. Google states that FedRAMP High on Google Cloud requires Assured Workloads
     *and* Assured Support.
-  - The **FedRAMP Moderate** package sets support-personnel controls. When you create the
-    folder, you also choose a location that the folder's org policy enforces: resources
-    can only be created or used in allowed locations.
+  - The **FedRAMP Moderate** package sets support-personnel controls. Google states that
+    with it "you won't have data residency controls" (data residency requirements are
+    mandated only by FedRAMP High), so check the folder's org policy for any location
+    restriction you need.
 - The Terraform `google_assured_workloads_workload.compliance_regime` values include `FEDRAMP_MODERATE`,
   `FEDRAMP_HIGH`, `IL2`, `IL4`, `IL5`, `CJIS`, `ITAR`, and `IRS_1075`. The regime is
   **immutable**, so choose it before creating projects.
@@ -65,7 +66,7 @@ FedRAMP column)
 | CP | Backup and DR; regional/multi-regional services; Cloud SQL HA + PITR; GCS object versioning / retention | RTO/RPO, restore testing |
 | IA | Cloud Identity / Workspace or a federated IdP with **phishing-resistant 2SV** (security keys / passkeys enforced); Workload Identity Federation instead of service-account keys (`iam.disableServiceAccountKeyCreation`); OS Login (`compute.requireOsLogin` enforces OS Login only; 2FA also needs instance/project metadata `enable-oslogin-2fa = TRUE`) | IdP policy, authenticator lifecycle |
 | IR | SCC threat detection (Event Threat Detection, Container Threat Detection), Google SecOps (Chronicle) SIEM/SOAR, Pub/Sub notifications to ticketing | IR plan, PAIN rating, IEC reporting |
-| RA / SI | Artifact Analysis (container scanning), VM Manager vulnerability reports, GKE security posture, Web Security Scanner, Sensitive Data Protection (DLP) | VER evaluation, VDR timeframes, KEV remediation |
+| RA / SI | Artifact Analysis (container scanning), VM Manager vulnerability reports, GKE security posture (its vulnerability scanning features were deprecated, with shutdown scheduled by 2026-06-16), Web Security Scanner, Sensitive Data Protection (DLP) | VER evaluation, VDR timeframes, KEV remediation |
 | SC | VPC firewall policies (hierarchical), Cloud NGFW, Cloud Armor, Private Service Connect / Private Google Access, VPC Service Controls, Cloud KMS/HSM, org policies `compute.vmExternalIpAccess`, `sql.restrictPublicIp`, `storage.publicAccessPrevention`, `compute.skipDefaultNetworkCreation` | Deny-by-default flows, boundary docs, crypto module list |
 | SR | Binary Authorization (attestation-based deploy), Artifact Registry, Assured Open Source Software, SLSA provenance from Cloud Build | Vendor risk, provenance |
 | PE / MA / MP | Inherited from Google for the infrastructure; **Access Transparency** and **Access Approval** give visibility and control over Google personnel access | Your own endpoints and media |

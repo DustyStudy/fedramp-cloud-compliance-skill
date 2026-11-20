@@ -85,7 +85,10 @@ Verified facts:
   - a standalone GovCloud account.
 - A GovCloud account can join only a GovCloud organization, by invitation. The GovCloud
   org is independent of the commercial one, and its feature set must be "all features".
-- No IAM role can delegate access between a GovCloud account and a commercial account.
+- `sts:AssumeRole` doesn't work between a GovCloud account and a commercial account.
+  Since 2026-11-09, STS cross-partition identity federation (`sts:GetWebIdentityToken` in
+  the source partition, then `sts:AssumeRoleWithWebIdentity` in the destination) can issue
+  temporary credentials across partitions; AWS says to consult your compliance team first.
   Each partition needs its own roles, its own GitHub OIDC providers, and its own state.
 - The new GovCloud account gets an `OrganizationAccountAccessRole` (or the `RoleName` you
   pass), which the GovCloud account paired with your commercial management account can
@@ -159,8 +162,8 @@ long-lived keys exist.
 
 ## 4. Organization guardrails
 
-GovCloud orgs support SCPs, RCPs, tag policies, and EC2 and S3 declarative policies. They
-don't support backup, chat application, or AI services opt-out policies. Run policy-type
+GovCloud orgs support SCPs, RCPs, tag policies, and declarative policies for EC2, S3,
+Security Hub, Amazon Inspector, and GuardDuty. They don't support backup, chat application, or AI services opt-out policies. Run policy-type
 operations against `us-gov-west-1`.
 
 _Guidance:_ baseline set:
@@ -199,7 +202,9 @@ _Guidance:_ baseline set:
   `aws_organizations_delegated_administrator`. GuardDuty, Security Hub CSPM, and
   Inspector admins are per Region, so set them and their auto-enable configuration (e.g.
   `aws_guardduty_organization_configuration`) in both GovCloud Regions. Security Hub
-  CSPM central configuration sets the same admin in the linked Regions for you. AWS says
+  CSPM central configuration sets the same admin in the linked Regions for you; AWS now
+  calls it a legacy feature and recommends Security Hub CSPM declarative policies, and the
+  two are mutually exclusive. AWS says
   to check which services support trusted access in the Organizations console in
   GovCloud.
 - **Org trail** (terraform-checks.md §5): all Regions, log file validation, a CMK, data
@@ -317,8 +322,8 @@ Checked 2026-10-15 in the GovCloud User Guide. Re-check before relying on them.
 |---|---|
 | Organizations | Account creation from GovCloud; backup, chat application, AI opt-out policies |
 | Control Tower | Account Factory account creation; AFT for new customers; RCP controls |
-| IAM | Root console sign-in and root MFA; global STS endpoint; Access Analyzer policy generation; cross-partition roles |
+| IAM | Root console sign-in and root MFA; global STS endpoint; Access Analyzer policy generation; cross-partition `AssumeRole` (cross-partition identity federation is available since 2026-11-09) |
 | AWS Backup | Restore testing; Backup Audit Manager multi-account, multi-Region reporting |
 | Inspector | Lambda code scanning; managed code repository scanning (Linux deep inspection plugin isn't FIPS compliant) |
 | GuardDuty | Entity lists; CompromisedCredentials finding; some EKS anomaly findings; Marketplace-AMI and EC2/EBS recovery-point malware scans |
-| Macie | Not listed for GovCloud on the FedRAMP services-in-scope page (as of 2026-09) |
+| Macie | Not listed for GovCloud on the FedRAMP services-in-scope page (as of 2026-11) |

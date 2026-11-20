@@ -13,9 +13,10 @@ For a new GovCloud build (accounts, landing zone, bootstrap, guardrails, network
   (guidance) for Rev5 Class D / former High and for ITAR/CJIS/DoD IL workloads. It uses a separate
   partition (`aws-us-gov`) with separate accounts, credentials, and ARNs.
 - **Commercial US East/West regions** are listed on AWS's services-in-scope page as
-  "FedRAMP Class C (formerly Moderate)", and GovCloud as "Class D (formerly High)". The
+  "FedRAMP Class C (formerly Moderate baseline)", and GovCloud as "Class D (formerly High
+  baseline)". The
   level is per service, so confirm each one on the services-in-scope page. For example,
-  Macie is listed for East/West but not GovCloud (as of 2026-09).
+  Macie is listed for East/West but not GovCloud (as of 2026-11).
 - **Get AWS's FedRAMP package and customer responsibility matrix** from **AWS Artifact**,
   or from the FedRAMP Marketplace. The CSP inherits the physical and
   environmental (PE) controls. For how other families split between AWS and the
@@ -67,7 +68,7 @@ For a new GovCloud build (accounts, landing zone, bootstrap, guardrails, network
 | CP (contingency) | AWS Backup (org backup policies in commercial regions only; GovCloud organizations can't use backup policies, so deploy backup plans per account, e.g. with StackSets or Terraform; Vault Lock, cross-region/cross-account copies); multi-AZ; Elastic Disaster Recovery; Route 53 health checks | Set RTO/RPO, *test* restores (CP-4, CP-9, KSI-RPL-TRC) |
 | IA (identification) | Identity Center with external IdP and **phishing-resistant MFA** (FIDO2/passkeys, PIV/CAC), required by FedRAMP guidance on IA-2(1)/(2); IAM Roles Anywhere; no IAM users or long-lived access keys; commercial: root MFA via hardware key. GovCloud: root has no console sign-in or MFA, so delete any root access keys obtained from AWS Support and use Organizations root sessions for privileged tasks | Enforce MFA strength at the IdP, manage authenticators (IA-5), handle non-user identities (KSI-IAM-SNU) |
 | IR (incident) | GuardDuty (org, all protection plans in use); Security Hub / Security Hub CSPM findings aggregation; Detective; EventBridge → SNS/ticketing or on-call tooling; AWS Security Incident Response (East/West only on the FedRAMP scope page). SSM Incident Manager closed to new customers on 2025-11-07, so don't design new processes around it | IR plan, PAIN rating, and FedRAMP reporting timelines (IEC ruleset); after-action reviews |
-| RA / SI (vuln, integrity) | Amazon Inspector (EC2, ECR, Lambda; SBOM export. GovCloud has no Lambda code scanning or managed code repository scanning, and the Linux deep-inspection plugin isn't FIPS compliant); ECR enhanced scanning; SSM Patch Manager; GuardDuty Malware Protection; CloudTrail log integrity; Macie (sensitive data discovery; not listed for GovCloud as of 2026-09) | Evaluate each vuln (VER-EVA-*), meet VDR timeframes, handle KEVs (`VDR-TFR-KEV`) |
+| RA / SI (vuln, integrity) | Amazon Inspector (EC2, ECR, Lambda; SBOM export. GovCloud has no Lambda code scanning or managed code repository scanning, and the Linux deep-inspection plugin isn't FIPS compliant); ECR enhanced scanning; SSM Patch Manager; GuardDuty Malware Protection; CloudTrail log integrity; Macie (sensitive data discovery; not listed for GovCloud as of 2026-11) | Evaluate each vuln (VER-EVA-*), meet VDR timeframes, handle KEVs (`VDR-TFR-KEV`) |
 | SC (boundary, crypto) | VPC design with private subnets; security groups; Network Firewall; WAF; Shield Advanced (East/West only on the FedRAMP scope page); PrivateLink / VPC endpoints (FIPS); KMS; ACM; Route 53 Resolver DNS Firewall | Deny-by-default flows (SC-7), boundary docs, crypto module list (CMU) |
 | SR (supply chain) | ECR with image signing (AWS Signer / Notation); Inspector SBOMs. CodeArtifact is not on the FedRAMP services-in-scope page | Vendor risk process, provenance verification |
 | PE / MA / MP | Inherited from AWS for the infrastructure layer | Your own endpoints/media, if any are in scope |
@@ -93,7 +94,7 @@ For a new GovCloud build (accounts, landing zone, bootstrap, guardrails, network
 
 ```hcl
 provider "aws" {
-  region            = "us-gov-west-1" # or a commercial US region if the service authorization allows
+  region              = "us-gov-west-1" # or a commercial US region if the service authorization allows
   use_fips_endpoint   = true
   allowed_account_ids = [var.account_id]
   default_tags { tags = { "fedramp:boundary" = "in" } }
@@ -106,7 +107,7 @@ data "aws_partition" "current" {} # never hard-code "arn:aws:"; GovCloud is "aws
   and a new, OCSF-based "AWS Security Hub" became generally available on 2025-12-02. The
   NIST 800-53 standard and its control IDs belong to Security Hub CSPM. In Terraform, the
   classic `aws_securityhub_*` resources manage Security Hub CSPM, and the `_v2` resources
-  (e.g. `aws_securityhub_account_v2`, 6.43.0+) manage the new service. As of 2026-09, only
+  (e.g. `aws_securityhub_account_v2`, 6.43.0+) manage the new service. As of 2026-11, only
   Security Hub CSPM appears on AWS's FedRAMP services-in-scope page.
 - Enable the Security Hub CSPM standard with
   `standards_arn = "arn:${data.aws_partition.current.partition}:securityhub:${var.region}::standards/nist-800-53/v/5.0.0"`.
@@ -115,8 +116,9 @@ data "aws_partition" "current" {} # never hard-code "arn:aws:"; GovCloud is "aws
   `template_body` limit (Moderate is about 50.6 KB), so upload the reviewed copy to S3 and
   use `template_s3_uri` instead. For multi-account deployments, use
   `aws_config_organization_conformance_pack`.
-- **Organization policy types in GovCloud** (checked 2026-10-15 in the GovCloud User
-  Guide): SCPs, RCPs, tag policies, and EC2 and S3 declarative policies are available;
+- **Organization policy types in GovCloud** (checked 2026-11-19 in the GovCloud User
+  Guide): SCPs, RCPs, tag policies, and declarative policies for EC2, S3, Security Hub,
+  Amazon Inspector, and GuardDuty are available;
   backup, chat application, and AI services opt-out policies are not. Policy-type
   operations and the org root only work against `us-gov-west-1`. Manage them with
   `aws_organizations_policy` (`type = "SERVICE_CONTROL_POLICY"`,

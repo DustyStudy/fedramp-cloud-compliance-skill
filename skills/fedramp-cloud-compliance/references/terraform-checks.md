@@ -75,8 +75,9 @@ validated modules are MAY for A/B, SHOULD for C, and MUST for D.
       `token.actions.githubusercontent.com:aud = "sts.amazonaws.com"` and
       `token.actions.githubusercontent.com:sub = "repo:<org>/<repo>:environment:prod"`.
       No `repo:<org>/*` or `*` wildcards, no missing `sub` condition. Match the subject
-      format GitHub actually issues; repos can customize it to include immutable
-      owner/repo IDs. Equivalents: Azure federated identity credential `subject`; GCP
+      format GitHub actually issues: repos created, renamed, or transferred after
+      2026-07-15, and repos that opt in, use the immutable format
+      `repo:<org>@<owner_id>/<repo>@<repo_id>:...` (not on GHES). Equivalents: Azure federated identity credential `subject`; GCP
       Workload Identity Federation `attribute_condition` on `assertion.repository` and
       environment/ref. See section 9 for plan vs. apply roles (AC-6, IA-2, IA-5;
       KSI-IAM-SNU).
@@ -132,7 +133,8 @@ validated modules are MAY for A/B, SHOULD for C, and MUST for D.
       front doors (LB/WAF/CDN), and never to SSH/RDP/DB/admin ports.
 - [ ] Data stores are private. AWS: `publicly_accessible = false`, S3 public access block.
       Azure: public network access disabled (`public_network_access_enabled = false`, or
-      `public_network_access = "Disabled"` on storage in azurerm 5.5.0+) + private endpoints. GCP: `sql.restrictPublicIp`,
+      `public_network_access = "Disabled"` on storage in azurerm 5.5.0+, where
+      `public_network_access_enabled` is deprecated and will be removed in v6.0) + private endpoints. GCP: `sql.restrictPublicIp`,
       public access prevention.
 - [ ] Egress is controlled (firewall/NAT with allow-lists) for Class C/D workloads.
 - [ ] Kubernetes API endpoints are private or restricted to authorized CIDRs.
@@ -205,7 +207,9 @@ validated modules are MAY for A/B, SHOULD for C, and MUST for D.
 - [ ] Databases reject non-TLS clients: RDS/Aurora parameter `rds.force_ssl = 1`
       (PostgreSQL, SQL Server) or `require_secure_transport = ON` (MySQL, MariaDB) in the
       `aws_db_parameter_group` / `aws_rds_cluster_parameter_group`; Azure/GCP: enforce
-      TLS on the server (`ssl_enforcement`/`require_ssl` equivalents) (SC-8).
+      TLS on the server (Azure PostgreSQL/MySQL flexible server parameter
+      `require_secure_transport` left `ON`; GCP Cloud SQL `ssl_mode = "ENCRYPTED_ONLY"`,
+      since `require_ssl` was removed in google 6.0.1) (SC-8).
 - [ ] The crypto modules in use can be listed for `CMU-CSO-CMD`. Flag services that have
       no FIPS endpoint.
 
@@ -224,12 +228,13 @@ validated modules are MAY for A/B, SHOULD for C, and MUST for D.
       findings are routed to the SIEM or ticketing (KSI-MLA-OSM, IR-4, SI-4).
 - [ ] VPC/VNet flow logs are on for in-boundary networks.
 - [ ] The org trail records **S3 data events** for buckets holding federal customer data
-      or logs (`advanced_event_selector` on `data.resources.type = AWS::S3::Object`), not
+      or logs (`advanced_event_selector` with `eventCategory = Data` and
+      `resources.type = AWS::S3::Object`), not
       management events only (AU-2, AU-12).
 - [ ] ALB access logs, S3 server access logs, and VPC Resolver query logs reach the
       central log archive. ALB and S3 server access logs can only be delivered to an
-      SSE-S3 bucket in the same Region (S3: same account too, no Object Lock default
-      retention), so deliver locally, then copy them into the CMK-encrypted, Object-Locked
+      SSE-S3 bucket in the same Region (S3: same account too, and the bucket can't have
+      Object Lock enabled), so deliver locally, then copy them into the CMK-encrypted, Object-Locked
       archive with SSE-KMS set on the copy (S3 Batch Operations, a Lambda copy, or a
       Firehose/SIEM pipeline). Native S3 replication keeps the source's SSE-S3 encryption
       on the replica, so it does not re-encrypt them with the CMK. Flag a design that points them
@@ -478,5 +483,5 @@ SDR/CPO documents themselves, and all agency-facing reporting (CCM, VER, IEC, SC
 - **terraform test** with mock providers (`mock_provider`, `override_resource`; Terraform
   1.7+) to assert security-relevant attributes.
 - **Policy as code:** OPA/Conftest or Sentinel for deny rules. HashiCorp's HCL-based
-  **Terraform policy** (`.policy.hcl`, `tfpolicy test`) was announced on 2026-07-16 as a
-  public beta in HCP Terraform. HashiCorp says not to use it in production yet.
+  **Terraform policy** (`.policy.hcl`, `tfpolicy test`; the `-policies` flag on `plan`,
+  `apply`, and `query`) is generally available as of Terraform 1.17.0 (2026-10-21).
