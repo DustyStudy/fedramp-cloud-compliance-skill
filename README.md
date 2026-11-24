@@ -48,6 +48,10 @@ Then ask things like:
 - "Draft SDR entries for the VDR ruleset for our GKE-based service."
 - "How long do we have to send an initial incident report for a PAIN 4 incident at Class D?"
 
+## Example review
+
+Ask: “What evidence should we collect for account management on AWS?” For NIST SP 800-53 Rev. 5 **AC-2 (Account Management)**, a useful answer identifies who approves access, how accounts are reviewed and disabled, and which records the customer retains. An IAM Identity Center assignment export can show current access. Pair it with approval and deprovisioning records to show how that access was managed. See the [AWS reference](skills/fedramp-cloud-compliance/references/aws.md).
+
 ## Where the facts come from
 
 | Content | Source | How it stays current |
